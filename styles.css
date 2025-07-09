@@ -357,6 +357,20 @@ main {
     margin: 2rem 0;
 }
 
+.ai-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.35em 1em;
+    border-radius: 20px;
+    margin-left: 1rem;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.08);
+    white-space: nowrap;
+}
+
 /* Footer */
 .footer {
     background: #333;

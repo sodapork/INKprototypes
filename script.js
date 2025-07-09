@@ -58,25 +58,32 @@ function getToolContent(toolName) {
         
         'pov-builder': `
             <div class="tool-container">
-                <div class="tool-header">
-                    <h2>Point-of-View Builder</h2>
-                    <p>Develop your brand's stance on issues and structure compelling content around your perspective.</p>
+                <div class="tool-header" style="display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <h2>Point-of-View Builder</h2>
+                        <p>Get authentic, actionable POV ideas for your brand on any issue. Powered by AI.</p>
+                    </div>
+                    <span class="ai-tag">AI enabled</span>
                 </div>
                 <div id="pov-content">
                     <div class="input-group">
+                        <label for="website-url">Your Website URL <span style="color:red">*</span></label>
+                        <input type="url" id="website-url" placeholder="https://yourbrand.com" required>
+                    </div>
+                    <div class="input-group">
                         <label for="issue-topic">What issue or topic do you want to address?</label>
-                        <textarea id="issue-topic" rows="3" placeholder="Describe the issue you want to take a stance on..."></textarea>
+                        <textarea id="issue-topic" rows="3" placeholder="Describe the issue you want to take a stance on..." required></textarea>
                     </div>
                     <div class="input-group">
-                        <label for="brand-values">What are your brand's core values?</label>
-                        <textarea id="brand-values" rows="3" placeholder="List your brand's key values and principles..."></textarea>
+                        <label for="brand-values">What are your brand's core values? (optional)</label>
+                        <textarea id="brand-values" rows="2" placeholder="List your brand's key values and principles..."></textarea>
                     </div>
                     <div class="input-group">
-                        <label for="target-audience">Who is your target audience?</label>
+                        <label for="target-audience">Who is your target audience? (optional)</label>
                         <textarea id="target-audience" rows="2" placeholder="Describe your primary audience..."></textarea>
                     </div>
                     <div class="input-group">
-                        <label for="desired-outcome">What outcome do you want to achieve?</label>
+                        <label for="desired-outcome">What outcome do you want to achieve? (optional)</label>
                         <select id="desired-outcome">
                             <option value="">Select an outcome...</option>
                             <option value="awareness">Raise awareness</option>
@@ -86,7 +93,7 @@ function getToolContent(toolName) {
                             <option value="leadership">Position as thought leader</option>
                         </select>
                     </div>
-                    <button class="btn" onclick="generatePOV()">Generate Point of View</button>
+                    <button class="btn" onclick="generatePOVIdeas()">Generate POV Ideas</button>
                 </div>
             </div>
         `,
@@ -420,77 +427,86 @@ function calculateBrandAlignmentScore() {
     };
 }
 
-// POV Builder Functions
-function generatePOV() {
-    const issueTopic = document.getElementById('issue-topic').value;
-    const brandValues = document.getElementById('brand-values').value;
-    const targetAudience = document.getElementById('target-audience').value;
+// POV Builder Functions (AI-powered)
+async function generatePOVIdeas() {
+    const website = document.getElementById('website-url').value.trim();
+    const issueTopic = document.getElementById('issue-topic').value.trim();
+    const brandValues = document.getElementById('brand-values').value.trim();
+    const targetAudience = document.getElementById('target-audience').value.trim();
     const desiredOutcome = document.getElementById('desired-outcome').value;
-    
-    if (!issueTopic || !brandValues || !targetAudience || !desiredOutcome) {
-        alert('Please fill in all fields to generate your point of view.');
+
+    if (!website || !issueTopic) {
+        alert('Please enter your website URL and the issue/topic.');
         return;
     }
-    
-    const pov = generatePOVContent(issueTopic, brandValues, targetAudience, desiredOutcome);
-    
-    const resultsHTML = `
-        <div class="results">
-            <h3>Your Point of View Framework</h3>
-            <div class="pov-content">
-                <h4>Core Position</h4>
-                <p>${pov.position}</p>
-                
-                <h4>Key Messages</h4>
-                <ul>
-                    ${pov.messages.map(msg => `<li>${msg}</li>`).join('')}
-                </ul>
-                
-                <h4>Content Structure</h4>
-                <ol>
-                    ${pov.structure.map(item => `<li>${item}</li>`).join('')}
-                </ol>
-                
-                <h4>Call to Action</h4>
-                <p>${pov.cta}</p>
-            </div>
-            <div style="margin-top: 2rem; text-align: center;">
-                <button class="btn" onclick="window.open('https://ink-co.com/contact', '_blank')">Get Professional Content Support</button>
-            </div>
+
+    // Show loading spinner
+    document.getElementById('pov-content').innerHTML = `
+        <div style="text-align:center; padding:2rem;">
+            <div class="loader" style="margin-bottom:1rem;"></div>
+            <p>Generating authentic POV ideas...</p>
         </div>
     `;
-    
-    document.getElementById('pov-content').innerHTML = resultsHTML;
-}
 
-function generatePOVContent(issue, values, audience, outcome) {
-    // This is a simplified version - in a real implementation, this could use AI
-    const positions = {
-        'awareness': 'Take a leadership position in raising awareness about this critical issue',
-        'education': 'Serve as an educational resource to help your audience understand the complexities',
-        'action': 'Inspire and enable your audience to take meaningful action',
-        'conversation': 'Facilitate important conversations and diverse perspectives',
-        'leadership': 'Establish your brand as a thought leader and trusted voice'
-    };
-    
-    return {
-        position: positions[outcome] || 'Take a clear, values-driven stance on this issue',
-        messages: [
-            `Connect this issue to your core values of ${values.split(',')[0] || 'integrity'}`,
-            `Address the specific needs and concerns of ${audience}`,
-            `Provide actionable insights and solutions`,
-            `Maintain authenticity and transparency throughout`
-        ],
-        structure: [
-            'Hook: Start with a compelling statistic or story',
-            'Context: Provide background and relevance to your audience',
-            'Position: Clearly state your brand\'s stance',
-            'Evidence: Support your position with data or examples',
-            'Action: Provide clear next steps for your audience',
-            'Commitment: Show your brand\'s ongoing commitment'
-        ],
-        cta: `Ready to develop this into compelling content? Our team can help you craft messaging that resonates with your audience and drives your desired outcomes.`
-    };
+    // Build the OpenAI prompt
+    let prompt = `You are a brand strategist. Given the following information, suggest a list of 5-7 authentic point-of-view (POV) ideas for the brand to take on the issue. For each bullet point, provide:\n- The POV idea (bolded)\n- A short explanation (1-2 sentences) of why this position makes sense for the brand, referencing the website, values, or audience if possible.\n\nBrand website: ${website}\nIssue/topic: ${issueTopic}`;
+    if (brandValues) prompt += `\nBrand values: ${brandValues}`;
+    if (targetAudience) prompt += `\nTarget audience: ${targetAudience}`;
+    if (desiredOutcome) prompt += `\nDesired outcome: ${desiredOutcome}`;
+    prompt += `\n\nFormat your response as:\n- **POV idea**\n  - Why this makes sense: [explanation]\nRepeat for each idea. Do not write a full article. Guide the user, do not give them all the answers.`;
+
+    try {
+        const apiKey = window.OPENAI_API_KEY || (typeof process !== 'undefined' && process.env && process.env.OPENAI_API_KEY);
+        if (!apiKey) {
+            document.getElementById('pov-content').innerHTML = `<div class="results"><p style="color:red;">OpenAI API key not found. Please set OPENAI_API_KEY in your environment.</p></div>`;
+            return;
+        }
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: 'gpt-3.5-turbo',
+                messages: [
+                    { role: 'system', content: 'You are a helpful brand strategist.' },
+                    { role: 'user', content: prompt }
+                ],
+                max_tokens: 600,
+                temperature: 0.7
+            })
+        });
+        const data = await response.json();
+        let ideas = '';
+        if (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
+            // Format: split on lines that start with - ** (the POV idea)
+            const lines = data.choices[0].message.content.split(/\n(?=- \*\*)/g);
+            ideas = '<ul class="pov-idea-list">' + lines.map(line => {
+                // Split into idea and explanation
+                const match = line.match(/^- \*\*(.*?)\*\*\s*\n?\s*- Why this makes sense: (.*)$/s);
+                if (match) {
+                    return `<li><strong>${match[1]}</strong><br><span class="pov-explanation">${match[2]}</span></li>`;
+                } else {
+                    // fallback: just show the line
+                    return `<li>${line.replace(/^- /, '')}</li>`;
+                }
+            }).join('') + '</ul>';
+        } else {
+            ideas = '<span style="color:red;">No response from OpenAI. Please try again.</span>';
+        }
+        document.getElementById('pov-content').innerHTML = `
+            <div class="results">
+                <h3>Authentic POV Ideas</h3>
+                <div class="pov-ideas" style="margin-bottom:2rem;">${ideas}</div>
+                <div style="text-align:center;">
+                    <button class="btn" onclick="window.open('https://ink-co.com/contact', '_blank')">Get Professional Content Support</button>
+                </div>
+            </div>
+        `;
+    } catch (err) {
+        document.getElementById('pov-content').innerHTML = `<div class="results"><p style="color:red;">Error generating POV ideas. Please try again later.</p></div>`;
+    }
 }
 
 // ROI Calculator Functions
