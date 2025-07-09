@@ -126,9 +126,25 @@ function getToolContent(toolName) {
                             <option value="tech">Technology</option>
                             <option value="healthcare">Healthcare</option>
                             <option value="finance">Financial Services</option>
-                            <option value="retail">Retail</option>
+                            <option value="retail">Retail & E-commerce</option>
                             <option value="manufacturing">Manufacturing</option>
                             <option value="nonprofit">Nonprofit</option>
+                            <option value="education">Education</option>
+                            <option value="real-estate">Real Estate</option>
+                            <option value="food-beverage">Food & Beverage</option>
+                            <option value="automotive">Automotive</option>
+                            <option value="fashion-beauty">Fashion & Beauty</option>
+                            <option value="travel-hospitality">Travel & Hospitality</option>
+                            <option value="energy">Energy & Utilities</option>
+                            <option value="legal">Legal Services</option>
+                            <option value="consulting">Consulting</option>
+                            <option value="media-entertainment">Media & Entertainment</option>
+                            <option value="sports-fitness">Sports & Fitness</option>
+                            <option value="pharmaceuticals">Pharmaceuticals</option>
+                            <option value="logistics">Logistics & Transportation</option>
+                            <option value="construction">Construction</option>
+                            <option value="agriculture">Agriculture</option>
+                            <option value="government">Government & Public Sector</option>
                         </select>
                     </div>
                     <div class="input-group">
@@ -537,6 +553,11 @@ function calculateROI() {
                 ${roi.successFactors.map(factor => `<li>${factor}</li>`).join('')}
             </ul>
             
+            <div class="industry-insight" style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <h4>Industry Insight:</h4>
+                <p>${roi.industryInsights}</p>
+            </div>
+            
             <div style="margin-top: 2rem; text-align: center;">
                 <button class="btn" onclick="window.open('https://ink-co.com/contact', '_blank')">Get Detailed Strategy</button>
             </div>
@@ -547,29 +568,226 @@ function calculateROI() {
 }
 
 function calculateROIEstimates(budget, campaignType, industry, duration) {
-    // Simplified ROI calculation - real implementation would be more sophisticated
-    const multipliers = {
+    // Campaign type multipliers
+    const campaignMultipliers = {
         'pr': { impressions: 1000, traffic: 15, leads: 0.1, value: 3 },
         'content': { impressions: 800, traffic: 25, leads: 0.15, value: 4 },
         'brand': { impressions: 1200, traffic: 10, leads: 0.05, value: 2 },
         'integrated': { impressions: 1500, traffic: 30, leads: 0.2, value: 5 }
     };
     
-    const mult = multipliers[campaignType];
+    // Industry-specific multipliers based on typical marketing effectiveness
+    const industryMultipliers = {
+        'tech': { impressions: 1.2, traffic: 1.3, leads: 1.4, value: 1.5 },
+        'healthcare': { impressions: 0.9, traffic: 0.8, leads: 1.1, value: 1.2 },
+        'finance': { impressions: 0.8, traffic: 0.7, leads: 1.0, value: 1.3 },
+        'retail': { impressions: 1.1, traffic: 1.2, leads: 1.3, value: 1.1 },
+        'manufacturing': { impressions: 0.7, traffic: 0.6, leads: 0.8, value: 0.9 },
+        'nonprofit': { impressions: 1.0, traffic: 0.9, leads: 0.7, value: 0.8 },
+        'education': { impressions: 1.0, traffic: 1.1, leads: 1.0, value: 1.0 },
+        'real-estate': { impressions: 1.1, traffic: 1.0, leads: 1.2, value: 1.1 },
+        'food-beverage': { impressions: 1.3, traffic: 1.4, leads: 1.1, value: 1.0 },
+        'automotive': { impressions: 1.0, traffic: 1.1, leads: 1.0, value: 1.1 },
+        'fashion-beauty': { impressions: 1.4, traffic: 1.5, leads: 1.2, value: 1.1 },
+        'travel-hospitality': { impressions: 1.2, traffic: 1.3, leads: 1.1, value: 1.0 },
+        'energy': { impressions: 0.6, traffic: 0.5, leads: 0.7, value: 0.8 },
+        'legal': { impressions: 0.8, traffic: 0.7, leads: 0.9, value: 1.1 },
+        'consulting': { impressions: 0.9, traffic: 0.8, leads: 1.0, value: 1.2 },
+        'media-entertainment': { impressions: 1.5, traffic: 1.6, leads: 1.3, value: 1.2 },
+        'sports-fitness': { impressions: 1.2, traffic: 1.3, leads: 1.1, value: 1.0 },
+        'pharmaceuticals': { impressions: 0.7, traffic: 0.6, leads: 0.8, value: 1.0 },
+        'logistics': { impressions: 0.8, traffic: 0.7, leads: 0.9, value: 1.0 },
+        'construction': { impressions: 0.6, traffic: 0.5, leads: 0.7, value: 0.8 },
+        'agriculture': { impressions: 0.7, traffic: 0.6, leads: 0.8, value: 0.9 },
+        'government': { impressions: 0.5, traffic: 0.4, leads: 0.6, value: 0.7 }
+    };
+    
+    const campaignMult = campaignMultipliers[campaignType];
+    const industryMult = industryMultipliers[industry] || { impressions: 1.0, traffic: 1.0, leads: 1.0, value: 1.0 };
     const durationMultiplier = duration / 3; // Normalize to 3 months
     
     return {
-        impressions: Math.round(budget * mult.impressions * durationMultiplier),
-        trafficUplift: Math.round(mult.traffic * durationMultiplier),
-        leads: Math.round(budget * mult.leads * durationMultiplier),
-        estimatedValue: Math.round(budget * mult.value * durationMultiplier),
-        successFactors: [
-            'Consistent messaging across all channels',
-            'Regular measurement and optimization',
-            'Strong content quality and relevance',
-            'Active engagement with target audience'
+        impressions: Math.round(budget * campaignMult.impressions * industryMult.impressions * durationMultiplier),
+        trafficUplift: Math.round(campaignMult.traffic * industryMult.traffic * durationMultiplier),
+        leads: Math.round(budget * campaignMult.leads * industryMult.leads * durationMultiplier),
+        estimatedValue: Math.round(budget * campaignMult.value * industryMult.value * durationMultiplier),
+        successFactors: getIndustrySuccessFactors(industry),
+        industryInsights: getIndustryInsights(industry)
+    };
+}
+
+// Helper functions for industry-specific insights
+function getIndustrySuccessFactors(industry) {
+    const successFactors = {
+        'tech': [
+            'Thought leadership content and technical expertise',
+            'Social media presence on LinkedIn and Twitter',
+            'Product demos and case studies',
+            'Participation in industry events and conferences'
+        ],
+        'healthcare': [
+            'Educational content and patient-focused messaging',
+            'Compliance with healthcare regulations',
+            'Trust-building through expert credentials',
+            'Community engagement and health awareness'
+        ],
+        'finance': [
+            'Regulatory compliance and security messaging',
+            'Educational financial content',
+            'Trust and credibility building',
+            'Professional networking and referrals'
+        ],
+        'retail': [
+            'Visual content and product showcases',
+            'Customer reviews and testimonials',
+            'Seasonal and trend-based campaigns',
+            'Social commerce and influencer partnerships'
+        ],
+        'manufacturing': [
+            'Technical specifications and quality content',
+            'B2B networking and trade shows',
+            'Case studies and ROI demonstrations',
+            'Industry certifications and standards'
+        ],
+        'nonprofit': [
+            'Storytelling and impact narratives',
+            'Donor engagement and transparency',
+            'Community partnerships and events',
+            'Social media advocacy campaigns'
+        ],
+        'education': [
+            'Student success stories and testimonials',
+            'Educational content and thought leadership',
+            'Community engagement and partnerships',
+            'Digital marketing and social media presence'
+        ],
+        'real-estate': [
+            'Property showcases and virtual tours',
+            'Local market insights and trends',
+            'Client testimonials and referrals',
+            'Community involvement and networking'
+        ],
+        'food-beverage': [
+            'Visual content and food photography',
+            'Customer reviews and social proof',
+            'Local partnerships and events',
+            'Social media engagement and user-generated content'
+        ],
+        'automotive': [
+            'Vehicle showcases and specifications',
+            'Customer reviews and testimonials',
+            'Service and maintenance content',
+            'Local community engagement'
+        ],
+        'fashion-beauty': [
+            'Visual content and lifestyle imagery',
+            'Influencer partnerships and collaborations',
+            'Trend forecasting and style guides',
+            'Social media engagement and user-generated content'
+        ],
+        'travel-hospitality': [
+            'Destination photography and videos',
+            'Customer reviews and travel stories',
+            'Local partnerships and experiences',
+            'Social media engagement and travel inspiration'
+        ],
+        'energy': [
+            'Sustainability and environmental messaging',
+            'Technical expertise and innovation',
+            'Regulatory compliance and safety',
+            'Community engagement and education'
+        ],
+        'legal': [
+            'Expert legal insights and thought leadership',
+            'Client testimonials and case studies',
+            'Professional networking and referrals',
+            'Educational content and legal updates'
+        ],
+        'consulting': [
+            'Thought leadership and industry expertise',
+            'Case studies and client success stories',
+            'Professional networking and speaking engagements',
+            'Educational content and white papers'
+        ],
+        'media-entertainment': [
+            'Content creation and storytelling',
+            'Celebrity partnerships and collaborations',
+            'Social media engagement and viral content',
+            'Event marketing and experiential campaigns'
+        ],
+        'sports-fitness': [
+            'Athlete partnerships and endorsements',
+            'Community engagement and events',
+            'Educational fitness content',
+            'Social media challenges and user engagement'
+        ],
+        'pharmaceuticals': [
+            'Educational health content',
+            'Regulatory compliance and safety messaging',
+            'Healthcare professional partnerships',
+            'Patient education and support programs'
+        ],
+        'logistics': [
+            'Efficiency and reliability messaging',
+            'Technology and innovation content',
+            'Customer testimonials and case studies',
+            'Industry partnerships and trade shows'
+        ],
+        'construction': [
+            'Project showcases and before/after content',
+            'Safety and quality messaging',
+            'Client testimonials and referrals',
+            'Industry certifications and partnerships'
+        ],
+        'agriculture': [
+            'Sustainability and environmental messaging',
+            'Educational farming content',
+            'Community partnerships and local engagement',
+            'Technology and innovation in agriculture'
+        ],
+        'government': [
+            'Transparency and public service messaging',
+            'Community engagement and outreach',
+            'Educational content and public awareness',
+            'Partnerships with local organizations'
         ]
     };
+    
+    return successFactors[industry] || [
+        'Consistent messaging across all channels',
+        'Regular measurement and optimization',
+        'Strong content quality and relevance',
+        'Active engagement with target audience'
+    ];
+}
+
+function getIndustryInsights(industry) {
+    const insights = {
+        'tech': 'Technology companies typically see higher engagement on LinkedIn and Twitter, with thought leadership content driving the most leads.',
+        'healthcare': 'Healthcare marketing requires careful compliance with regulations while building trust through educational content.',
+        'finance': 'Financial services benefit from educational content that builds trust and demonstrates expertise.',
+        'retail': 'Retail and e-commerce thrive on visual content and social proof, with Instagram and TikTok being key channels.',
+        'manufacturing': 'B2B manufacturing companies often see better results from trade shows and technical content.',
+        'nonprofit': 'Nonprofits benefit most from storytelling and impact narratives that connect emotionally with donors.',
+        'education': 'Educational institutions see success through student testimonials and thought leadership content.',
+        'real-estate': 'Real estate marketing is highly visual and local, with virtual tours and market insights driving engagement.',
+        'food-beverage': 'Food and beverage companies excel with visual content and user-generated content on social media.',
+        'automotive': 'Automotive marketing benefits from vehicle showcases and customer testimonials.',
+        'fashion-beauty': 'Fashion and beauty brands thrive on visual content and influencer partnerships.',
+        'travel-hospitality': 'Travel companies benefit from destination content and customer travel stories.',
+        'energy': 'Energy companies focus on sustainability messaging and technical expertise.',
+        'legal': 'Legal services benefit from thought leadership and client testimonials.',
+        'consulting': 'Consulting firms excel with case studies and thought leadership content.',
+        'media-entertainment': 'Media and entertainment companies thrive on content creation and celebrity partnerships.',
+        'sports-fitness': 'Sports and fitness brands benefit from athlete partnerships and community engagement.',
+        'pharmaceuticals': 'Pharmaceutical companies require careful regulatory compliance while educating patients.',
+        'logistics': 'Logistics companies focus on efficiency and reliability messaging.',
+        'construction': 'Construction companies benefit from project showcases and safety messaging.',
+        'agriculture': 'Agriculture companies emphasize sustainability and innovation in their marketing.',
+        'government': 'Government agencies focus on transparency and public service messaging.'
+    };
+    
+    return insights[industry] || 'Focus on consistent messaging, quality content, and audience engagement for best results.';
 }
 
 // Channel Optimizer Functions
