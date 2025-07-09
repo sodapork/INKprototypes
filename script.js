@@ -456,26 +456,11 @@ async function generatePOVIdeas() {
     prompt += `\n\nFormat your response as:\n- **POV idea**\n  - Why this makes sense: [explanation]\nRepeat for each idea. Do not write a full article. Guide the user, do not give them all the answers.`;
 
     try {
-        const apiKey = window.OPENAI_API_KEY || (typeof process !== 'undefined' && process.env && process.env.OPENAI_API_KEY);
-        if (!apiKey) {
-            document.getElementById('pov-content').innerHTML = `<div class="results"><p style="color:red;">OpenAI API key not found. Please set OPENAI_API_KEY in your environment.</p></div>`;
-            return;
-        }
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        // Call the Vercel serverless function instead of OpenAI directly
+        const response = await fetch('/api/openai', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
-            },
-            body: JSON.stringify({
-                model: 'gpt-3.5-turbo',
-                messages: [
-                    { role: 'system', content: 'You are a helpful brand strategist.' },
-                    { role: 'user', content: prompt }
-                ],
-                max_tokens: 600,
-                temperature: 0.7
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt })
         });
         const data = await response.json();
         let ideas = '';
