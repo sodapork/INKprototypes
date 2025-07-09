@@ -21,17 +21,7 @@ window.onclick = function(event) {
     }
 }
 
-// Navigation
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        this.classList.add('active');
-        
-        const target = this.getAttribute('href').substring(1);
-        document.getElementById(target).scrollIntoView({ behavior: 'smooth' });
-    });
-});
+
 
 // Tool opening function
 function openTool(toolName) {
