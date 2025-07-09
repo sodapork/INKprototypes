@@ -907,6 +907,19 @@ function createChannelChart(channels) {
 }
 
 // Customer Quiz Functions
+function selectOption(key, value) {
+    answers[key] = value;
+    
+    // Remove selected class from all options
+    document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+    
+    // Add selected class to clicked option
+    event.target.classList.add('selected');
+    
+    // Show the start quiz button
+    document.getElementById('start-quiz-btn').style.display = 'block';
+}
+
 function startCustomerQuiz() {
     const demographic = answers['demographic'];
     const questions = getCustomerQuestions(demographic);
@@ -950,6 +963,15 @@ function getCustomerQuestions(demographic) {
                     { value: 'quality', text: 'Product quality' },
                     { value: 'convenience', text: 'Convenience' }
                 ]
+            },
+            {
+                question: "How do Millennials prefer to research products before purchasing?",
+                options: [
+                    { value: 'social', text: 'Social media and peer reviews' },
+                    { value: 'google', text: 'Google search and reviews' },
+                    { value: 'direct', text: 'Direct brand websites' },
+                    { value: 'influencer', text: 'Influencer recommendations' }
+                ]
             }
         ],
         'gen-z': [
@@ -969,6 +991,73 @@ function getCustomerQuestions(demographic) {
                     { value: 'trends', text: 'Following trends' },
                     { value: 'influence', text: 'Influencer endorsements' },
                     { value: 'discounts', text: 'Discounts and deals' }
+                ]
+            },
+            {
+                question: "Which platform do Gen Z users spend the most time on daily?",
+                options: [
+                    { value: 'tiktok', text: 'TikTok' },
+                    { value: 'instagram', text: 'Instagram' },
+                    { value: 'youtube', text: 'YouTube' },
+                    { value: 'snapchat', text: 'Snapchat' }
+                ]
+            }
+        ],
+        'gen-x': [
+            {
+                question: "What's the primary way Gen X consumers discover new products?",
+                options: [
+                    { value: 'search', text: 'Online search engines' },
+                    { value: 'social', text: 'Social media' },
+                    { value: 'email', text: 'Email marketing' },
+                    { value: 'traditional', text: 'Traditional advertising' }
+                ]
+            },
+            {
+                question: "What matters most to Gen X when making purchasing decisions?",
+                options: [
+                    { value: 'quality', text: 'Product quality and reliability' },
+                    { value: 'price', text: 'Price and value' },
+                    { value: 'convenience', text: 'Convenience and ease' },
+                    { value: 'trust', text: 'Brand trust and reputation' }
+                ]
+            },
+            {
+                question: "How do Gen X consumers prefer to interact with brands?",
+                options: [
+                    { value: 'email', text: 'Email communication' },
+                    { value: 'phone', text: 'Phone calls' },
+                    { value: 'social', text: 'Social media' },
+                    { value: 'website', text: 'Brand websites' }
+                ]
+            }
+        ],
+        'boomers': [
+            {
+                question: "What's the most trusted source of information for Baby Boomers?",
+                options: [
+                    { value: 'traditional', text: 'Traditional media (TV, newspapers)' },
+                    { value: 'word', text: 'Word of mouth recommendations' },
+                    { value: 'online', text: 'Online reviews' },
+                    { value: 'direct', text: 'Direct brand communication' }
+                ]
+            },
+            {
+                question: "What's most important to Baby Boomers when choosing a brand?",
+                options: [
+                    { value: 'trust', text: 'Trust and reliability' },
+                    { value: 'quality', text: 'Quality and durability' },
+                    { value: 'service', text: 'Customer service' },
+                    { value: 'price', text: 'Price and value' }
+                ]
+            },
+            {
+                question: "How do Baby Boomers prefer to make purchases?",
+                options: [
+                    { value: 'in-person', text: 'In-person at physical stores' },
+                    { value: 'phone', text: 'Over the phone' },
+                    { value: 'online', text: 'Online with customer service' },
+                    { value: 'self-service', text: 'Self-service online' }
                 ]
             }
         ]
@@ -991,6 +1080,7 @@ function selectCustomerAnswer(questionIndex, value) {
 function showCustomerQuizResults() {
     const demographic = answers['demographic'];
     const results = calculateCustomerQuizScore();
+    const demographicInsights = getDemographicInsights(demographic);
     
     const resultsHTML = `
         <div class="results">
@@ -1001,6 +1091,11 @@ function showCustomerQuizResults() {
             </div>
             <p><strong>${results.title}</strong></p>
             <p>${results.description}</p>
+            
+            <div class="industry-insight">
+                <h4>${demographic.charAt(0).toUpperCase() + demographic.slice(1)} Consumer Insights:</h4>
+                <p>${demographicInsights}</p>
+            </div>
             
             ${results.score >= 70 ? `
                 <div style="margin-top: 2rem; text-align: center;">
@@ -1019,19 +1114,56 @@ function showCustomerQuizResults() {
     document.getElementById('customer-quiz-content').innerHTML = resultsHTML;
 }
 
+function getDemographicInsights(demographic) {
+    const insights = {
+        'millennials': 'Millennials value authenticity, social responsibility, and experiences over material possessions. They prefer brands that align with their values and use social media extensively for discovery and research. Mobile-first experiences and personalized content resonate strongly with this demographic.',
+        'gen-z': 'Gen Z consumers are digital natives who prioritize authenticity, diversity, and social causes. They prefer short-form video content, value transparency from brands, and are heavily influenced by social media and peer recommendations. They expect brands to take stands on social issues.',
+        'gen-x': 'Gen X consumers are practical and value quality, reliability, and good customer service. They research thoroughly before purchasing and prefer email communication. They appreciate brands that understand their busy lifestyles and provide straightforward, no-nonsense experiences.',
+        'boomers': 'Baby Boomers value trust, quality, and personal relationships with brands. They prefer traditional media and in-person interactions, though many are increasingly comfortable with online shopping. They appreciate clear communication, excellent customer service, and brands that respect their experience and wisdom.'
+    };
+    
+    return insights[demographic] || 'Understanding your target demographic is crucial for effective marketing. Consider conducting customer research to better understand their preferences and behaviors.';
+}
+
 function calculateCustomerQuizScore() {
     let score = 0;
     let totalQuestions = 0;
+    const demographic = answers['demographic'];
+    
+    // Define correct answers based on demographic research
+    const correctAnswers = {
+        'millennials': {
+            'instagram': true, // Instagram is preferred for brand discovery
+            'values': true,    // Brand values are most important
+            'social': true     // Social media and peer reviews for research
+        },
+        'gen-z': {
+            'video': true,     // Short-form video is preferred
+            'authenticity': true, // Authenticity is most important
+            'tiktok': true     // TikTok is most used platform
+        },
+        'gen-x': {
+            'search': true,    // Online search is primary discovery method
+            'quality': true,   // Quality matters most
+            'email': true      // Email is preferred interaction method
+        },
+        'boomers': {
+            'traditional': true, // Traditional media is most trusted
+            'trust': true,     // Trust is most important
+            'in-person': true  // In-person purchases preferred
+        }
+    };
     
     Object.keys(answers).forEach(key => {
         if (key.startsWith('customer-question-')) {
             totalQuestions++;
             const answer = answers[key];
-            // Simplified scoring - correct answers based on general knowledge
-            if (answer === 'instagram' || answer === 'values' || answer === 'video' || answer === 'authenticity') {
-                score += 50;
+            const correctAnswersForDemo = correctAnswers[demographic] || {};
+            
+            if (correctAnswersForDemo[answer]) {
+                score += 100; // Full points for correct answer
             } else {
-                score += 25;
+                score += 25;  // Partial points for any answer (shows some knowledge)
             }
         }
     });
@@ -1043,21 +1175,21 @@ function calculateCustomerQuizScore() {
             score: finalScore,
             level: 'excellent',
             title: 'Excellent Customer Knowledge',
-            description: 'You have a deep understanding of your target audience. You\'re well-positioned to create meaningful connections.'
+            description: `You have a deep understanding of ${demographic} consumers. You're well-positioned to create meaningful connections and campaigns that resonate with this audience.`
         };
     } else if (finalScore >= 60) {
         return {
             score: finalScore,
             level: 'good',
             title: 'Good Customer Knowledge',
-            description: 'You have a solid understanding of your audience, but there\'s room to deepen your insights.'
+            description: `You have a solid understanding of ${demographic} consumers, but there's room to deepen your insights. Consider conducting more targeted research to better understand their preferences and behaviors.`
         };
     } else {
         return {
             score: finalScore,
             level: 'poor',
             title: 'Needs Improvement',
-            description: 'You could benefit from deeper customer research and insights to better understand your audience.'
+            description: `Your knowledge of ${demographic} consumers could benefit from deeper research. Understanding your audience is crucial for effective marketing - consider investing in customer research and persona development.`
         };
     }
 } 
