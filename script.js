@@ -1070,7 +1070,7 @@ function selectCustomerAnswer(questionIndex, value) {
     answers[`customer-question-${questionIndex}`] = value;
     
     // Remove selected class from all options in this question
-    const questionContainer = document.querySelectorAll('.question-container')[questionIndex + 1];
+    const questionContainer = document.querySelectorAll('.question-container')[questionIndex];
     questionContainer.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
     
     // Add selected class to clicked option
