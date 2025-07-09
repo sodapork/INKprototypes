@@ -296,6 +296,59 @@ function showBrandAlignmentQuestions() {
 }
 
 function getIssueQuestions(issueType) {
+    // New universal questions for brand-issue alignment
+    const universalQuestions = [
+        {
+            question: "How closely does this issue relate to your brand’s core mission or values?",
+            options: [
+                { value: 'direct', text: 'Directly related' },
+                { value: 'somewhat', text: 'Somewhat related' },
+                { value: 'not', text: 'Not related' }
+            ]
+        },
+        {
+            question: "Do your customers or stakeholders expect your brand to take a stand on this issue?",
+            options: [
+                { value: 'expect', text: 'Yes, they expect it' },
+                { value: 'maybe', text: 'Maybe, but not sure' },
+                { value: 'no', text: 'No, they don’t expect it' }
+            ]
+        },
+        {
+            question: "Has your brand previously addressed this issue or similar topics publicly?",
+            options: [
+                { value: 'frequent', text: 'Yes, frequently' },
+                { value: 'occasional', text: 'Occasionally' },
+                { value: 'never', text: 'Never' }
+            ]
+        },
+        {
+            question: "Does your brand have credible expertise or experience with this issue?",
+            options: [
+                { value: 'expert', text: 'Yes, we’re recognized experts' },
+                { value: 'some', text: 'Some experience' },
+                { value: 'none', text: 'No expertise' }
+            ]
+        },
+        {
+            question: "Could commenting on this issue create significant risk or backlash for your brand?",
+            options: [
+                { value: 'low', text: 'Low risk' },
+                { value: 'moderate', text: 'Moderate risk' },
+                { value: 'high', text: 'High risk' }
+            ]
+        },
+        {
+            question: "Would your audience view your comment as authentic and consistent with your brand?",
+            options: [
+                { value: 'authentic', text: 'Definitely' },
+                { value: 'maybe', text: 'Maybe' },
+                { value: 'not', text: 'Probably not' }
+            ]
+        }
+    ];
+
+    // Keep the original issue-specific questions for context
     const questionSets = {
         'social-justice': [
             {
@@ -338,8 +391,8 @@ function getIssueQuestions(issueType) {
             }
         ]
     };
-    
-    return questionSets[issueType] || questionSets['social-justice'];
+    // Combine universal and issue-specific questions
+    return [...universalQuestions, ...(questionSets[issueType] || questionSets['social-justice'])];
 }
 
 function selectQuizAnswer(questionIndex, value) {
@@ -380,77 +433,61 @@ function showBrandAlignmentResults() {
 }
 
 function calculateBrandAlignmentScore() {
-    // Simple scoring logic - in real implementation, this would be more sophisticated
     let score = 0;
     let totalQuestions = 0;
-    
+    let advice = [];
+    let shouldComment = true;
+
     Object.keys(answers).forEach(key => {
         if (key.startsWith('question-')) {
             totalQuestions++;
             const answer = answers[key];
-            if (answer === 'leading' || answer === 'active' || answer === 'carbon-neutral' || answer === 'certified') {
-                score += 25;
-            } else if (answer === 'supporting' || answer === 'aware' || answer === 'reducing' || answer === 'auditing') {
-                score += 15;
-            } else if (answer === 'learning' || answer === 'neutral' || answer === 'planning' || answer === 'partial') {
+            // Universal question scoring
+            if ([
+                'direct', 'expect', 'frequent', 'expert', 'low', 'authentic',
+                'leading', 'active', 'carbon-neutral', 'certified'
+            ].includes(answer)) {
+                score += 20;
+            } else if ([
+                'somewhat', 'maybe', 'occasional', 'some', 'moderate',
+                'supporting', 'aware', 'reducing', 'auditing', 'planning', 'partial', 'learning', 'neutral'
+            ].includes(answer)) {
                 score += 10;
             } else {
-                score += 5;
+                score += 0;
             }
+            // Advice logic
+            if (answer === 'not') advice.push('The issue is not closely related to your brand’s core mission.');
+            if (answer === 'no') advice.push('Your audience may not expect you to comment.');
+            if (answer === 'never') advice.push('You have no track record on this issue.');
+            if (answer === 'none') advice.push('You lack expertise on this issue.');
+            if (answer === 'high') advice.push('There is a high risk of backlash.');
+            if (answer === 'not') advice.push('Your comment may not be seen as authentic.');
         }
     });
-    
     const finalScore = Math.round(score / totalQuestions);
-    
-    if (finalScore >= 80) {
-        return {
-            score: finalScore,
-            level: 'excellent',
-            title: 'Excellent Alignment',
-            description: 'Your brand shows strong alignment with this issue. You\'re well-positioned to lead conversations and drive meaningful change.',
-            recommendations: [
-                'Continue leading initiatives and share best practices',
-                'Consider expanding your impact through partnerships',
-                'Document and communicate your success stories'
-            ]
-        };
-    } else if (finalScore >= 60) {
-        return {
-            score: finalScore,
-            level: 'good',
-            title: 'Good Alignment',
-            description: 'Your brand has a solid foundation for addressing this issue. There are opportunities to strengthen your position.',
-            recommendations: [
-                'Develop more comprehensive policies and programs',
-                'Increase internal education and training',
-                'Enhance external communication about your efforts'
-            ]
-        };
-    } else if (finalScore >= 40) {
-        return {
-            score: finalScore,
-            level: 'fair',
-            title: 'Fair Alignment',
-            description: 'Your brand is beginning to address this issue but needs more strategic focus and commitment.',
-            recommendations: [
-                'Create a formal strategy and action plan',
-                'Allocate dedicated resources and budget',
-                'Establish clear metrics and accountability'
-            ]
-        };
-    } else {
-        return {
-            score: finalScore,
-            level: 'poor',
-            title: 'Needs Improvement',
-            description: 'Your brand needs to develop a more comprehensive approach to this issue.',
-            recommendations: [
-                'Conduct a thorough assessment of current practices',
-                'Develop a roadmap for improvement',
-                'Consider external expertise to accelerate progress'
-            ]
-        };
+    // Decision logic
+    if (advice.length > 2 || finalScore < 40) {
+        shouldComment = false;
     }
+    let resultTitle, resultDesc;
+    if (shouldComment && finalScore >= 70) {
+        resultTitle = 'Yes, you should comment.';
+        resultDesc = 'Your brand is well-aligned with this issue. Proceed with a thoughtful, authentic statement.';
+    } else if (shouldComment && finalScore >= 40) {
+        resultTitle = 'Proceed with caution.';
+        resultDesc = 'There are some alignment gaps. Address them before making a public statement.';
+    } else {
+        resultTitle = 'It may be best to stay silent.';
+        resultDesc = 'Your brand is not well-aligned with this issue. Consider focusing on issues more relevant to your brand.';
+    }
+    return {
+        score: finalScore,
+        level: finalScore >= 70 ? 'excellent' : finalScore >= 40 ? 'fair' : 'poor',
+        title: resultTitle,
+        description: resultDesc,
+        recommendations: advice.length ? advice : ['You are well-positioned to comment on this issue.']
+    };
 }
 
 // POV Builder Functions
