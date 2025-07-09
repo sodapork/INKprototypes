@@ -50,21 +50,9 @@ function getToolContent(toolName) {
             <div class="tool-container">
                 <div class="tool-header">
                     <h2>Brand Alignment Quiz</h2>
-                    <p>Assess how well your brand aligns with specific issues and identify areas for improvement.</p>
+                    <p>Should your brand comment on a current issue? Answer the questions below to find out how well the issue aligns with your brand and what you should do next.</p>
                 </div>
-                <div id="quiz-content">
-                    <div class="question-container">
-                        <div class="question">What type of issue are you looking to address?</div>
-                        <div class="options">
-                            <div class="option" onclick="selectOption('issue-type', 'social-justice')">Social Justice & Equity</div>
-                            <div class="option" onclick="selectOption('issue-type', 'environmental')">Environmental Sustainability</div>
-                            <div class="option" onclick="selectOption('issue-type', 'economic')">Economic Development</div>
-                            <div class="option" onclick="selectOption('issue-type', 'health')">Public Health</div>
-                            <div class="option" onclick="selectOption('issue-type', 'education')">Education & Workforce</div>
-                        </div>
-                    </div>
-                    <button class="btn" onclick="nextQuestion()" id="next-btn" style="display: none;">Continue</button>
-                </div>
+                <div id="quiz-content"></div>
             </div>
         `,
         
@@ -225,7 +213,7 @@ function getToolContent(toolName) {
 function initializeTool(toolName) {
     switch(toolName) {
         case 'brand-alignment':
-            // Already initialized in HTML
+            startBrandAlignmentQuiz();
             break;
         case 'pov-builder':
             // Already initialized in HTML
@@ -243,61 +231,50 @@ function initializeTool(toolName) {
 }
 
 // Brand Alignment Quiz Functions
-function selectOption(question, value) {
-    answers[question] = value;
-    
-    // Remove selected class from all options
+function startBrandAlignmentQuiz() {
+    currentQuestion = 0;
+    answers = {};
+    showBrandAlignmentQuestion();
+}
+
+function showBrandAlignmentQuestion() {
+    const questions = getIssueQuestions();
+    if (currentQuestion >= questions.length) {
+        showBrandAlignmentResults();
+        return;
+    }
+    const q = questions[currentQuestion];
+    let optionsHTML = q.options.map((option, idx) => `
+        <div class="option${answers[`question-${currentQuestion}`] === option.value ? ' selected' : ''}" data-value="${option.value}" data-idx="${idx}" onclick="selectSingleOption(${currentQuestion}, '${option.value}')">${option.text}</div>
+    `).join('');
+    const questionHTML = `
+        <div class="question-container">
+            <div class="question">${q.question}</div>
+            <div class="options">${optionsHTML}</div>
+        </div>
+        <button class="btn" id="next-btn" ${answers[`question-${currentQuestion}`] ? '' : 'disabled'} onclick="nextBrandAlignmentQuestion()">${currentQuestion === questions.length - 1 ? 'Get Results' : 'Next'}</button>
+    `;
+    document.getElementById('quiz-content').innerHTML = questionHTML;
+}
+
+function selectSingleOption(questionIndex, value) {
+    answers[`question-${questionIndex}`] = value;
+    // Remove selected class from all options in this question
     document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-    
     // Add selected class to clicked option
     event.target.classList.add('selected');
-    
-    // Show next button
-    document.getElementById('next-btn').style.display = 'inline-block';
+    // Enable next button
+    document.getElementById('next-btn').disabled = false;
 }
 
-function nextQuestion() {
-    if (currentTool === 'brand-alignment') {
-        if (currentQuestion === 0) {
-            showBrandAlignmentQuestions();
-        } else {
-            showBrandAlignmentResults();
-        }
-    } else if (currentTool === 'customer-quiz') {
-        if (currentQuestion === 0) {
-            showCustomerQuizQuestions();
-        } else {
-            showCustomerQuizResults();
-        }
-    }
+function nextBrandAlignmentQuestion() {
+    currentQuestion++;
+    showBrandAlignmentQuestion();
 }
 
-function showBrandAlignmentQuestions() {
-    const issueType = answers['issue-type'];
-    const questions = getIssueQuestions(issueType);
-    
-    let questionsHTML = '';
-    questions.forEach((q, index) => {
-        questionsHTML += `
-            <div class="question-container">
-                <div class="question">${q.question}</div>
-                <div class="options">
-                    ${q.options.map(option => `
-                        <div class="option" onclick="selectQuizAnswer(${index}, '${option.value}')">${option.text}</div>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-    });
-    
-    questionsHTML += '<button class="btn" onclick="showBrandAlignmentResults()">Get Results</button>';
-    
-    document.getElementById('quiz-content').innerHTML = questionsHTML;
-}
-
-function getIssueQuestions(issueType) {
-    // New universal questions for brand-issue alignment
-    const universalQuestions = [
+function getIssueQuestions() {
+    // Only use universal questions for alignment
+    return [
         {
             question: "How closely does this issue relate to your brand’s core mission or values?",
             options: [
@@ -347,63 +324,6 @@ function getIssueQuestions(issueType) {
             ]
         }
     ];
-
-    // Keep the original issue-specific questions for context
-    const questionSets = {
-        'social-justice': [
-            {
-                question: "How does your brand currently address diversity and inclusion?",
-                options: [
-                    { value: 'leading', text: 'Leading initiatives and programs' },
-                    { value: 'supporting', text: 'Supporting existing programs' },
-                    { value: 'learning', text: 'Learning and developing approach' },
-                    { value: 'beginning', text: 'Just beginning to address' }
-                ]
-            },
-            {
-                question: "What's your brand's stance on systemic inequality?",
-                options: [
-                    { value: 'active', text: 'Actively working to dismantle' },
-                    { value: 'aware', text: 'Aware and taking steps' },
-                    { value: 'neutral', text: 'Neutral or undecided' },
-                    { value: 'unaware', text: 'Not actively addressing' }
-                ]
-            }
-        ],
-        'environmental': [
-            {
-                question: "How does your brand approach sustainability?",
-                options: [
-                    { value: 'carbon-neutral', text: 'Carbon neutral or negative' },
-                    { value: 'reducing', text: 'Actively reducing footprint' },
-                    { value: 'planning', text: 'Planning sustainability initiatives' },
-                    { value: 'beginning', text: 'Just starting to consider' }
-                ]
-            },
-            {
-                question: "What's your supply chain sustainability like?",
-                options: [
-                    { value: 'certified', text: 'Certified sustainable throughout' },
-                    { value: 'auditing', text: 'Auditing and improving' },
-                    { value: 'partial', text: 'Partially sustainable' },
-                    { value: 'traditional', text: 'Traditional supply chain' }
-                ]
-            }
-        ]
-    };
-    // Combine universal and issue-specific questions
-    return [...universalQuestions, ...(questionSets[issueType] || questionSets['social-justice'])];
-}
-
-function selectQuizAnswer(questionIndex, value) {
-    answers[`question-${questionIndex}`] = value;
-    
-    // Remove selected class from all options in this question
-    const questionContainer = document.querySelectorAll('.question-container')[questionIndex + 1];
-    questionContainer.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-    
-    // Add selected class to clicked option
-    event.target.classList.add('selected');
 }
 
 function showBrandAlignmentResults() {
