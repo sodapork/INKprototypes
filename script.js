@@ -527,7 +527,7 @@ function calculateROI() {
     const resultsHTML = `
         <div class="results">
             <h3>ROI Projections</h3>
-            <p><em>*All results are estimates and do not reflect final results of an engagement</em></p>
+            <p><em>*All results are conservative estimates based on industry benchmarks. Actual results may vary based on campaign execution, market conditions, and other factors.</em></p>
             
             <div class="roi-metrics">
                 <div class="metric">
@@ -568,38 +568,39 @@ function calculateROI() {
 }
 
 function calculateROIEstimates(budget, campaignType, industry, duration) {
-    // Campaign type multipliers
+    // Campaign type multipliers (realistic industry benchmarks)
     const campaignMultipliers = {
-        'pr': { impressions: 1000, traffic: 15, leads: 0.1, value: 3 },
-        'content': { impressions: 800, traffic: 25, leads: 0.15, value: 4 },
-        'brand': { impressions: 1200, traffic: 10, leads: 0.05, value: 2 },
-        'integrated': { impressions: 1500, traffic: 30, leads: 0.2, value: 5 }
+        'pr': { impressions: 25, traffic: 8, leads: 0.02, value: 2.5 },
+        'content': { impressions: 15, traffic: 12, leads: 0.03, value: 3.2 },
+        'brand': { impressions: 35, traffic: 6, leads: 0.01, value: 1.8 },
+        'integrated': { impressions: 45, traffic: 15, leads: 0.04, value: 4.0 }
     };
     
     // Industry-specific multipliers based on typical marketing effectiveness
+    // These multipliers reflect relative performance compared to average across industries
     const industryMultipliers = {
-        'tech': { impressions: 1.2, traffic: 1.3, leads: 1.4, value: 1.5 },
-        'healthcare': { impressions: 0.9, traffic: 0.8, leads: 1.1, value: 1.2 },
-        'finance': { impressions: 0.8, traffic: 0.7, leads: 1.0, value: 1.3 },
-        'retail': { impressions: 1.1, traffic: 1.2, leads: 1.3, value: 1.1 },
-        'manufacturing': { impressions: 0.7, traffic: 0.6, leads: 0.8, value: 0.9 },
-        'nonprofit': { impressions: 1.0, traffic: 0.9, leads: 0.7, value: 0.8 },
-        'education': { impressions: 1.0, traffic: 1.1, leads: 1.0, value: 1.0 },
-        'real-estate': { impressions: 1.1, traffic: 1.0, leads: 1.2, value: 1.1 },
-        'food-beverage': { impressions: 1.3, traffic: 1.4, leads: 1.1, value: 1.0 },
-        'automotive': { impressions: 1.0, traffic: 1.1, leads: 1.0, value: 1.1 },
-        'fashion-beauty': { impressions: 1.4, traffic: 1.5, leads: 1.2, value: 1.1 },
-        'travel-hospitality': { impressions: 1.2, traffic: 1.3, leads: 1.1, value: 1.0 },
-        'energy': { impressions: 0.6, traffic: 0.5, leads: 0.7, value: 0.8 },
-        'legal': { impressions: 0.8, traffic: 0.7, leads: 0.9, value: 1.1 },
-        'consulting': { impressions: 0.9, traffic: 0.8, leads: 1.0, value: 1.2 },
-        'media-entertainment': { impressions: 1.5, traffic: 1.6, leads: 1.3, value: 1.2 },
-        'sports-fitness': { impressions: 1.2, traffic: 1.3, leads: 1.1, value: 1.0 },
-        'pharmaceuticals': { impressions: 0.7, traffic: 0.6, leads: 0.8, value: 1.0 },
-        'logistics': { impressions: 0.8, traffic: 0.7, leads: 0.9, value: 1.0 },
-        'construction': { impressions: 0.6, traffic: 0.5, leads: 0.7, value: 0.8 },
-        'agriculture': { impressions: 0.7, traffic: 0.6, leads: 0.8, value: 0.9 },
-        'government': { impressions: 0.5, traffic: 0.4, leads: 0.6, value: 0.7 }
+        'tech': { impressions: 1.3, traffic: 1.4, leads: 1.5, value: 1.6 },
+        'healthcare': { impressions: 0.8, traffic: 0.7, leads: 1.2, value: 1.3 },
+        'finance': { impressions: 0.7, traffic: 0.6, leads: 1.1, value: 1.4 },
+        'retail': { impressions: 1.2, traffic: 1.3, leads: 1.4, value: 1.2 },
+        'manufacturing': { impressions: 0.6, traffic: 0.5, leads: 0.9, value: 1.0 },
+        'nonprofit': { impressions: 0.9, traffic: 0.8, leads: 0.8, value: 0.9 },
+        'education': { impressions: 1.0, traffic: 1.1, leads: 1.0, value: 1.1 },
+        'real-estate': { impressions: 1.1, traffic: 1.0, leads: 1.3, value: 1.2 },
+        'food-beverage': { impressions: 1.4, traffic: 1.5, leads: 1.2, value: 1.1 },
+        'automotive': { impressions: 1.0, traffic: 1.1, leads: 1.0, value: 1.2 },
+        'fashion-beauty': { impressions: 1.5, traffic: 1.6, leads: 1.3, value: 1.2 },
+        'travel-hospitality': { impressions: 1.3, traffic: 1.4, leads: 1.2, value: 1.1 },
+        'energy': { impressions: 0.5, traffic: 0.4, leads: 0.8, value: 0.9 },
+        'legal': { impressions: 0.8, traffic: 0.7, leads: 1.0, value: 1.2 },
+        'consulting': { impressions: 0.9, traffic: 0.8, leads: 1.1, value: 1.3 },
+        'media-entertainment': { impressions: 1.6, traffic: 1.7, leads: 1.4, value: 1.3 },
+        'sports-fitness': { impressions: 1.3, traffic: 1.4, leads: 1.2, value: 1.1 },
+        'pharmaceuticals': { impressions: 0.6, traffic: 0.5, leads: 0.9, value: 1.1 },
+        'logistics': { impressions: 0.7, traffic: 0.6, leads: 1.0, value: 1.1 },
+        'construction': { impressions: 0.5, traffic: 0.4, leads: 0.8, value: 0.9 },
+        'agriculture': { impressions: 0.6, traffic: 0.5, leads: 0.9, value: 1.0 },
+        'government': { impressions: 0.4, traffic: 0.3, leads: 0.7, value: 0.8 }
     };
     
     const campaignMult = campaignMultipliers[campaignType];
