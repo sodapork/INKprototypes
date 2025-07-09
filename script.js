@@ -357,25 +357,31 @@ function calculateBrandAlignmentScore() {
     let totalQuestions = 0;
     let advice = [];
     let shouldComment = true;
+    let maxScore = 0;
+
+    // Define scoring for each answer type
+    const answerScores = {
+        best: [
+            'direct', 'expect', 'frequent', 'expert', 'low', 'authentic'
+        ],
+        middle: [
+            'somewhat', 'maybe', 'occasional', 'some', 'moderate'
+        ],
+        worst: [
+            'not', 'no', 'never', 'none', 'high'
+        ]
+    };
 
     Object.keys(answers).forEach(key => {
         if (key.startsWith('question-')) {
             totalQuestions++;
             const answer = answers[key];
-            // Universal question scoring
-            if ([
-                'direct', 'expect', 'frequent', 'expert', 'low', 'authentic',
-                'leading', 'active', 'carbon-neutral', 'certified'
-            ].includes(answer)) {
-                score += 20;
-            } else if ([
-                'somewhat', 'maybe', 'occasional', 'some', 'moderate',
-                'supporting', 'aware', 'reducing', 'auditing', 'planning', 'partial', 'learning', 'neutral'
-            ].includes(answer)) {
-                score += 10;
-            } else {
-                score += 0;
-            }
+            if (answerScores.best.includes(answer)) {
+                score += 2;
+            } else if (answerScores.middle.includes(answer)) {
+                score += 1;
+            } // worst gets 0
+            maxScore += 2;
             // Advice logic
             if (answer === 'not') advice.push('The issue is not closely related to your brand’s core mission.');
             if (answer === 'no') advice.push('Your audience may not expect you to comment.');
@@ -385,28 +391,32 @@ function calculateBrandAlignmentScore() {
             if (answer === 'not') advice.push('Your comment may not be seen as authentic.');
         }
     });
-    const finalScore = Math.round(score / totalQuestions);
+    // Normalize score to 100%
+    const finalScore = Math.round((score / maxScore) * 100);
     // Decision logic
     if (advice.length > 2 || finalScore < 40) {
         shouldComment = false;
     }
-    let resultTitle, resultDesc;
+    let resultTitle, resultDesc, recommendations;
     if (shouldComment && finalScore >= 70) {
         resultTitle = 'Yes, you should comment.';
         resultDesc = 'Your brand is well-aligned with this issue. Proceed with a thoughtful, authentic statement.';
+        recommendations = advice.length ? advice : ['No major gaps identified.'];
     } else if (shouldComment && finalScore >= 40) {
         resultTitle = 'Proceed with caution.';
         resultDesc = 'There are some alignment gaps. Address them before making a public statement.';
+        recommendations = advice.length ? advice : ['Review your brand’s alignment before commenting.'];
     } else {
         resultTitle = 'It may be best to stay silent.';
         resultDesc = 'Your brand is not well-aligned with this issue. Consider focusing on issues more relevant to your brand.';
+        recommendations = advice.length ? advice : ['Significant gaps exist; commenting may not be advisable.'];
     }
     return {
         score: finalScore,
         level: finalScore >= 70 ? 'excellent' : finalScore >= 40 ? 'fair' : 'poor',
         title: resultTitle,
         description: resultDesc,
-        recommendations: advice.length ? advice : ['You are well-positioned to comment on this issue.']
+        recommendations
     };
 }
 
