@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INK Interactive Tools - Prototypes</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>INK</h1>
+                <span class="tagline">Interactive Tools</span>
+            </div>
+            <nav class="nav">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#tools" class="nav-link">Tools</a>
+                <a href="#about" class="nav-link">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Interactive Marketing Tools</h1>
+                    <p>Explore our suite of professional tools designed to help brands navigate complex marketing challenges and make data-driven decisions.</p>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <span class="stat-number">5</span>
+                            <span class="stat-label">Tools</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">Free</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">∞</span>
+                            <span class="stat-label">Insights</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tools" class="tools-section">
+            <div class="container">
+                <h2>Our Tools</h2>
+                <div class="tools-grid">
+                    <div class="tool-card" onclick="openTool('brand-alignment')">
+                        <div class="tool-icon">🎯</div>
+                        <h3>Brand Alignment Quiz</h3>
+                        <p>Assess how well your brand aligns with specific issues and identify areas for improvement.</p>
+                        <div class="tool-features">
+                            <span class="feature">Issue Assessment</span>
+                            <span class="feature">Gap Analysis</span>
+                            <span class="feature">Action Plan</span>
+                        </div>
+                        <button class="tool-btn">Try Tool</button>
+                    </div>
+
+                    <div class="tool-card" onclick="openTool('pov-builder')">
+                        <div class="tool-icon">✍️</div>
+                        <h3>Point-of-View Builder</h3>
+                        <p>Develop your brand's stance on issues and structure compelling content around your perspective.</p>
+                        <div class="tool-features">
+                            <span class="feature">Perspective Development</span>
+                            <span class="feature">Content Structure</span>
+                            <span class="feature">Messaging Framework</span>
+                        </div>
+                        <button class="tool-btn">Try Tool</button>
+                    </div>
+
+                    <div class="tool-card" onclick="openTool('roi-calculator')">
+                        <div class="tool-icon">💰</div>
+                        <h3>ROI Calculator</h3>
+                        <p>Estimate potential returns from PR, content, and brand marketing investments.</p>
+                        <div class="tool-features">
+                            <span class="feature">Budget Planning</span>
+                            <span class="feature">Impact Projections</span>
+                            <span class="feature">Performance Metrics</span>
+                        </div>
+                        <button class="tool-btn">Try Tool</button>
+                    </div>
+
+                    <div class="tool-card" onclick="openTool('channel-optimizer')">
+                        <div class="tool-icon">📊</div>
+                        <h3>Campaign Channel Optimizer</h3>
+                        <p>Find the optimal mix of marketing channels for your specific goals and industry.</p>
+                        <div class="tool-features">
+                            <span class="feature">Channel Mix</span>
+                            <span class="feature">Goal Alignment</span>
+                            <span class="feature">Strategy Planning</span>
+                        </div>
+                        <button class="tool-btn">Try Tool</button>
+                    </div>
+
+                    <div class="tool-card" onclick="openTool('customer-quiz')">
+                        <div class="tool-icon">👥</div>
+                        <h3>Customer Knowledge Quiz</h3>
+                        <p>Test how well you understand your target audience and identify knowledge gaps.</p>
+                        <div class="tool-features">
+                            <span class="feature">Audience Assessment</span>
+                            <span class="feature">Knowledge Gaps</span>
+                            <span class="feature">Improvement Areas</span>
+                        </div>
+                        <button class="tool-btn">Try Tool</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about-section">
+            <div class="container">
+                <h2>About INK</h2>
+                <p>INK is a strategic communications firm that helps brands navigate complex issues and build meaningful connections with their audiences. These interactive tools are designed to provide immediate value while showcasing our expertise in brand strategy, content development, and audience engagement.</p>
+                <div class="cta-section">
+                    <h3>Ready to take your brand to the next level?</h3>
+                    <p>Let's discuss how INK can help you achieve your communication goals.</p>
+                    <a href="https://ink-co.com/contact" class="cta-btn" target="_blank">Get in Touch</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Tool Modals -->
+    <div id="tool-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="tool-container"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 INK. All rights reserved. | <a href="https://ink-co.com" target="_blank">Visit INK</a></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
