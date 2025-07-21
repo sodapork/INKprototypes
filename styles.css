@@ -281,24 +281,29 @@ main {
 }
 
 .option {
-    background: #f8f9fa;
-    border: 2px solid #e9ecef;
-    border-radius: 8px;
-    padding: 1rem;
+    background: #eafff6;
+    border: 2px solid #c2f2e3;
+    border-radius: 12px;
+    padding: 1.1rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-weight: 500;
+    font-weight: 700;
+    color: #1ec9a3;
+    font-size: 1.15rem;
+    margin-bottom: 0.5rem;
 }
 
 .option:hover {
-    background: #e9ecef;
-    border-color: #007bff;
+    background: #3bb273;
+    color: #fff;
+    border-color: #1ec9a3;
 }
 
 .option.selected {
-    background: #007bff;
-    color: white;
-    border-color: #007bff;
+    background: #1ec9a3;
+    color: #fff;
+    border-color: #1ec9a3;
+    font-weight: 900;
 }
 
 .input-group {
