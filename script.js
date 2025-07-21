@@ -470,8 +470,8 @@ async function generatePOVIdeas() {
     const targetAudience = document.getElementById('target-audience').value.trim();
     const desiredOutcome = document.getElementById('desired-outcome').value;
 
-    if (!website || !issueTopic) {
-        alert('Please enter your website URL and the issue/topic.');
+    if (!website || !issueTopic || !brandValues || !targetAudience || !desiredOutcome) {
+        document.getElementById('pov-content').insertAdjacentHTML('beforeend', '<div class="results" style="color:red; margin-top:1rem;">Please fill in <strong>all fields</strong> before generating POV ideas.</div>');
         return;
     }
 
