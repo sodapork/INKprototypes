@@ -72,7 +72,6 @@ function getToolContent(toolName) {
                     <p>Should your brand comment on a current issue? Answer the questions below to find out how well the issue aligns with your brand and what you should do next.</p>
                 </div>
                 <div id="quiz-content"></div>
-                ${embedSection}
             </div>
         `,
         
@@ -115,7 +114,6 @@ function getToolContent(toolName) {
                     </div>
                     <button class="btn" onclick="generatePOVIdeas()">Generate POV Ideas</button>
                 </div>
-                ${embedSection}
             </div>
         `,
         
@@ -174,7 +172,6 @@ function getToolContent(toolName) {
                     </div>
                     <button class="btn" onclick="calculateROI()">Calculate ROI</button>
                 </div>
-                ${embedSection}
             </div>
         `,
         
@@ -227,7 +224,6 @@ function getToolContent(toolName) {
                     </div>
                     <button class="btn" onclick="optimizeChannels()">Optimize Channel Mix</button>
                 </div>
-                ${embedSection}
             </div>
         `,
         
@@ -249,7 +245,6 @@ function getToolContent(toolName) {
                     </div>
                     <button class="btn" onclick="startCustomerQuiz()" id="start-quiz-btn" style="display: none;">Start Quiz</button>
                 </div>
-                ${embedSection}
             </div>
         `
     };
