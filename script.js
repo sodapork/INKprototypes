@@ -1241,9 +1241,12 @@ let pov2State = {
     chat: []
 };
 const pov2Questions = [
-    { key: 'issue', text: "What current issue do you want to address?" },
-    { key: 'company', text: "Tell me about your company (name, industry, etc.)." },
-    { key: 'values', text: "What are your company's core values?" }
+    { key: 'issue', text: "What current issue or event are you considering making a public statement about?" },
+    { key: 'company', text: "What is your company’s name and industry?" },
+    { key: 'values', text: "What are your company’s core values?" },
+    { key: 'audience', text: "Who is your primary audience for this statement? (e.g., customers, employees, media, public)" },
+    { key: 'goal', text: "What is your main goal with this statement? (e.g., show support, clarify position, respond to criticism, etc.)" },
+    { key: 'risks', text: "Are there any risks or sensitivities you’re concerned about?" }
 ];
 function pov2RenderChat() {
     const chatDiv = document.getElementById('pov2-chat');
@@ -1287,10 +1290,10 @@ async function pov2GetPerspective() {
     pov2State.chat.push({ from: 'bot', text: '<span style="color:#888;">Thinking...</span>' });
     pov2RenderChat();
     // Build prompt
-    const { issue, company, values } = pov2State.answers;
-    let prompt = `You are a brand strategist chatbot. A user wants advice on how their company should address a current issue.\n\n` +
-        `Issue: ${issue}\nCompany: ${company}\nCore Values: ${values}\n\n` +
-        `Give a thoughtful, actionable perspective on the best way for this company to address the issue, referencing their values and context. Format as a short paragraph.`;
+    const { issue, company, values, audience, goal, risks } = pov2State.answers;
+    let prompt = `You are a senior PR strategist chatbot. A user is considering making a public statement on behalf of their company about a current issue.\n\n` +
+        `Issue/Event: ${issue}\nCompany: ${company}\nCore Values: ${values}\nAudience: ${audience}\nGoal: ${goal}\nRisks/Sensitivities: ${risks}\n\n` +
+        `Should this company make a public statement? If so, what should the tone, content, and approach be? What are the key risks and best practices? Provide a PR-focused, actionable recommendation in a short paragraph.`;
     try {
         const response = await fetch('/api/openai', {
             method: 'POST',
