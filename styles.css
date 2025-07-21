@@ -6,27 +6,40 @@
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
-    color: #333;
-    background-color: #fafafa;
+    color: #fff;
+    background: linear-gradient(135deg, #1ec9a3 0%, #3bb273 100%);
+    min-height: 100vh;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 0;
+    background: url('data:image/svg+xml;utf8,<svg width="100%25" height="100%25" xmlns="http://www.w3.org/2000/svg"><path d="M0,100 Q200,200 400,100 T800,100 T1200,200 T1600,100 V800 H0 Z" fill="%233bb273" fill-opacity="0.08"/></svg>') repeat;
+    pointer-events: none;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    position: relative;
+    z-index: 1;
 }
 
 /* Header */
 .header {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    background: linear-gradient(135deg, #1ec9a3 0%, #3bb273 100%);
     color: white;
-    padding: 1rem 0;
+    padding: 1.5rem 0 1rem 0;
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
 
 .header .container {
@@ -36,36 +49,47 @@ body {
 }
 
 .logo h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #fff;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #1ec9a3;
+    background: #fff;
+    padding: 0.25em 0.75em;
+    border-radius: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
     margin: 0;
+    display: inline-block;
 }
 
 .tagline {
-    font-size: 0.9rem;
-    color: #ccc;
-    margin-left: 10px;
+    font-size: 1rem;
+    color: #eafff6;
+    margin-left: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .nav {
     display: flex;
-    gap: 2rem;
+    gap: 2.5rem;
 }
 
 .nav-link {
     color: #fff;
     text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.1rem;
+    transition: color 0.3s, background 0.3s;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
 }
 
 .nav-link:hover,
 .nav-link.active {
-    color: #007bff;
-    background-color: rgba(255,255,255,0.1);
+    color: #1ec9a3;
+    background: #fff;
 }
 
 /* Main Content */
@@ -76,14 +100,17 @@ main {
 /* Tools Section */
 .tools-section {
     padding: 4rem 0;
-    background: white;
+    background: transparent;
 }
 
 .tools-section h2 {
     text-align: center;
-    font-size: 2.5rem;
+    font-size: 2.7rem;
     margin-bottom: 3rem;
-    color: #333;
+    color: #fff;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .tools-grid {
@@ -94,18 +121,19 @@ main {
 }
 
 .tool-card {
-    background: white;
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #fff;
+    border-radius: 16px;
+    padding: 2.2rem;
+    box-shadow: 0 6px 32px rgba(30,201,163,0.10), 0 1.5px 8px rgba(59,178,115,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
     cursor: pointer;
-    border: 1px solid #f0f0f0;
+    border: 1.5px solid #eafff6;
+    color: #222;
 }
 
 .tool-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    transform: translateY(-7px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(30,201,163,0.18), 0 2px 12px rgba(59,178,115,0.12);
 }
 
 .tool-icon {
@@ -115,15 +143,19 @@ main {
 }
 
 .tool-card h3 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     margin-bottom: 1rem;
-    color: #333;
+    color: #1ec9a3;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .tool-card p {
-    color: #666;
+    color: #3bb273;
     margin-bottom: 1.5rem;
     line-height: 1.6;
+    font-weight: 500;
 }
 
 .tool-features {
@@ -134,28 +166,34 @@ main {
 }
 
 .feature {
-    background: #f8f9fa;
-    color: #495057;
+    background: #eafff6;
+    color: #1ec9a3;
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.8rem;
-    font-weight: 500;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .tool-btn {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
+    background: linear-gradient(135deg, #1ec9a3 0%, #3bb273 100%);
+    color: #fff;
     border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 6px;
-    font-weight: 600;
+    padding: 0.85rem 1.7rem;
+    border-radius: 8px;
+    font-weight: 900;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s, background 0.2s;
     width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 1.05rem;
 }
 
 .tool-btn:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.03);
+    background: linear-gradient(135deg, #3bb273 0%, #1ec9a3 100%);
 }
 
 
