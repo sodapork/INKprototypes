@@ -23,7 +23,7 @@
             <div class="container">
                 <h2>INK's Tool Prototypes</h2>
                 <div class="tools-grid">
-                    <div class="tool-card" onclick="openTool('brand-alignment')">
+                    <div class="tool-card">
                         <div class="tool-icon">🎯</div>
                         <h3>Brand Alignment Quiz</h3>
                         <p>Assess how well your brand aligns with specific issues and identify areas for improvement.</p>
@@ -32,10 +32,18 @@
                             <span class="feature">Gap Analysis</span>
                             <span class="feature">Action Plan</span>
                         </div>
-                        <button class="tool-btn">Try Tool</button>
+                        <button class="tool-btn" onclick="openTool('brand-alignment')">Try Tool</button>
+                        <div class="embed-snippet" style="margin-top:1.5rem; background:#f8f9fa; border-radius:8px; padding:1rem; border:1px solid #e9ecef;">
+                            <div style="font-weight:600; margin-bottom:0.5rem;">Embed this tool:</div>
+                            <div style="display:flex; align-items:center; gap:0.5rem;">
+                                <input id="iframe-snippet-brand-alignment" type="text" readonly style="flex:1; font-family:monospace; font-size:0.95rem; padding:0.5rem; border-radius:6px; border:1px solid #ccc; background:#fff;">
+                                <button class="btn" style="padding:0.5rem 1rem; font-size:0.95rem;" onclick="copyIframeSnippet('brand-alignment')">Copy</button>
+                            </div>
+                            <div id="copy-confirm-brand-alignment" style="color:#28a745; font-size:0.95rem; margin-top:0.5rem; display:none;">Copied!</div>
+                        </div>
                     </div>
 
-                    <div class="tool-card" onclick="openTool('pov-builder')">
+                    <div class="tool-card">
                         <div class="tool-icon">✍️</div>
                         <h3>Point-of-View Builder</h3>
                         <p>Develop your brand's stance on issues and structure compelling content around your perspective.</p>
@@ -44,10 +52,18 @@
                             <span class="feature">Content Structure</span>
                             <span class="feature">Messaging Framework</span>
                         </div>
-                        <button class="tool-btn">Try Tool</button>
+                        <button class="tool-btn" onclick="openTool('pov-builder')">Try Tool</button>
+                        <div class="embed-snippet" style="margin-top:1.5rem; background:#f8f9fa; border-radius:8px; padding:1rem; border:1px solid #e9ecef;">
+                            <div style="font-weight:600; margin-bottom:0.5rem;">Embed this tool:</div>
+                            <div style="display:flex; align-items:center; gap:0.5rem;">
+                                <input id="iframe-snippet-pov-builder" type="text" readonly style="flex:1; font-family:monospace; font-size:0.95rem; padding:0.5rem; border-radius:6px; border:1px solid #ccc; background:#fff;">
+                                <button class="btn" style="padding:0.5rem 1rem; font-size:0.95rem;" onclick="copyIframeSnippet('pov-builder')">Copy</button>
+                            </div>
+                            <div id="copy-confirm-pov-builder" style="color:#28a745; font-size:0.95rem; margin-top:0.5rem; display:none;">Copied!</div>
+                        </div>
                     </div>
 
-                    <div class="tool-card" onclick="openTool('roi-calculator')">
+                    <div class="tool-card">
                         <div class="tool-icon">💰</div>
                         <h3>ROI Calculator</h3>
                         <p>Estimate potential returns from PR, content, and brand marketing investments.</p>
@@ -56,10 +72,18 @@
                             <span class="feature">Impact Projections</span>
                             <span class="feature">Performance Metrics</span>
                         </div>
-                        <button class="tool-btn">Try Tool</button>
+                        <button class="tool-btn" onclick="openTool('roi-calculator')">Try Tool</button>
+                        <div class="embed-snippet" style="margin-top:1.5rem; background:#f8f9fa; border-radius:8px; padding:1rem; border:1px solid #e9ecef;">
+                            <div style="font-weight:600; margin-bottom:0.5rem;">Embed this tool:</div>
+                            <div style="display:flex; align-items:center; gap:0.5rem;">
+                                <input id="iframe-snippet-roi-calculator" type="text" readonly style="flex:1; font-family:monospace; font-size:0.95rem; padding:0.5rem; border-radius:6px; border:1px solid #ccc; background:#fff;">
+                                <button class="btn" style="padding:0.5rem 1rem; font-size:0.95rem;" onclick="copyIframeSnippet('roi-calculator')">Copy</button>
+                            </div>
+                            <div id="copy-confirm-roi-calculator" style="color:#28a745; font-size:0.95rem; margin-top:0.5rem; display:none;">Copied!</div>
+                        </div>
                     </div>
 
-                    <div class="tool-card" onclick="openTool('channel-optimizer')">
+                    <div class="tool-card">
                         <div class="tool-icon">📊</div>
                         <h3>Campaign Channel Optimizer</h3>
                         <p>Find the optimal mix of marketing channels for your specific goals and industry.</p>
@@ -68,10 +92,18 @@
                             <span class="feature">Goal Alignment</span>
                             <span class="feature">Strategy Planning</span>
                         </div>
-                        <button class="tool-btn">Try Tool</button>
+                        <button class="tool-btn" onclick="openTool('channel-optimizer')">Try Tool</button>
+                        <div class="embed-snippet" style="margin-top:1.5rem; background:#f8f9fa; border-radius:8px; padding:1rem; border:1px solid #e9ecef;">
+                            <div style="font-weight:600; margin-bottom:0.5rem;">Embed this tool:</div>
+                            <div style="display:flex; align-items:center; gap:0.5rem;">
+                                <input id="iframe-snippet-channel-optimizer" type="text" readonly style="flex:1; font-family:monospace; font-size:0.95rem; padding:0.5rem; border-radius:6px; border:1px solid #ccc; background:#fff;">
+                                <button class="btn" style="padding:0.5rem 1rem; font-size:0.95rem;" onclick="copyIframeSnippet('channel-optimizer')">Copy</button>
+                            </div>
+                            <div id="copy-confirm-channel-optimizer" style="color:#28a745; font-size:0.95rem; margin-top:0.5rem; display:none;">Copied!</div>
+                        </div>
                     </div>
 
-                    <div class="tool-card" onclick="openTool('customer-quiz')">
+                    <div class="tool-card">
                         <div class="tool-icon">👥</div>
                         <h3>Customer Knowledge Quiz</h3>
                         <p>Test how well you understand your target audience and identify knowledge gaps.</p>
@@ -80,7 +112,15 @@
                             <span class="feature">Knowledge Gaps</span>
                             <span class="feature">Improvement Areas</span>
                         </div>
-                        <button class="tool-btn">Try Tool</button>
+                        <button class="tool-btn" onclick="openTool('customer-quiz')">Try Tool</button>
+                        <div class="embed-snippet" style="margin-top:1.5rem; background:#f8f9fa; border-radius:8px; padding:1rem; border:1px solid #e9ecef;">
+                            <div style="font-weight:600; margin-bottom:0.5rem;">Embed this tool:</div>
+                            <div style="display:flex; align-items:center; gap:0.5rem;">
+                                <input id="iframe-snippet-customer-quiz" type="text" readonly style="flex:1; font-family:monospace; font-size:0.95rem; padding:0.5rem; border-radius:6px; border:1px solid #ccc; background:#fff;">
+                                <button class="btn" style="padding:0.5rem 1rem; font-size:0.95rem;" onclick="copyIframeSnippet('customer-quiz')">Copy</button>
+                            </div>
+                            <div id="copy-confirm-customer-quiz" style="color:#28a745; font-size:0.95rem; margin-top:0.5rem; display:none;">Copied!</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,5 +142,28 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var baseUrl = window.location.origin + window.location.pathname.replace(/\/index.html$/, '/');
+        var tools = ['brand-alignment', 'pov-builder', 'roi-calculator', 'channel-optimizer', 'customer-quiz'];
+        tools.forEach(function(tool) {
+            var input = document.getElementById('iframe-snippet-' + tool);
+            if (input) {
+                input.value = `<iframe src="${baseUrl}?tool=${tool}" width="100%" height="700" style="border:none;"></iframe>`;
+            }
+        });
+    });
+    function copyIframeSnippet(tool) {
+        var input = document.getElementById('iframe-snippet-' + tool);
+        input.select();
+        input.setSelectionRange(0, 99999);
+        document.execCommand('copy');
+        var confirm = document.getElementById('copy-confirm-' + tool);
+        if (confirm) {
+            confirm.style.display = 'block';
+            setTimeout(function() { confirm.style.display = 'none'; }, 1500);
+        }
+    }
+    </script>
 </body>
 </html> 
