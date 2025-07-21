@@ -246,6 +246,24 @@ function getToolContent(toolName) {
                     <button class="btn" onclick="startCustomerQuiz()" id="start-quiz-btn" style="display: none;">Start Quiz</button>
                 </div>
             </div>
+        `,
+        'pov-builder-2': `
+            <div class="tool-container">
+                <div class="tool-header">
+                    <h2>POV Builder 2.0 <span class="ai-tag">Chatbot</span></h2>
+                    <p>Chat with an AI to get tailored perspective and messaging guidance for your company on any current issue.</p>
+                </div>
+                <div id="pov2-chat" class="chatbot-container" style="background:#f8f9fa; border-radius:12px; padding:1.5rem; min-height:320px; margin-bottom:1.5rem; max-width:600px; margin-left:auto; margin-right:auto; box-shadow:0 2px 12px rgba(0,0,0,0.04);">
+                    <!-- Chat bubbles will be rendered here -->
+                </div>
+                <div id="pov2-input-area" style="max-width:600px; margin:0 auto; display:flex; gap:0.5rem;">
+                    <input id="pov2-user-input" type="text" class="chat-input" placeholder="Type your answer..." style="flex:1; padding:0.75rem; border-radius:6px; border:1.5px solid #ccc; font-size:1rem;">
+                    <button class="btn" id="pov2-send-btn" onclick="pov2HandleUserInput()">Send</button>
+                </div>
+                <div style="text-align:center; margin-top:1.5rem;">
+                    <button class="btn btn-secondary" onclick="pov2Restart()">Restart Conversation</button>
+                </div>
+            </div>
         `
     };
     
@@ -267,6 +285,9 @@ function initializeTool(toolName) {
             // Already initialized in HTML
             break;
         case 'customer-quiz':
+            // Already initialized in HTML
+            break;
+        case 'pov-builder-2':
             // Already initialized in HTML
             break;
     }
@@ -1212,6 +1233,99 @@ function calculateCustomerQuizScore() {
         };
     }
 } 
+
+// --- POV Builder 2.0 Chatbot Logic ---
+let pov2State = {
+    step: 0,
+    answers: {},
+    chat: []
+};
+const pov2Questions = [
+    { key: 'issue', text: "What current issue do you want to address?" },
+    { key: 'company', text: "Tell me about your company (name, industry, etc.)." },
+    { key: 'values', text: "What are your company's core values?" }
+];
+function pov2RenderChat() {
+    const chatDiv = document.getElementById('pov2-chat');
+    if (!chatDiv) return;
+    chatDiv.innerHTML = pov2State.chat.map(msg => `
+        <div class="chat-bubble ${msg.from}">
+            ${msg.text}
+        </div>
+    `).join('');
+}
+function pov2AskNext() {
+    if (pov2State.step < pov2Questions.length) {
+        pov2State.chat.push({ from: 'bot', text: pov2Questions[pov2State.step].text });
+        pov2RenderChat();
+    } else {
+        // All questions answered, show Get Perspective button
+        pov2State.chat.push({ from: 'bot', text: `<button class='btn' onclick='pov2GetPerspective()'>Get Perspective</button>` });
+        pov2RenderChat();
+        document.getElementById('pov2-input-area').style.display = 'none';
+    }
+}
+function pov2HandleUserInput() {
+    const input = document.getElementById('pov2-user-input');
+    const value = input.value.trim();
+    if (!value) return;
+    // Add user message
+    pov2State.chat.push({ from: 'user', text: value });
+    pov2State.answers[pov2Questions[pov2State.step].key] = value;
+    pov2State.step++;
+    input.value = '';
+    pov2RenderChat();
+    setTimeout(pov2AskNext, 400);
+}
+function pov2Restart() {
+    pov2State = { step: 0, answers: {}, chat: [] };
+    pov2RenderChat();
+    document.getElementById('pov2-input-area').style.display = 'flex';
+    setTimeout(pov2AskNext, 400);
+}
+async function pov2GetPerspective() {
+    pov2State.chat.push({ from: 'bot', text: '<span style="color:#888;">Thinking...</span>' });
+    pov2RenderChat();
+    // Build prompt
+    const { issue, company, values } = pov2State.answers;
+    let prompt = `You are a brand strategist chatbot. A user wants advice on how their company should address a current issue.\n\n` +
+        `Issue: ${issue}\nCompany: ${company}\nCore Values: ${values}\n\n` +
+        `Give a thoughtful, actionable perspective on the best way for this company to address the issue, referencing their values and context. Format as a short paragraph.`;
+    try {
+        const response = await fetch('/api/openai', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt })
+        });
+        const data = await response.json();
+        pov2State.chat.pop(); // remove 'Thinking...'
+        let answer = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) ? data.choices[0].message.content : 'Sorry, I could not generate a perspective at this time.';
+        pov2State.chat.push({ from: 'bot', text: answer });
+        pov2RenderChat();
+    } catch (err) {
+        pov2State.chat.pop();
+        pov2State.chat.push({ from: 'bot', text: 'Sorry, there was an error. Please try again.' });
+        pov2RenderChat();
+    }
+}
+// Chatbot bubble styles
+const style = document.createElement('style');
+style.innerHTML = `
+.chatbot-container { min-height: 320px; }
+.chat-bubble { max-width: 80%; margin-bottom: 1rem; padding: 1rem 1.25rem; border-radius: 18px; font-size: 1.05rem; line-height: 1.6; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.chat-bubble.bot { background: #e9ecef; color: #222; align-self: flex-start; }
+.chat-bubble.user { background: #007bff; color: #fff; align-self: flex-end; margin-left:auto; }
+#pov2-input-area { margin-top: 1rem; }
+`;
+document.head.appendChild(style);
+// Hook up chatbot when modal opens
+const origOpenTool = window.openTool;
+window.openTool = function(toolName) {
+    origOpenTool(toolName);
+    if (toolName === 'pov-builder-2') {
+        pov2Restart();
+    }
+};
 
 // Copy iframe snippet to clipboard
 function copyIframeSnippet() {
