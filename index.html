@@ -15,6 +15,10 @@
                 <h1>INK</h1>
                 <span class="tagline">Interactive Tools</span>
             </div>
+            <nav class="nav">
+                <a href="#" class="nav-link active" id="nav-main" onclick="showTab('main')">Home</a>
+                <a href="#" class="nav-link" id="nav-backburner" onclick="showTab('backburner')">Backburner</a>
+            </nav>
         </div>
     </header>
 
@@ -22,7 +26,7 @@
         <section id="tools" class="tools-section">
             <div class="container">
                 <h2>INK's Tool Prototypes</h2>
-                <div class="tools-grid">
+                <div class="tools-grid" id="main-tools-grid">
                     <div class="tool-card">
                         <div class="tool-icon">🎯</div>
                         <h3>Brand Alignment Quiz</h3>
@@ -64,22 +68,22 @@
                     </div>
 
                     <div class="tool-card">
-                        <div class="tool-icon">💰</div>
-                        <h3>ROI Calculator</h3>
-                        <p>Estimate potential returns from PR, content, and brand marketing investments.</p>
+                        <div class="tool-icon">🤖</div>
+                        <h3>POV Builder 2.0 (Chatbot)</h3>
+                        <p>Chat with an AI to get tailored perspective and messaging guidance for your company on any current issue.</p>
                         <div class="tool-features">
-                            <span class="feature">Budget Planning</span>
-                            <span class="feature">Impact Projections</span>
-                            <span class="feature">Performance Metrics</span>
+                            <span class="feature">Conversational</span>
+                            <span class="feature">AI Guidance</span>
+                            <span class="feature">Brand Alignment</span>
                         </div>
-                        <button class="tool-btn" onclick="openTool('roi-calculator')">Try Tool</button>
+                        <button class="tool-btn" onclick="openTool('pov-builder-2')">Try Tool</button>
                         <div class="embed-snippet" style="margin-top:1.5rem; background:#f8f9fa; border-radius:8px; padding:1rem; border:1px solid #e9ecef;">
                             <div style="font-weight:600; margin-bottom:0.5rem;">Embed this tool:</div>
                             <div style="display:flex; align-items:center; gap:0.5rem;">
-                                <input id="iframe-snippet-roi-calculator" type="text" readonly style="flex:1; font-family:monospace; font-size:0.95rem; padding:0.5rem; border-radius:6px; border:1px solid #ccc; background:#fff;">
-                                <button class="btn" style="padding:0.5rem 1rem; font-size:0.95rem;" onclick="copyIframeSnippet('roi-calculator')">Copy</button>
+                                <input id="iframe-snippet-pov-builder-2" type="text" readonly style="flex:1; font-family:monospace; font-size:0.95rem; padding:0.5rem; border-radius:6px; border:1px solid #ccc; background:#fff;">
+                                <button class="btn" style="padding:0.5rem 1rem; font-size:0.95rem;" onclick="copyIframeSnippet('pov-builder-2')">Copy</button>
                             </div>
-                            <div id="copy-confirm-roi-calculator" style="color:#28a745; font-size:0.95rem; margin-top:0.5rem; display:none;">Copied!</div>
+                            <div id="copy-confirm-pov-builder-2" style="color:#28a745; font-size:0.95rem; margin-top:0.5rem; display:none;">Copied!</div>
                         </div>
                     </div>
 
@@ -122,24 +126,31 @@
                             <div id="copy-confirm-customer-quiz" style="color:#28a745; font-size:0.95rem; margin-top:0.5rem; display:none;">Copied!</div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
 
+        <section id="backburner-section" class="tools-section" style="display:none;">
+            <div class="container">
+                <h2>Backburner Tools</h2>
+                <div class="tools-grid">
                     <div class="tool-card">
-                        <div class="tool-icon">🤖</div>
-                        <h3>POV Builder 2.0 (Chatbot)</h3>
-                        <p>Chat with an AI to get tailored perspective and messaging guidance for your company on any current issue.</p>
+                        <div class="tool-icon">💰</div>
+                        <h3>ROI Calculator</h3>
+                        <p>Estimate potential returns from PR, content, and brand marketing investments.</p>
                         <div class="tool-features">
-                            <span class="feature">Conversational</span>
-                            <span class="feature">AI Guidance</span>
-                            <span class="feature">Brand Alignment</span>
+                            <span class="feature">Budget Planning</span>
+                            <span class="feature">Impact Projections</span>
+                            <span class="feature">Performance Metrics</span>
                         </div>
-                        <button class="tool-btn" onclick="openTool('pov-builder-2')">Try Tool</button>
+                        <button class="tool-btn" onclick="openTool('roi-calculator')">Try Tool</button>
                         <div class="embed-snippet" style="margin-top:1.5rem; background:#f8f9fa; border-radius:8px; padding:1rem; border:1px solid #e9ecef;">
                             <div style="font-weight:600; margin-bottom:0.5rem;">Embed this tool:</div>
                             <div style="display:flex; align-items:center; gap:0.5rem;">
-                                <input id="iframe-snippet-pov-builder-2" type="text" readonly style="flex:1; font-family:monospace; font-size:0.95rem; padding:0.5rem; border-radius:6px; border:1px solid #ccc; background:#fff;">
-                                <button class="btn" style="padding:0.5rem 1rem; font-size:0.95rem;" onclick="copyIframeSnippet('pov-builder-2')">Copy</button>
+                                <input id="iframe-snippet-roi-calculator" type="text" readonly style="flex:1; font-family:monospace; font-size:0.95rem; padding:0.5rem; border-radius:6px; border:1px solid #ccc; background:#fff;">
+                                <button class="btn" style="padding:0.5rem 1rem; font-size:0.95rem;" onclick="copyIframeSnippet('roi-calculator')">Copy</button>
                             </div>
-                            <div id="copy-confirm-pov-builder-2" style="color:#28a745; font-size:0.95rem; margin-top:0.5rem; display:none;">Copied!</div>
+                            <div id="copy-confirm-roi-calculator" style="color:#28a745; font-size:0.95rem; margin-top:0.5rem; display:none;">Copied!</div>
                         </div>
                     </div>
                 </div>
@@ -165,7 +176,7 @@
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         var baseUrl = window.location.origin + window.location.pathname.replace(/\/index.html$/, '/');
-        var tools = ['brand-alignment', 'pov-builder', 'roi-calculator', 'channel-optimizer', 'customer-quiz'];
+        var tools = ['brand-alignment', 'pov-builder', 'pov-builder-2', 'roi-calculator', 'channel-optimizer', 'customer-quiz'];
         tools.forEach(function(tool) {
             var input = document.getElementById('iframe-snippet-' + tool);
             if (input) {
@@ -182,6 +193,23 @@
         if (confirm) {
             confirm.style.display = 'block';
             setTimeout(function() { confirm.style.display = 'none'; }, 1500);
+        }
+    }
+    function showTab(tab) {
+        var mainSection = document.getElementById('tools');
+        var backburnerSection = document.getElementById('backburner-section');
+        var navMain = document.getElementById('nav-main');
+        var navBackburner = document.getElementById('nav-backburner');
+        if (tab === 'main') {
+            mainSection.style.display = '';
+            backburnerSection.style.display = 'none';
+            navMain.classList.add('active');
+            navBackburner.classList.remove('active');
+        } else {
+            mainSection.style.display = 'none';
+            backburnerSection.style.display = '';
+            navMain.classList.remove('active');
+            navBackburner.classList.add('active');
         }
     }
     </script>
