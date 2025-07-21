@@ -45,6 +45,25 @@ function resetTool() {
 }
 
 function getToolContent(toolName) {
+    const baseUrl = window.location.origin + window.location.pathname.replace(/\/index.html$/, '/');
+    const toolUrls = {
+        'brand-alignment': baseUrl + '?tool=brand-alignment',
+        'pov-builder': baseUrl + '?tool=pov-builder',
+        'roi-calculator': baseUrl + '?tool=roi-calculator',
+        'channel-optimizer': baseUrl + '?tool=channel-optimizer',
+        'customer-quiz': baseUrl + '?tool=customer-quiz'
+    };
+    const iframeSnippet = `<iframe src=\"${toolUrls[toolName]}\" width=\"100%\" height=\"700\" style=\"border:none;\"></iframe>`;
+    const embedSection = `
+        <div class="embed-snippet" style="margin-top:2rem; background:#f8f9fa; border-radius:8px; padding:1.5rem; border:1px solid #e9ecef;">
+            <div style="font-weight:600; margin-bottom:0.5rem;">Embed this tool on your site:</div>
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+                <input id="iframe-snippet" type="text" value="${iframeSnippet}" readonly style="flex:1; font-family:monospace; font-size:0.95rem; padding:0.5rem; border-radius:6px; border:1px solid #ccc; background:#fff;">
+                <button class="btn" style="padding:0.5rem 1rem; font-size:0.95rem;" onclick="copyIframeSnippet()">Copy</button>
+            </div>
+            <div id="copy-confirm" style="color:#28a745; font-size:0.95rem; margin-top:0.5rem; display:none;">Copied!</div>
+        </div>
+    `;
     const tools = {
         'brand-alignment': `
             <div class="tool-container">
@@ -53,6 +72,7 @@ function getToolContent(toolName) {
                     <p>Should your brand comment on a current issue? Answer the questions below to find out how well the issue aligns with your brand and what you should do next.</p>
                 </div>
                 <div id="quiz-content"></div>
+                ${embedSection}
             </div>
         `,
         
@@ -95,6 +115,7 @@ function getToolContent(toolName) {
                     </div>
                     <button class="btn" onclick="generatePOVIdeas()">Generate POV Ideas</button>
                 </div>
+                ${embedSection}
             </div>
         `,
         
@@ -153,6 +174,7 @@ function getToolContent(toolName) {
                     </div>
                     <button class="btn" onclick="calculateROI()">Calculate ROI</button>
                 </div>
+                ${embedSection}
             </div>
         `,
         
@@ -205,6 +227,7 @@ function getToolContent(toolName) {
                     </div>
                     <button class="btn" onclick="optimizeChannels()">Optimize Channel Mix</button>
                 </div>
+                ${embedSection}
             </div>
         `,
         
@@ -226,6 +249,7 @@ function getToolContent(toolName) {
                     </div>
                     <button class="btn" onclick="startCustomerQuiz()" id="start-quiz-btn" style="display: none;">Start Quiz</button>
                 </div>
+                ${embedSection}
             </div>
         `
     };
@@ -1191,5 +1215,18 @@ function calculateCustomerQuizScore() {
             title: 'Needs Improvement',
             description: `Your knowledge of ${demographic} consumers could benefit from deeper research. Understanding your audience is crucial for effective marketing - consider investing in customer research and persona development.`
         };
+    }
+} 
+
+// Copy iframe snippet to clipboard
+function copyIframeSnippet() {
+    const input = document.getElementById('iframe-snippet');
+    input.select();
+    input.setSelectionRange(0, 99999); // For mobile
+    document.execCommand('copy');
+    const confirm = document.getElementById('copy-confirm');
+    if (confirm) {
+        confirm.style.display = 'block';
+        setTimeout(() => { confirm.style.display = 'none'; }, 1500);
     }
 } 
