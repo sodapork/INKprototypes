@@ -288,7 +288,7 @@ main {
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 700;
-    color: #1ec9a3;
+    color: #222;
     font-size: 1.15rem;
     margin-bottom: 0.5rem;
 }
