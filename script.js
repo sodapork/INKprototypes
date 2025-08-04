@@ -315,7 +315,6 @@ function showBrandAlignmentQuestion() {
             <div class="question">${q.question}</div>
             <div class="options">${optionsHTML}</div>
         </div>
-        <button class="btn" id="next-btn" ${answers[`question-${currentQuestion}`] ? '' : 'disabled'} onclick="nextBrandAlignmentQuestion()">${currentQuestion === questions.length - 1 ? 'Get Results' : 'Next'}</button>
     `;
     document.getElementById('quiz-content').innerHTML = questionHTML;
 }
@@ -326,8 +325,16 @@ function selectSingleOption(questionIndex, value) {
     document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
     // Add selected class to clicked option
     event.target.classList.add('selected');
-    // Enable next button
-    document.getElementById('next-btn').disabled = false;
+    
+    // Auto-advance to next question after a short delay
+    setTimeout(() => {
+        if (currentQuestion < getIssueQuestions().length - 1) {
+            nextBrandAlignmentQuestion();
+        } else {
+            // If it's the last question, show results
+            showBrandAlignmentResults();
+        }
+    }, 500);
 }
 
 function nextBrandAlignmentQuestion() {
@@ -400,11 +407,11 @@ function showBrandAlignmentResults() {
             <div class="progress-bar">
                 <div class="progress-fill" style="width: ${results.score}%"></div>
             </div>
-            <p><strong>${results.title}</strong></p>
-            <p>${results.description}</p>
+            <p class="results-highlight"><strong>${results.title}</strong></p>
+            <p class="results-highlight">${results.description}</p>
             <h4>Key Areas to Address:</h4>
             <ul>
-                ${results.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                ${results.recommendations.map(rec => `<li class="results-highlight">${rec}</li>`).join('')}
             </ul>
             <div style="margin-top: 2rem; text-align: center;">
                 <button class="btn" onclick="window.open('https://ink-co.com/contact', '_blank')">Schedule a Consultation</button>
