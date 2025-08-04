@@ -863,10 +863,10 @@ function optimizeChannels() {
             <div class="channel-breakdown">
                 ${optimization.channels.map(channel => `
                     <div class="channel-item">
-                        <h4>${channel.name} (${channel.percentage}%)</h4>
-                        <p>${channel.description}</p>
+                        <h4 class="results-highlight">${channel.name} (${channel.percentage}%)</h4>
+                        <p class="results-highlight">${channel.description}</p>
                         <ul>
-                            ${channel.activities.map(activity => `<li>${activity}</li>`).join('')}
+                            ${channel.activities.map(activity => `<li class="results-highlight">${activity}</li>`).join('')}
                         </ul>
                     </div>
                 `).join('')}
@@ -874,7 +874,7 @@ function optimizeChannels() {
             
             <h4>Strategic Recommendations:</h4>
             <ul>
-                ${optimization.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                ${optimization.recommendations.map(rec => `<li class="results-highlight">${rec}</li>`).join('')}
             </ul>
             
             <div style="margin-top: 2rem; text-align: center;">
