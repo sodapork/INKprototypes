@@ -69,7 +69,7 @@ function getToolContent(toolName) {
             <div class="tool-container">
                 <div class="tool-header">
                     <h2>Brand Alignment Quiz</h2>
-                    <p>Should your brand comment on a current issue? Answer the questions below to find out how well the issue aligns with your brand and what you should do next.</p>
+                    <p>In today's rapidly changing landscape, brands face constant pressure to take stands on issues. But not every issue deserves your brand's voice. This quiz helps you think strategically about when and how to engage with current issues that matter to your stakeholders.</p>
                 </div>
                 <div id="quiz-content"></div>
             </div>
@@ -297,6 +297,88 @@ function initializeTool(toolName) {
 function startBrandAlignmentQuiz() {
     currentQuestion = 0;
     answers = {};
+    showIssueSelectionStep();
+}
+
+function showIssueSelectionStep() {
+    const issueSelectionHTML = `
+        <div class="issue-selection-container">
+            <div class="step-indicator">
+                <span class="step active">1. Select Issue</span>
+                <span class="step">2. Assess Alignment</span>
+                <span class="step">3. Get Results</span>
+            </div>
+            <div class="issue-selection-content">
+                <h3>What issue are you considering?</h3>
+                <p class="context-text">Before diving into alignment questions, let's identify the specific issue you're thinking about. This helps us provide more targeted guidance for your brand's unique situation.</p>
+                
+                <div class="input-group">
+                    <label for="issue-category">Issue Category</label>
+                    <select id="issue-category" onchange="updateIssueContext()">
+                        <option value="">Select a category...</option>
+                        <option value="cultural-movements">Cultural Movements</option>
+                        <option value="geopolitical-crises">Geopolitical Crises and War</option>
+                        <option value="climate-weather">Climate and Extreme Weather Events</option>
+                        <option value="violence-terrorism">National and Domestic Violence, Terrorist Attacks</option>
+                        <option value="political-infrastructure">Political, Infrastructure Issues</option>
+                        <option value="health-community">Health and Community Crises</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="specific-issue">Describe the specific issue</label>
+                    <textarea id="specific-issue" rows="3" placeholder="Describe the current issue, event, or topic you're considering commenting on..."></textarea>
+                </div>
+                
+                <div class="input-group">
+                    <label for="brand-context">Why are you considering this issue?</label>
+                    <textarea id="brand-context" rows="2" placeholder="What's driving your interest in this issue? (e.g., stakeholder pressure, business impact, values alignment)"></textarea>
+                </div>
+                
+                <button class="btn" onclick="proceedToAlignmentQuestions()">Continue to Alignment Assessment</button>
+            </div>
+        </div>
+    `;
+    document.getElementById('quiz-content').innerHTML = issueSelectionHTML;
+}
+
+function updateIssueContext() {
+    const category = document.getElementById('issue-category').value;
+    const contextText = document.querySelector('.context-text');
+    
+    const categoryContexts = {
+        'cultural-movements': 'Cultural movements around gender, sexuality, and racial issues require brands to demonstrate genuine understanding and authentic commitment. Consider your brand\'s track record and whether you can contribute meaningfully to the conversation.',
+        'geopolitical-crises': 'Geopolitical crises and war require extreme sensitivity and careful consideration. Assess whether your brand has relevant expertise or if commenting could be seen as opportunistic or insensitive.',
+        'climate-weather': 'Climate and extreme weather events demand long-term commitment and action, not just statements. Consider whether your brand can demonstrate meaningful progress and ongoing dedication to environmental issues.',
+        'violence-terrorism': 'Violence and terrorism issues require the highest level of sensitivity and care. Consider whether your brand has a legitimate role in this conversation or if staying silent might be more appropriate.',
+        'political-infrastructure': 'Political and infrastructure issues like union strikes, political unrest, and transportation crises directly impact your customers and stakeholders. Focus on how the issue affects your community.',
+        'health-community': 'Health and community crises like pandemics and poverty require brands to demonstrate genuine care and support. Consider your brand\'s role in the community and how you can provide real value.',
+        'other': 'For other issues, focus on the direct connection to your brand\'s mission, values, and stakeholder interests.'
+    };
+    
+    if (category && contextText) {
+        contextText.innerHTML = categoryContexts[category] || 'Consider how this issue connects to your brand\'s core mission, values, and stakeholder interests.';
+    }
+}
+
+function proceedToAlignmentQuestions() {
+    const category = document.getElementById('issue-category').value;
+    const specificIssue = document.getElementById('specific-issue').value.trim();
+    const brandContext = document.getElementById('brand-context').value.trim();
+    
+    if (!category || !specificIssue) {
+        alert('Please select an issue category and describe the specific issue.');
+        return;
+    }
+    
+    // Store the issue information
+    answers['issue-category'] = category;
+    answers['specific-issue'] = specificIssue;
+    answers['brand-context'] = brandContext;
+    
+    // Proceed to alignment questions
+    currentQuestion = 0;
     showBrandAlignmentQuestion();
 }
 
@@ -312,6 +394,11 @@ function showBrandAlignmentQuestion() {
     `).join('');
     const questionHTML = `
         <div class="question-container">
+            <div class="step-indicator">
+                <span class="step completed">1. Select Issue</span>
+                <span class="step active">2. Assess Alignment</span>
+                <span class="step">3. Get Results</span>
+            </div>
             <div class="question">${q.question}</div>
             <div class="options">${optionsHTML}</div>
         </div>
@@ -397,11 +484,26 @@ function getIssueQuestions() {
 }
 
 function showBrandAlignmentResults() {
-    const issueType = answers['issue-type'];
+    const issueCategory = answers['issue-category'];
+    const specificIssue = answers['specific-issue'];
+    const brandContext = answers['brand-context'];
     const results = calculateBrandAlignmentScore();
     
     const resultsHTML = `
         <div class="results">
+            <div class="step-indicator">
+                <span class="step completed">1. Select Issue</span>
+                <span class="step completed">2. Assess Alignment</span>
+                <span class="step active">3. Get Results</span>
+            </div>
+            
+            <div class="issue-summary">
+                <h4>Your Issue Analysis</h4>
+                <p><strong>Category:</strong> ${getCategoryDisplayName(issueCategory)}</p>
+                <p><strong>Specific Issue:</strong> ${specificIssue}</p>
+                ${brandContext ? `<p><strong>Your Context:</strong> ${brandContext}</p>` : ''}
+            </div>
+            
             <h3>Your Brand Alignment Assessment</h3>
             <div class="score ${results.level}">${results.score}%</div>
             <div class="progress-bar">
@@ -409,17 +511,108 @@ function showBrandAlignmentResults() {
             </div>
             <p class="results-highlight"><strong>${results.title}</strong></p>
             <p class="results-highlight">${results.description}</p>
+            
             <h4>Key Areas to Address:</h4>
             <ul>
                 ${results.recommendations.map(rec => `<li class="results-highlight">${rec}</li>`).join('')}
             </ul>
-            <div style="margin-top: 2rem; text-align: center;">
-                <button class="btn" onclick="window.open('https://ink-co.com/contact', '_blank')">Schedule a Consultation</button>
+            
+            <div class="next-steps">
+                <h4>Next Steps</h4>
+                <p>Ready to develop your brand's stance on this issue? Download our comprehensive worksheet to guide your strategic thinking and action planning.</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" onclick="downloadWorksheet()">Download Strategic Issues Worksheet</button>
+                    <button class="btn btn-secondary" onclick="window.open('https://ink-co.com/contact', '_blank')">Schedule a Consultation</button>
+                </div>
             </div>
         </div>
     `;
     
     document.getElementById('quiz-content').innerHTML = resultsHTML;
+}
+
+function getCategoryDisplayName(category) {
+    const categoryNames = {
+        'cultural-movements': 'Cultural Movements',
+        'geopolitical-crises': 'Geopolitical Crises and War',
+        'climate-weather': 'Climate and Extreme Weather Events',
+        'violence-terrorism': 'National and Domestic Violence, Terrorist Attacks',
+        'political-infrastructure': 'Political, Infrastructure Issues',
+        'health-community': 'Health and Community Crises',
+        'other': 'Other'
+    };
+    return categoryNames[category] || category;
+}
+
+function downloadWorksheet() {
+    // Create a simple worksheet content based on the quiz results
+    const issueCategory = answers['issue-category'];
+    const specificIssue = answers['specific-issue'];
+    const brandContext = answers['brand-context'];
+    const results = calculateBrandAlignmentScore();
+    
+    const worksheetContent = `
+Strategic Issues Management Worksheet
+Generated by INK's Brand Alignment Quiz
+
+ISSUE ANALYSIS
+==============
+Issue Category: ${getCategoryDisplayName(issueCategory)}
+Specific Issue: ${specificIssue}
+Brand Context: ${brandContext}
+
+ALIGNMENT ASSESSMENT
+===================
+Overall Score: ${results.score}%
+Recommendation: ${results.title}
+
+Key Areas to Address:
+${results.recommendations.map(rec => `- ${rec}`).join('\n')}
+
+STRATEGIC PLANNING FRAMEWORK
+===========================
+1. Issue Relevance
+   - How does this issue connect to our brand's mission?
+   - What's our unique perspective or expertise?
+
+2. Stakeholder Impact
+   - Who are the key stakeholders affected?
+   - What do they expect from us?
+
+3. Risk Assessment
+   - What are the potential risks of speaking out?
+   - What are the risks of staying silent?
+
+4. Action Planning
+   - What specific actions can we take?
+   - How will we measure success?
+
+5. Communication Strategy
+   - What's our key message?
+   - Which channels should we use?
+   - How will we engage stakeholders?
+
+NEXT STEPS
+==========
+- Review this worksheet with your leadership team
+- Develop specific action items and timelines
+- Consider consulting with INK for strategic guidance
+- Schedule follow-up assessment in 30-60 days
+
+For professional guidance on strategic issues management, contact INK:
+https://ink-co.com/contact
+    `;
+    
+    // Create and download the file
+    const blob = new Blob([worksheetContent], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'strategic-issues-worksheet.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
 }
 
 function calculateBrandAlignmentScore() {
@@ -534,10 +727,10 @@ async function generatePOVIdeas() {
                 // Split into idea and explanation
                 const match = line.match(/^- \*\*(.*?)\*\*\s*\n?\s*- Why this makes sense: (.*)$/s);
                 if (match) {
-                    return `<li><strong>${match[1]}</strong><br><span class="pov-explanation">${match[2]}</span></li>`;
+                    return `<li class="results-highlight"><strong>${match[1]}</strong><br><span class="pov-explanation">${match[2]}</span></li>`;
                 } else {
                     // fallback: just show the line
-                    return `<li>${line.replace(/^- /, '')}</li>`;
+                    return `<li class="results-highlight">${line.replace(/^- /, '')}</li>`;
                 }
             }).join('') + '</ul>';
         } else {
