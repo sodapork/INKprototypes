@@ -25,11 +25,13 @@ window.onclick = function(event) {
 
 // Tool opening function
 function openTool(toolName) {
+    console.log('Opening tool:', toolName);
     currentTool = toolName;
     currentQuestion = 0;
     answers = {};
     
     const toolContent = getToolContent(toolName);
+    console.log('Tool content length:', toolContent.length);
     toolContainer.innerHTML = toolContent;
     modal.style.display = "block";
     
