@@ -51,7 +51,8 @@ function getToolContent(toolName) {
         'pov-builder': baseUrl + '?tool=pov-builder',
         'roi-calculator': baseUrl + '?tool=roi-calculator',
         'channel-optimizer': baseUrl + '?tool=channel-optimizer',
-        'customer-quiz': baseUrl + '?tool=customer-quiz'
+        'customer-quiz': baseUrl + '?tool=customer-quiz',
+        'glossary-creator': baseUrl + '?tool=glossary-creator'
     };
     const iframeSnippet = `<iframe src=\"${toolUrls[toolName]}\" width=\"100%\" height=\"700\" style=\"border:none;\"></iframe>`;
     const embedSection = `
@@ -264,6 +265,39 @@ function getToolContent(toolName) {
                     <button class="btn btn-secondary" onclick="pov2Restart()">Restart Conversation</button>
                 </div>
             </div>
+        `,
+        
+        'glossary-creator': `
+            <div class="tool-container">
+                <div class="tool-header">
+                    <h2>Glossary Entry Creator</h2>
+                    <p>Create and publish glossary entries as drafts in WordPress for Ink's internal knowledge base.</p>
+                </div>
+                <div id="glossary-content">
+                    <div class="input-group">
+                        <label for="glossary-term">Term <span style="color:red">*</span></label>
+                        <input type="text" id="glossary-term" placeholder="Enter the term to define..." required>
+                    </div>
+                    <div class="input-group">
+                        <label for="glossary-definition">Definition <span style="color:red">*</span></label>
+                        <textarea id="glossary-definition" rows="4" placeholder="Provide a clear, concise definition of the term..." required></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="glossary-category">Category (optional)</label>
+                        <input type="text" id="glossary-category" placeholder="e.g., Marketing, Technology, Business Strategy...">
+                    </div>
+                    <div class="input-group">
+                        <label for="glossary-related-terms">Related Terms (optional)</label>
+                        <input type="text" id="glossary-related-terms" placeholder="e.g., SEO, Content Marketing, Brand Awareness">
+                    </div>
+                    <div class="input-group">
+                        <label for="glossary-author">Author (optional)</label>
+                        <input type="text" id="glossary-author" placeholder="Your name or team">
+                    </div>
+                    <button class="btn" onclick="createGlossaryEntry()">Create Glossary Entry</button>
+                    <div id="glossary-result" style="margin-top: 1rem;"></div>
+                </div>
+            </div>
         `
     };
     
@@ -288,6 +322,9 @@ function initializeTool(toolName) {
             // Already initialized in HTML
             break;
         case 'pov-builder-2':
+            // Already initialized in HTML
+            break;
+        case 'glossary-creator':
             // Already initialized in HTML
             break;
     }
@@ -1480,4 +1517,83 @@ function copyIframeSnippet() {
         confirm.style.display = 'block';
         setTimeout(() => { confirm.style.display = 'none'; }, 1500);
     }
+} 
+
+// --- Glossary Entry Creator Functions ---
+async function createGlossaryEntry() {
+    const term = document.getElementById('glossary-term').value.trim();
+    const definition = document.getElementById('glossary-definition').value.trim();
+    const category = document.getElementById('glossary-category').value.trim();
+    const relatedTerms = document.getElementById('glossary-related-terms').value.trim();
+    const author = document.getElementById('glossary-author').value.trim();
+    
+    // Validate required fields
+    if (!term || !definition) {
+        showGlossaryResult('Please fill in both the term and definition fields.', 'error');
+        return;
+    }
+    
+    // Show loading state
+    showGlossaryResult('Creating glossary entry...', 'loading');
+    
+    try {
+        const response = await fetch('/api/wordpress', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                term,
+                definition,
+                category,
+                relatedTerms,
+                author
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+            showGlossaryResult(`
+                <div style="color: #28a745; font-weight: 600; margin-bottom: 0.5rem;">✅ Glossary entry created successfully!</div>
+                <div style="margin-bottom: 0.5rem;"><strong>Post ID:</strong> ${data.post.id}</div>
+                <div style="margin-bottom: 0.5rem;"><strong>Status:</strong> ${data.post.status}</div>
+                <div style="margin-bottom: 1rem;"><strong>Link:</strong> <a href="${data.post.link}" target="_blank">View in WordPress</a></div>
+                <button class="btn btn-secondary" onclick="clearGlossaryForm()">Create Another Entry</button>
+            `, 'success');
+        } else {
+            showGlossaryResult(`Error: ${data.error || 'Failed to create glossary entry'}`, 'error');
+        }
+    } catch (error) {
+        console.error('Error creating glossary entry:', error);
+        showGlossaryResult('Network error. Please check your connection and try again.', 'error');
+    }
+}
+
+function showGlossaryResult(message, type) {
+    const resultDiv = document.getElementById('glossary-result');
+    if (!resultDiv) return;
+    
+    resultDiv.innerHTML = message;
+    resultDiv.className = `glossary-result ${type}`;
+    
+    // Add some basic styling
+    if (type === 'error') {
+        resultDiv.style.color = '#dc3545';
+        resultDiv.style.fontWeight = '600';
+    } else if (type === 'success') {
+        resultDiv.style.color = '#28a745';
+    } else if (type === 'loading') {
+        resultDiv.style.color = '#007bff';
+        resultDiv.style.fontStyle = 'italic';
+    }
+}
+
+function clearGlossaryForm() {
+    document.getElementById('glossary-term').value = '';
+    document.getElementById('glossary-definition').value = '';
+    document.getElementById('glossary-category').value = '';
+    document.getElementById('glossary-related-terms').value = '';
+    document.getElementById('glossary-author').value = '';
+    document.getElementById('glossary-result').innerHTML = '';
 } 

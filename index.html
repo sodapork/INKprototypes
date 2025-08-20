@@ -153,6 +153,26 @@
                             <div id="copy-confirm-customer-quiz" style="color:#28a745; font-size:0.95rem; margin-top:0.5rem; display:none;">Copied!</div>
                         </div>
                     </div>
+
+                    <div class="tool-card">
+                        <div class="tool-icon">📚</div>
+                        <h3>Glossary Entry Creator</h3>
+                        <p>Create and publish glossary entries as drafts in WordPress for Ink's internal knowledge base.</p>
+                        <div class="tool-features">
+                            <span class="feature">Term Definition</span>
+                            <span class="feature">WordPress Integration</span>
+                            <span class="feature">Draft Publishing</span>
+                        </div>
+                        <button class="tool-btn" onclick="openTool('glossary-creator')">Try Tool</button>
+                        <div class="embed-snippet" style="margin-top:1.5rem; background:#f8f9fa; border-radius:8px; padding:1rem; border:1px solid #e9ecef;">
+                            <div style="font-weight:600; margin-bottom:0.5rem;">Embed this tool:</div>
+                            <div style="display:flex; align-items:center; gap:0.5rem;">
+                                <input id="iframe-snippet-glossary-creator" type="text" readonly style="flex:1; font-family:monospace; font-size:0.95rem; padding:0.5rem; border-radius:6px; border:1px solid #ccc; background:#fff;">
+                                <button class="btn" style="padding:0.5rem 1rem; font-size:0.95rem;" onclick="copyIframeSnippet('glossary-creator')">Copy</button>
+                            </div>
+                            <div id="copy-confirm-glossary-creator" style="color:#28a745; font-size:0.95rem; margin-top:0.5rem; display:none;">Copied!</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -176,7 +196,7 @@
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         var baseUrl = window.location.origin + window.location.pathname.replace(/\/index.html$/, '/');
-        var tools = ['brand-alignment', 'pov-builder', 'pov-builder-2', 'roi-calculator', 'channel-optimizer', 'customer-quiz'];
+        var tools = ['brand-alignment', 'pov-builder', 'pov-builder-2', 'roi-calculator', 'channel-optimizer', 'customer-quiz', 'glossary-creator'];
         tools.forEach(function(tool) {
             var input = document.getElementById('iframe-snippet-' + tool);
             if (input) {
