@@ -271,16 +271,12 @@ function getToolContent(toolName) {
             <div class="tool-container">
                 <div class="tool-header">
                     <h2>Glossary Entry Creator</h2>
-                    <p>Create and publish glossary entries as drafts in WordPress for Ink's internal knowledge base.</p>
+                    <p>Create and publish glossary entries as drafts in WordPress for Ink's internal knowledge base with AI-powered definition generation.</p>
                 </div>
                 <div id="glossary-content">
                     <div class="input-group">
                         <label for="glossary-term">Term <span style="color:red">*</span></label>
                         <input type="text" id="glossary-term" placeholder="Enter the term to define..." required>
-                    </div>
-                    <div class="input-group">
-                        <label for="glossary-definition">Definition <span style="color:red">*</span></label>
-                        <textarea id="glossary-definition" rows="4" placeholder="Provide a clear, concise definition of the term..." required></textarea>
                     </div>
                     <div class="input-group">
                         <label for="glossary-category">Category (optional)</label>
@@ -294,7 +290,19 @@ function getToolContent(toolName) {
                         <label for="glossary-author">Author (optional)</label>
                         <input type="text" id="glossary-author" placeholder="Your name or team">
                     </div>
-                    <button class="btn" onclick="createGlossaryEntry()">Create Glossary Entry</button>
+                    <button class="btn" onclick="generateGlossaryDefinition()">Generate Definition with AI</button>
+                    
+                    <div id="glossary-definition-section" style="display: none; margin-top: 2rem;">
+                        <div class="input-group">
+                            <label for="glossary-definition">Definition <span style="color:red">*</span></label>
+                            <textarea id="glossary-definition" rows="6" placeholder="AI-generated definition will appear here. You can edit it before publishing..." required></textarea>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <button class="btn" onclick="createGlossaryEntry()">Create Glossary Entry</button>
+                            <button class="btn btn-secondary" onclick="regenerateDefinition()" style="margin-left: 0.5rem;">Regenerate Definition</button>
+                        </div>
+                    </div>
+                    
                     <div id="glossary-result" style="margin-top: 1rem;"></div>
                 </div>
             </div>
@@ -470,7 +478,7 @@ function getIssueQuestions() {
     // Only use universal questions for alignment
     return [
         {
-            question: "How closely does this issue relate to your brand’s core mission or values?",
+            question: "How closely does this issue relate to your brand's core mission or values?",
             options: [
                 { value: 'direct', text: 'Directly related' },
                 { value: 'somewhat', text: 'Somewhat related' },
@@ -482,7 +490,7 @@ function getIssueQuestions() {
             options: [
                 { value: 'expect', text: 'Yes, they expect it' },
                 { value: 'maybe', text: 'Maybe, but not sure' },
-                { value: 'no', text: 'No, they don’t expect it' }
+                { value: 'no', text: 'No, they don't expect it' }
             ]
         },
         {
@@ -496,7 +504,7 @@ function getIssueQuestions() {
         {
             question: "Does your brand have credible expertise or experience with this issue?",
             options: [
-                { value: 'expert', text: 'Yes, we’re recognized experts' },
+                { value: 'expert', text: 'Yes, we're recognized experts' },
                 { value: 'some', text: 'Some experience' },
                 { value: 'none', text: 'No expertise' }
             ]
@@ -622,7 +630,7 @@ function calculateBrandAlignmentScore() {
             } // worst gets 0
             maxScore += 2;
             // Advice logic
-            if (answer === 'not') advice.push('The issue is not closely related to your brand’s core mission.');
+            if (answer === 'not') advice.push('The issue is not closely related to your brand's core mission.');
             if (answer === 'no') advice.push('Your audience may not expect you to comment.');
             if (answer === 'never') advice.push('You have no track record on this issue.');
             if (answer === 'none') advice.push('You lack expertise on this issue.');
@@ -644,7 +652,7 @@ function calculateBrandAlignmentScore() {
     } else if (shouldComment && finalScore >= 40) {
         resultTitle = 'Proceed with caution.';
         resultDesc = 'There are some alignment gaps. Address them before making a public statement.';
-        recommendations = advice.length ? advice : ['Review your brand’s alignment before commenting.'];
+        recommendations = advice.length ? advice : ['Review your brand's alignment before commenting.'];
     } else {
         resultTitle = 'It may be best to stay silent.';
         resultDesc = 'Your brand is not well-aligned with this issue. Consider focusing on issues more relevant to your brand.';
@@ -1418,11 +1426,11 @@ let pov2State = {
 };
 const pov2Questions = [
     { key: 'issue', text: "What current issue or event are you considering making a public statement about?" },
-    { key: 'company', text: "What is your company’s name and industry?" },
-    { key: 'values', text: "What are your company’s core values?" },
+    { key: 'company', text: "What is your company's name and industry?" },
+    { key: 'values', text: "What are your company's core values?" },
     { key: 'audience', text: "Who is your primary audience for this statement? (e.g., customers, employees, media, public)" },
     { key: 'goal', text: "What is your main goal with this statement? (e.g., show support, clarify position, respond to criticism, etc.)" },
-    { key: 'risks', text: "Are there any risks or sensitivities you’re concerned about?" }
+    { key: 'risks', text: "Are there any risks or sensitivities you're concerned about?" }
 ];
 function pov2RenderChat() {
     const chatDiv = document.getElementById('pov2-chat');
@@ -1597,4 +1605,82 @@ function clearGlossaryForm() {
     document.getElementById('glossary-related-terms').value = '';
     document.getElementById('glossary-author').value = '';
     document.getElementById('glossary-result').innerHTML = '';
+} 
+
+// --- AI-Powered Glossary Definition Generation ---
+async function generateGlossaryDefinition() {
+    const term = document.getElementById('glossary-term').value.trim();
+    const category = document.getElementById('glossary-category').value.trim();
+    const relatedTerms = document.getElementById('glossary-related-terms').value.trim();
+    
+    // Validate required fields
+    if (!term) {
+        showGlossaryResult('Please enter a term to define.', 'error');
+        return;
+    }
+    
+    // Show loading state
+    showGlossaryResult('Generating definition with AI...', 'loading');
+    
+    try {
+        // Build the prompt for AI
+        let prompt = `Create a professional glossary definition for the term "${term}" in the context of marketing, communications, and business strategy. `;
+        
+        if (category) {
+            prompt += `Category: ${category}. `;
+        }
+        
+        if (relatedTerms) {
+            prompt += `Related terms/synonyms: ${relatedTerms}. `;
+        }
+        
+        prompt += `The definition should be clear, concise, and professional. Write it in a way that would be suitable for a business glossary. Keep it to 1-2 sentences maximum.`;
+        
+        const response = await fetch('/api/openai', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ prompt })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.choices && data.choices[0] && data.choices[0].message) {
+            const generatedDefinition = data.choices[0].message.content.trim();
+            
+            // Show the definition section and populate it
+            document.getElementById('glossary-definition-section').style.display = 'block';
+            document.getElementById('glossary-definition').value = generatedDefinition;
+            
+            showGlossaryResult(`
+                <div style="color: #28a745; font-weight: 600; margin-bottom: 0.5rem;">✅ Definition generated successfully!</div>
+                <div style="margin-bottom: 1rem;">Review and edit the definition above, then click "Create Glossary Entry" when ready.</div>
+            `, 'success');
+            
+            // Scroll to the definition section
+            document.getElementById('glossary-definition').scrollIntoView({ behavior: 'smooth' });
+        } else {
+            showGlossaryResult('Error: Could not generate definition. Please try again.', 'error');
+        }
+    } catch (error) {
+        console.error('Error generating definition:', error);
+        showGlossaryResult('Network error. Please check your connection and try again.', 'error');
+    }
+}
+
+async function regenerateDefinition() {
+    // Clear the current definition and regenerate
+    document.getElementById('glossary-definition').value = '';
+    await generateGlossaryDefinition();
+}
+
+function clearGlossaryForm() {
+    document.getElementById('glossary-term').value = '';
+    document.getElementById('glossary-definition').value = '';
+    document.getElementById('glossary-category').value = '';
+    document.getElementById('glossary-related-terms').value = '';
+    document.getElementById('glossary-author').value = '';
+    document.getElementById('glossary-result').innerHTML = '';
+    document.getElementById('glossary-definition-section').style.display = 'none';
 } 
