@@ -1556,9 +1556,10 @@ async function createGlossaryEntry() {
         if (response.ok && data.success) {
             showGlossaryResult(`
                 <div style="color: #28a745; font-weight: 600; margin-bottom: 0.5rem;">✅ Glossary entry created successfully!</div>
-                <div style="margin-bottom: 0.5rem;"><strong>Post ID:</strong> ${data.post.id}</div>
+                <div style="margin-bottom: 0.5rem;"><strong>Glossary ID:</strong> ${data.post.id}</div>
                 <div style="margin-bottom: 0.5rem;"><strong>Status:</strong> ${data.post.status}</div>
-                <div style="margin-bottom: 1rem;"><strong>Link:</strong> <a href="${data.post.link}" target="_blank">View in WordPress</a></div>
+                <div style="margin-bottom: 0.5rem;"><strong>Type:</strong> Glossary Entry</div>
+                <div style="margin-bottom: 1rem;"><strong>Link:</strong> <a href="${data.post.link}" target="_blank">View in WordPress Glossary</a></div>
                 <button class="btn btn-secondary" onclick="clearGlossaryForm()">Create Another Entry</button>
             `, 'success');
         } else {

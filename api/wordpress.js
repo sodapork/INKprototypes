@@ -54,7 +54,7 @@ ${relatedTerms ? `
       title: term,
       content: postContent,
       status: 'draft',
-      type: 'post',
+      type: 'glossary', // Use the custom post type 'glossary'
       categories: [], // You can add category IDs here if needed
       tags: ['glossary', 'ink-glossary'],
       meta: {
@@ -65,8 +65,8 @@ ${relatedTerms ? `
       }
     };
 
-    // Create the post via WordPress REST API
-    const response = await fetch(`${wpUrl}/wp-json/wp/v2/posts`, {
+    // Create the post via WordPress REST API using the glossary endpoint
+    const response = await fetch(`${wpUrl}/wp-json/wp/v2/glossary`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -84,12 +84,13 @@ ${relatedTerms ? `
 
     res.status(200).json({
       success: true,
-      message: 'Glossary entry created successfully as draft',
+      message: 'Glossary entry created successfully as draft in the Glossary section',
       post: {
         id: createdPost.id,
         title: createdPost.title.rendered,
         link: createdPost.link,
-        status: createdPost.status
+        status: createdPost.status,
+        type: 'glossary'
       }
     });
 
