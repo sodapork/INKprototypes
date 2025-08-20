@@ -21,8 +21,6 @@ window.onclick = function(event) {
     }
 }
 
-
-
 // Tool opening function
 function openTool(toolName) {
     console.log('Opening tool:', toolName);
