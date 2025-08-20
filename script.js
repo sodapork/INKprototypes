@@ -271,7 +271,7 @@ function getToolContent(toolName) {
             <div class="tool-container">
                 <div class="tool-header">
                     <h2>Glossary Entry Creator</h2>
-                    <p>Create and publish glossary entries as drafts in WordPress for Ink's internal knowledge base with AI-powered definition generation.</p>
+                    <p>Enter a term and let AI generate a professional definition, then publish to WordPress Glossary.</p>
                 </div>
                 <div id="glossary-content">
                     <div class="input-group">
