@@ -287,8 +287,8 @@ function getToolContent(toolName) {
                         <input type="text" id="glossary-category" placeholder="e.g., Marketing, Technology, Business Strategy...">
                     </div>
                     <div class="input-group">
-                        <label for="glossary-related-terms">Related Terms (optional)</label>
-                        <input type="text" id="glossary-related-terms" placeholder="e.g., SEO, Content Marketing, Brand Awareness">
+                        <label for="glossary-related-terms">Synonyms (optional)</label>
+                        <input type="text" id="glossary-related-terms" placeholder="e.g., Industry analyst outreach, Analyst engagement, AR">
                     </div>
                     <div class="input-group">
                         <label for="glossary-author">Author (optional)</label>

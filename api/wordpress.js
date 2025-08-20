@@ -22,15 +22,29 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Create the post content
+    // Create the post content with proper formatting
     const postContent = `
-<h2>${term}</h2>
+<h1>${term}</h1>
 
-<p><strong>Definition:</strong> ${definition}</p>
+<p>${definition}</p>
 
-${category ? `<p><strong>Category:</strong> ${category}</p>` : ''}
+${relatedTerms ? `
+<h3>Synonyms:</h3>
+<p>${relatedTerms}</p>
+` : ''}
 
-${relatedTerms ? `<p><strong>Related Terms:</strong> ${relatedTerms}</p>` : ''}
+<h3>Why does ${term.toLowerCase()} matter?</h3>
+<p>${definition}</p>
+
+<h3>INK's role</h3>
+<p>INK supports companies' ${term.toLowerCase()} through strategic guidance, implementation, and ongoing optimization to build credibility and achieve measurable results.</p>
+
+<h3>Challenges</h3>
+<ul>
+<li>Understanding the nuances and best practices of ${term.toLowerCase()}</li>
+<li>Implementing effective strategies with limited resources</li>
+<li>Measuring and demonstrating ROI from ${term.toLowerCase()} efforts</li>
+</ul>
 
 <p><em>This glossary entry was created by ${author || 'INK Team'}.</em></p>
     `.trim();
