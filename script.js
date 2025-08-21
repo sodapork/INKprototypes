@@ -490,7 +490,7 @@ function getIssueQuestions() {
             options: [
                 { value: 'expect', text: 'Yes, they expect it' },
                 { value: 'maybe', text: 'Maybe, but not sure' },
-                { value: 'no', text: 'No, they don't expect it' }
+                { value: 'no', text: 'No, they don\'t expect it' }
             ]
         },
         {
@@ -504,7 +504,7 @@ function getIssueQuestions() {
         {
             question: "Does your brand have credible expertise or experience with this issue?",
             options: [
-                { value: 'expert', text: 'Yes, we're recognized experts' },
+                { value: 'expert', text: 'Yes, we\'re recognized experts' },
                 { value: 'some', text: 'Some experience' },
                 { value: 'none', text: 'No expertise' }
             ]
@@ -630,7 +630,7 @@ function calculateBrandAlignmentScore() {
             } // worst gets 0
             maxScore += 2;
             // Advice logic
-            if (answer === 'not') advice.push('The issue is not closely related to your brand's core mission.');
+            if (answer === 'not') advice.push('The issue is not closely related to your brand\'s core mission.');
             if (answer === 'no') advice.push('Your audience may not expect you to comment.');
             if (answer === 'never') advice.push('You have no track record on this issue.');
             if (answer === 'none') advice.push('You lack expertise on this issue.');
@@ -652,7 +652,7 @@ function calculateBrandAlignmentScore() {
     } else if (shouldComment && finalScore >= 40) {
         resultTitle = 'Proceed with caution.';
         resultDesc = 'There are some alignment gaps. Address them before making a public statement.';
-        recommendations = advice.length ? advice : ['Review your brand's alignment before commenting.'];
+        recommendations = advice.length ? advice : ['Review your brand\'s alignment before commenting.'];
     } else {
         resultTitle = 'It may be best to stay silent.';
         resultDesc = 'Your brand is not well-aligned with this issue. Consider focusing on issues more relevant to your brand.';
@@ -1605,15 +1605,6 @@ function showGlossaryResult(message, type) {
         resultDiv.style.fontStyle = 'italic';
     }
 }
-
-function clearGlossaryForm() {
-    document.getElementById('glossary-term').value = '';
-    document.getElementById('glossary-definition').value = '';
-    document.getElementById('glossary-category').value = '';
-    document.getElementById('glossary-related-terms').value = '';
-    document.getElementById('glossary-author').value = '';
-    document.getElementById('glossary-result').innerHTML = '';
-} 
 
 // --- AI-Powered Glossary Definition Generation ---
 async function generateGlossaryDefinition() {
