@@ -1604,9 +1604,15 @@ async function generateGlossaryDefinition() {
         
         if (relatedTerms) {
             prompt += `Related terms/synonyms: ${relatedTerms}. `;
+        } else {
+            prompt += `Please also provide 2-3 relevant synonyms or related terms for this term. `;
         }
         
         prompt += `The definition should be clear, concise, and professional. Write it in a way that would be suitable for a business glossary. Keep it to 1-2 sentences maximum.`;
+        
+        if (!relatedTerms) {
+            prompt += ` Format your response as: DEFINITION: [your definition here] SYNONYMS: [comma-separated synonyms here]`;
+        }
         
         const response = await fetch('/api/openai', {
             method: 'POST',
@@ -1619,15 +1625,37 @@ async function generateGlossaryDefinition() {
         const data = await response.json();
         
         if (response.ok && data.choices && data.choices[0] && data.choices[0].message) {
-            const generatedDefinition = data.choices[0].message.content.trim();
+            const aiResponse = data.choices[0].message.content.trim();
+            
+            let generatedDefinition = aiResponse;
+            let generatedSynonyms = '';
+            
+            // Parse the response if it contains both definition and synonyms
+            if (!relatedTerms && aiResponse.includes('DEFINITION:') && aiResponse.includes('SYNONYMS:')) {
+                const definitionMatch = aiResponse.match(/DEFINITION:\s*(.*?)(?=\s*SYNONYMS:|$)/s);
+                const synonymsMatch = aiResponse.match(/SYNONYMS:\s*(.*?)$/s);
+                
+                if (definitionMatch) {
+                    generatedDefinition = definitionMatch[1].trim();
+                }
+                if (synonymsMatch) {
+                    generatedSynonyms = synonymsMatch[1].trim();
+                }
+            }
             
             // Show the definition section and populate it
             document.getElementById('glossary-definition-section').style.display = 'block';
             document.getElementById('glossary-definition').value = generatedDefinition;
             
+            // If synonyms were generated and the field is empty, populate it
+            if (generatedSynonyms && !relatedTerms) {
+                document.getElementById('glossary-related-terms').value = generatedSynonyms;
+            }
+            
             showGlossaryResult(`
                 <div style="color: #28a745; font-weight: 600; margin-bottom: 0.5rem;">✅ Definition generated successfully!</div>
                 <div style="margin-bottom: 1rem;">Review and edit the definition above, then click "Create Glossary Entry" when ready.</div>
+                ${generatedSynonyms ? `<div style="margin-bottom: 1rem; color: #17a2b8;"><strong>Generated synonyms:</strong> ${generatedSynonyms}</div>` : ''}
             `, 'success');
             
             // Scroll to the definition section
