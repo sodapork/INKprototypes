@@ -1636,18 +1636,18 @@ INK_ROLE: [Explain how INK (a strategic communications agency) helps companies w
 CHALLENGES: [List 3 specific challenges that companies face related to this term, in bullet point format]
 
 EXAMPLE FOR REFERENCE:
-For "LLM" (Large Language Model):
-DEFINITION: Large Language Models (LLMs) are AI systems that can understand, generate, and process human language, enabling businesses to automate content creation, customer service, and data analysis.
+For "Analyst Relations":
+DEFINITION: Analyst relations is the practice of building relationships with industry analysts who influence buyers, market categories, and company reputation—especially important for B2B companies in complex or emerging sectors.
 
-SYNONYMS: AI language models, natural language processing, generative AI
+SYNONYMS: Industry analyst outreach, Analyst engagement, AR
 
-WHY_MATTERS: LLMs are transforming how businesses communicate with customers, create content, and analyze data. They enable scalable, personalized interactions and content generation that can improve customer experience and operational efficiency.
+WHY_MATTERS: Analyst relations is a strategic effort to engage with analysts at firms like Gartner, Forrester, and IDC. These analysts advise buyers, define categories, and publish research that can shape perception and influence decisions. Effective analyst relations is more than securing a mention in a report. It's about forming ongoing relationships where analysts understand your business and you stay informed about how your category is evolving.
 
-INK_ROLE: INK helps companies leverage LLMs for strategic communications by developing AI-powered content strategies, ensuring brand voice consistency, and creating guidelines for effective human-AI collaboration in marketing and communications.
+INK_ROLE: INK supports companies' analyst relations through analyst briefings, evaluations, and long‑term engagement to build credibility and stay visible in key research cycles.
 
-CHALLENGES: - Maintaining brand voice and accuracy in AI-generated content
-- Ensuring ethical and responsible AI use in communications
-- Balancing automation with human creativity and oversight`;
+CHALLENGES: - Aligning company messaging with analyst expectations
+- Navigating pay‑to‑play programs with limited resources
+- Meeting deadlines tied to analyst research schedules`;
         
         if (category) {
             prompt += `\n\nCategory: ${category}`;
