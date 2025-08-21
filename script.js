@@ -1661,6 +1661,8 @@ CHALLENGES: - Distinguishing your brand in saturated markets
         
         const data = await response.json();
         
+        console.log('OpenAI Response:', data); // Debug logging
+        
         if (response.ok && data.choices && data.choices[0] && data.choices[0].message) {
             const aiResponse = data.choices[0].message.content.trim();
             
@@ -1737,7 +1739,8 @@ CHALLENGES: - Distinguishing your brand in saturated markets
             // Scroll to the definition section
             document.getElementById('glossary-definition').scrollIntoView({ behavior: 'smooth' });
         } else {
-            showGlossaryResult('Error: Could not generate definition. Please try again.', 'error');
+            console.error('OpenAI API Error:', data);
+            showGlossaryResult(`Error: Could not generate definition. ${data.error || 'Please try again.'}`, 'error');
         }
     } catch (error) {
         console.error('Error generating definition:', error);

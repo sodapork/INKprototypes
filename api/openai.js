@@ -16,15 +16,15 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`
       },
-      body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
-        messages: [
-          { role: 'system', content: 'You are a helpful brand strategist.' },
-          { role: 'user', content: prompt }
-        ],
-        max_tokens: 600,
-        temperature: 0.7
-      })
+              body: JSON.stringify({
+          model: 'gpt-3.5-turbo',
+          messages: [
+            { role: 'system', content: 'You are a professional business glossary writer for INK, a strategic communications and marketing agency. You create accurate, well-structured glossary entries that follow specific formatting requirements.' },
+            { role: 'user', content: prompt }
+          ],
+          max_tokens: 1000,
+          temperature: 0.3
+        })
     });
     const data = await response.json();
     res.status(200).json(data);
