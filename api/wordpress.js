@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Create the post content with proper formatting
+    // Create the post content with proper INK formatting
     const postContent = `
 <h1>${term}</h1>
 
