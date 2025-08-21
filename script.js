@@ -297,6 +297,22 @@ function getToolContent(toolName) {
                             <label for="glossary-definition">Definition <span style="color:red">*</span></label>
                             <textarea id="glossary-definition" rows="6" placeholder="AI-generated definition will appear here. You can edit it before publishing..." required></textarea>
                         </div>
+                        
+                        <div class="input-group" style="margin-top: 1rem;">
+                            <label for="glossary-why-matters">Why it matters</label>
+                            <textarea id="glossary-why-matters" rows="4" placeholder="AI-generated explanation of why this matters to businesses/marketers..."></textarea>
+                        </div>
+                        
+                        <div class="input-group" style="margin-top: 1rem;">
+                            <label for="glossary-ink-role">INK's role</label>
+                            <textarea id="glossary-ink-role" rows="4" placeholder="AI-generated explanation of how INK helps companies with this..."></textarea>
+                        </div>
+                        
+                        <div class="input-group" style="margin-top: 1rem;">
+                            <label for="glossary-challenges">Challenges</label>
+                            <textarea id="glossary-challenges" rows="4" placeholder="AI-generated list of challenges..."></textarea>
+                        </div>
+                        
                         <div style="margin-top: 1rem;">
                             <button class="btn" onclick="createGlossaryEntry()">Create Glossary Entry</button>
                             <button class="btn btn-secondary" onclick="regenerateDefinition()" style="margin-left: 0.5rem;">Regenerate Definition</button>
@@ -1545,10 +1561,10 @@ async function createGlossaryEntry() {
     showGlossaryResult('Creating glossary entry...', 'loading');
     
     try {
-        // Get the stored structured content
-        const whyMatters = document.getElementById('glossary-definition').getAttribute('data-why-matters') || '';
-        const inkRole = document.getElementById('glossary-definition').getAttribute('data-ink-role') || '';
-        const challenges = document.getElementById('glossary-definition').getAttribute('data-challenges') || '';
+        // Get the content from the form fields
+        const whyMatters = document.getElementById('glossary-why-matters').value.trim();
+        const inkRole = document.getElementById('glossary-ink-role').value.trim();
+        const challenges = document.getElementById('glossary-challenges').value.trim();
         
         const response = await fetch('/api/wordpress', {
             method: 'POST',
@@ -1742,12 +1758,23 @@ Now create the entry for "${term}" following the exact same format:`;
             document.getElementById('glossary-definition-section').style.display = 'block';
             document.getElementById('glossary-definition').value = generatedDefinition;
             
+            // Populate the additional fields with generated content
+            if (generatedWhyMatters) {
+                document.getElementById('glossary-why-matters').value = generatedWhyMatters;
+            }
+            if (generatedInkRole) {
+                document.getElementById('glossary-ink-role').value = generatedInkRole;
+            }
+            if (generatedChallenges) {
+                document.getElementById('glossary-challenges').value = generatedChallenges;
+            }
+            
             // If synonyms were generated and the field is empty, populate it
             if (generatedSynonyms && (!relatedTerms || relatedTerms.trim() === '')) {
                 document.getElementById('glossary-related-terms').value = generatedSynonyms;
             }
             
-            // Store the generated content in data attributes for later use
+            // Store the generated content in data attributes for later use (for backward compatibility)
             document.getElementById('glossary-definition').setAttribute('data-why-matters', generatedWhyMatters);
             document.getElementById('glossary-definition').setAttribute('data-ink-role', generatedInkRole);
             document.getElementById('glossary-definition').setAttribute('data-challenges', generatedChallenges);
@@ -1788,6 +1815,9 @@ Now create the entry for "${term}" following the exact same format:`;
 async function regenerateDefinition() {
     // Clear the current definition and regenerate
     document.getElementById('glossary-definition').value = '';
+    document.getElementById('glossary-why-matters').value = '';
+    document.getElementById('glossary-ink-role').value = '';
+    document.getElementById('glossary-challenges').value = '';
     await generateGlossaryDefinition();
 }
 
@@ -1797,6 +1827,9 @@ function clearGlossaryForm() {
     document.getElementById('glossary-category').value = '';
     document.getElementById('glossary-related-terms').value = '';
     document.getElementById('glossary-author').value = '';
+    document.getElementById('glossary-why-matters').value = '';
+    document.getElementById('glossary-ink-role').value = '';
+    document.getElementById('glossary-challenges').value = '';
     document.getElementById('glossary-result').innerHTML = '';
     document.getElementById('glossary-definition-section').style.display = 'none';
 } 
