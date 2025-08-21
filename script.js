@@ -1674,7 +1674,7 @@ Now create the entry for "${term}" following the exact same format:`;
         
         console.log('OpenAI Response:', data); // Debug logging
         
-        if (response.ok && data.choices && data.choices[0] && data.choices[0].message) {
+        if (response.ok && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
             const aiResponse = data.choices[0].message.content.trim();
             
             // Parse the structured AI response
@@ -1748,7 +1748,16 @@ Now create the entry for "${term}" following the exact same format:`;
             document.getElementById('glossary-definition').scrollIntoView({ behavior: 'smooth' });
         } else {
             console.error('OpenAI API Error:', data);
-            showGlossaryResult(`Error: Could not generate definition. ${data.error || 'Please try again.'}`, 'error');
+            let errorMessage = 'Could not generate definition. ';
+            if (data.error) {
+                errorMessage += data.error;
+            } else if (!response.ok) {
+                errorMessage += `API error (${response.status}). `;
+            } else {
+                errorMessage += 'Invalid response format. ';
+            }
+            errorMessage += 'Please try again.';
+            showGlossaryResult(`Error: ${errorMessage}`, 'error');
         }
     } catch (error) {
         console.error('Error generating definition:', error);
