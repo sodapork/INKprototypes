@@ -1517,6 +1517,11 @@ async function createGlossaryEntry() {
     showGlossaryResult('Creating glossary entry...', 'loading');
     
     try {
+        // Get the stored structured content
+        const whyMatters = document.getElementById('glossary-definition').getAttribute('data-why-matters') || '';
+        const inkRole = document.getElementById('glossary-definition').getAttribute('data-ink-role') || '';
+        const challenges = document.getElementById('glossary-definition').getAttribute('data-challenges') || '';
+        
         const response = await fetch('/api/wordpress', {
             method: 'POST',
             headers: {
@@ -1527,7 +1532,10 @@ async function createGlossaryEntry() {
                 definition,
                 category,
                 relatedTerms,
-                author
+                author,
+                whyMatters,
+                inkRole,
+                challenges
             })
         });
         
@@ -1595,24 +1603,45 @@ async function generateGlossaryDefinition() {
     showGlossaryResult('Generating definition with AI...', 'loading');
     
     try {
-        // Build the prompt for AI
-        let prompt = `Create a professional glossary definition for the term "${term}" in the context of marketing, communications, and business strategy. `;
+        // Build the prompt for AI with INK formatting instructions
+        let prompt = `Create a professional glossary definition for the term "${term}" in the context of marketing, communications, and business strategy. 
+
+IMPORTANT FORMATTING INSTRUCTIONS:
+The definition should be structured exactly like this INK glossary example:
+
+"Analyst Relations is the practice of building relationships with industry analysts who influence buyers, market categories, and company reputation—especially important for B2B companies in complex or emerging sectors.
+
+Synonyms: Industry analyst outreach, Analyst engagement, AR
+
+Why does analyst relations matter? Analyst relations is a strategic effort to engage with analysts at firms like Gartner, Forrester, and IDC. These analysts advise buyers, define categories, and publish research that can shape perception and influence decisions. Effective analyst relations is more than securing a mention in a report. It's about forming ongoing relationships where analysts understand your business and you stay informed about how your category is evolving.
+
+INK's role: INK supports companies' analyst relations through analyst briefings, evaluations, and long‑term engagement to build credibility and stay visible in key research cycles.
+
+Challenges:
+- Aligning company messaging with analyst expectations
+- Navigating pay‑to‑play programs with limited resources
+- Meeting deadlines tied to analyst research schedules"
+
+Your response should include:
+1. A clear, professional definition (1-2 sentences)
+2. Synonyms section (if not provided by user)
+3. "Why does [term] matter?" section explaining importance and context
+4. "INK's role" section explaining how INK supports this area
+5. "Challenges" section with 3 bullet points of common obstacles
+
+Use INK's professional, authoritative voice throughout.`;
         
         if (category) {
-            prompt += `Category: ${category}. `;
+            prompt += `\n\nCategory: ${category}`;
         }
         
         if (relatedTerms) {
-            prompt += `Related terms/synonyms: ${relatedTerms}. `;
+            prompt += `\n\nUser-provided synonyms: ${relatedTerms}`;
         } else {
-            prompt += `Please also provide 2-3 relevant synonyms or related terms for this term. `;
+            prompt += `\n\nPlease generate 2-3 relevant synonyms for this term.`;
         }
         
-        prompt += `The definition should be clear, concise, and professional. Write it in a way that would be suitable for a business glossary. Keep it to 1-2 sentences maximum.`;
-        
-        if (!relatedTerms) {
-            prompt += ` Format your response as: DEFINITION: [your definition here] SYNONYMS: [comma-separated synonyms here]`;
-        }
+        prompt += `\n\nFormat your response as: DEFINITION: [definition] SYNONYMS: [synonyms] WHY_MATTERS: [why it matters section] INK_ROLE: [INK's role section] CHALLENGES: [challenges section]`;
         
         const response = await fetch('/api/openai', {
             method: 'POST',
@@ -1630,16 +1659,46 @@ async function generateGlossaryDefinition() {
             let generatedDefinition = aiResponse;
             let generatedSynonyms = '';
             
-            // Parse the response if it contains both definition and synonyms
-            if (!relatedTerms && aiResponse.includes('DEFINITION:') && aiResponse.includes('SYNONYMS:')) {
+            // Parse the structured AI response
+            let generatedDefinition = aiResponse;
+            let generatedSynonyms = '';
+            let generatedWhyMatters = '';
+            let generatedInkRole = '';
+            let generatedChallenges = '';
+            
+            // Parse the structured response
+            if (aiResponse.includes('DEFINITION:')) {
                 const definitionMatch = aiResponse.match(/DEFINITION:\s*(.*?)(?=\s*SYNONYMS:|$)/s);
-                const synonymsMatch = aiResponse.match(/SYNONYMS:\s*(.*?)$/s);
-                
                 if (definitionMatch) {
                     generatedDefinition = definitionMatch[1].trim();
                 }
+            }
+            
+            if (aiResponse.includes('SYNONYMS:')) {
+                const synonymsMatch = aiResponse.match(/SYNONYMS:\s*(.*?)(?=\s*WHY_MATTERS:|$)/s);
                 if (synonymsMatch) {
                     generatedSynonyms = synonymsMatch[1].trim();
+                }
+            }
+            
+            if (aiResponse.includes('WHY_MATTERS:')) {
+                const whyMattersMatch = aiResponse.match(/WHY_MATTERS:\s*(.*?)(?=\s*INK_ROLE:|$)/s);
+                if (whyMattersMatch) {
+                    generatedWhyMatters = whyMattersMatch[1].trim();
+                }
+            }
+            
+            if (aiResponse.includes('INK_ROLE:')) {
+                const inkRoleMatch = aiResponse.match(/INK_ROLE:\s*(.*?)(?=\s*CHALLENGES:|$)/s);
+                if (inkRoleMatch) {
+                    generatedInkRole = inkRoleMatch[1].trim();
+                }
+            }
+            
+            if (aiResponse.includes('CHALLENGES:')) {
+                const challengesMatch = aiResponse.match(/CHALLENGES:\s*(.*?)$/s);
+                if (challengesMatch) {
+                    generatedChallenges = challengesMatch[1].trim();
                 }
             }
             
@@ -1652,10 +1711,18 @@ async function generateGlossaryDefinition() {
                 document.getElementById('glossary-related-terms').value = generatedSynonyms;
             }
             
+            // Store the generated content in data attributes for later use
+            document.getElementById('glossary-definition').setAttribute('data-why-matters', generatedWhyMatters);
+            document.getElementById('glossary-definition').setAttribute('data-ink-role', generatedInkRole);
+            document.getElementById('glossary-definition').setAttribute('data-challenges', generatedChallenges);
+            
             showGlossaryResult(`
-                <div style="color: #28a745; font-weight: 600; margin-bottom: 0.5rem;">✅ Definition generated successfully!</div>
-                <div style="margin-bottom: 1rem;">Review and edit the definition above, then click "Create Glossary Entry" when ready.</div>
-                ${generatedSynonyms ? `<div style="margin-bottom: 1rem; color: #17a2b8;"><strong>Generated synonyms:</strong> ${generatedSynonyms}</div>` : ''}
+                <div style="color: #28a745; font-weight: 600; margin-bottom: 0.5rem;">✅ Complete glossary entry generated successfully!</div>
+                <div style="margin-bottom: 1rem;">Review and edit the content above, then click "Create Glossary Entry" when ready.</div>
+                ${generatedSynonyms ? `<div style="margin-bottom: 0.5rem; color: #17a2b8;"><strong>Generated synonyms:</strong> ${generatedSynonyms}</div>` : ''}
+                ${generatedWhyMatters ? `<div style="margin-bottom: 0.5rem; color: #17a2b8;"><strong>Why it matters:</strong> ${generatedWhyMatters}</div>` : ''}
+                ${generatedInkRole ? `<div style="margin-bottom: 0.5rem; color: #17a2b8;"><strong>INK's role:</strong> ${generatedInkRole}</div>` : ''}
+                ${generatedChallenges ? `<div style="margin-bottom: 0.5rem; color: #17a2b8;"><strong>Challenges:</strong> ${generatedChallenges}</div>` : ''}
             `, 'success');
             
             // Scroll to the definition section

@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  const { term, definition, category, relatedTerms, author } = req.body;
+  const { term, definition, category, relatedTerms, author, whyMatters, inkRole, challenges } = req.body;
   
   // Validate required fields
   if (!term || !definition) {
@@ -34,17 +34,19 @@ ${relatedTerms ? `
 ` : ''}
 
 <h3>Why does ${term.toLowerCase()} matter?</h3>
-<p>${definition}</p>
+<p>${whyMatters || definition}</p>
 
 <h3>INK's role</h3>
-<p>INK supports companies' ${term.toLowerCase()} through strategic guidance, implementation, and ongoing optimization to build credibility and achieve measurable results.</p>
+<p>${inkRole || `INK supports companies' ${term.toLowerCase()} through strategic guidance, implementation, and ongoing optimization to build credibility and achieve measurable results.`}</p>
 
 <h3>Challenges</h3>
+${challenges ? challenges : `
 <ul>
 <li>Understanding the nuances and best practices of ${term.toLowerCase()}</li>
 <li>Implementing effective strategies with limited resources</li>
 <li>Measuring and demonstrating ROI from ${term.toLowerCase()} efforts</li>
 </ul>
+`}
 
 <p><em>This glossary entry was created by ${author || 'INK Team'}.</em></p>
     `.trim();
