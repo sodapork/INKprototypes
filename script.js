@@ -1609,10 +1609,20 @@ async function generateGlossaryDefinition() {
 Create a comprehensive glossary entry for the term "${term}" in the context of business, marketing, communications, and technology strategy.
 
 CRITICAL REQUIREMENTS:
-- Provide an ACCURATE and PROFESSIONAL definition that correctly explains what this term means in a business context
+- FIRST, carefully analyze what the term "${term}" actually means in a business/technology context
+- If the term contains common abbreviations (like LLM, AI, API, etc.), recognize and define the full meaning
+- Provide an ACCURATE and PROFESSIONAL definition that correctly explains what this term means
 - Focus on how this term relates to marketing, communications, business strategy, or technology
-- If the term has multiple meanings, focus on the business/marketing/communications context
 - Use clear, professional language suitable for business professionals
+
+TERM ANALYSIS:
+- If "${term}" contains "LLM" - this refers to Large Language Models (AI systems)
+- If "${term}" contains "AI" - this refers to Artificial Intelligence
+- If "${term}" contains "API" - this refers to Application Programming Interface
+- If "${term}" contains "SEO" - this refers to Search Engine Optimization
+- If "${term}" contains "CRM" - this refers to Customer Relationship Management
+- If "${term}" contains "ROI" - this refers to Return on Investment
+- If "${term}" contains "KPI" - this refers to Key Performance Indicators
 
 FORMAT YOUR RESPONSE EXACTLY AS FOLLOWS:
 DEFINITION: [Write a clear, accurate 1-2 sentence definition of what this term means in a business context]
@@ -1626,18 +1636,18 @@ INK_ROLE: [Explain how INK (a strategic communications agency) helps companies w
 CHALLENGES: [List 3 specific challenges that companies face related to this term, in bullet point format]
 
 EXAMPLE FOR REFERENCE:
-For "Brand Positioning":
-DEFINITION: Brand positioning is the strategic process of establishing a unique market presence and perception for a company, product, or service in the minds of target customers.
+For "LLM" (Large Language Model):
+DEFINITION: Large Language Models (LLMs) are AI systems that can understand, generate, and process human language, enabling businesses to automate content creation, customer service, and data analysis.
 
-SYNONYMS: Market positioning, brand differentiation, competitive positioning
+SYNONYMS: AI language models, natural language processing, generative AI
 
-WHY_MATTERS: Brand positioning determines how customers perceive and remember your brand relative to competitors. It influences purchasing decisions, brand loyalty, and market share. Effective positioning creates clarity about your value proposition and helps you stand out in crowded markets.
+WHY_MATTERS: LLMs are transforming how businesses communicate with customers, create content, and analyze data. They enable scalable, personalized interactions and content generation that can improve customer experience and operational efficiency.
 
-INK_ROLE: INK supports companies' brand positioning through strategic messaging development, competitive analysis, and market research to create compelling, differentiated brand narratives that resonate with target audiences.
+INK_ROLE: INK helps companies leverage LLMs for strategic communications by developing AI-powered content strategies, ensuring brand voice consistency, and creating guidelines for effective human-AI collaboration in marketing and communications.
 
-CHALLENGES: - Distinguishing your brand in saturated markets
-- Aligning internal teams around positioning strategy  
-- Maintaining consistency across all touchpoints`;
+CHALLENGES: - Maintaining brand voice and accuracy in AI-generated content
+- Ensuring ethical and responsible AI use in communications
+- Balancing automation with human creativity and oversight`;
         
         if (category) {
             prompt += `\n\nCategory: ${category}`;
