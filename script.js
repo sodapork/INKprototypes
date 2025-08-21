@@ -1604,32 +1604,40 @@ async function generateGlossaryDefinition() {
     
     try {
         // Build the prompt for AI with INK formatting instructions
-        let prompt = `Create a professional glossary definition for the term "${term}" in the context of marketing, communications, and business strategy. 
+        let prompt = `You are a professional business glossary writer for INK, a strategic communications and marketing agency. 
 
-IMPORTANT FORMATTING INSTRUCTIONS:
-The definition should be structured exactly like this INK glossary example:
+Create a comprehensive glossary entry for the term "${term}" in the context of business, marketing, communications, and technology strategy.
 
-"Analyst Relations is the practice of building relationships with industry analysts who influence buyers, market categories, and company reputation—especially important for B2B companies in complex or emerging sectors.
+CRITICAL REQUIREMENTS:
+- Provide an ACCURATE and PROFESSIONAL definition that correctly explains what this term means in a business context
+- Focus on how this term relates to marketing, communications, business strategy, or technology
+- If the term has multiple meanings, focus on the business/marketing/communications context
+- Use clear, professional language suitable for business professionals
 
-Synonyms: Industry analyst outreach, Analyst engagement, AR
+FORMAT YOUR RESPONSE EXACTLY AS FOLLOWS:
+DEFINITION: [Write a clear, accurate 1-2 sentence definition of what this term means in a business context]
 
-Why does analyst relations matter? Analyst relations is a strategic effort to engage with analysts at firms like Gartner, Forrester, and IDC. These analysts advise buyers, define categories, and publish research that can shape perception and influence decisions. Effective analyst relations is more than securing a mention in a report. It's about forming ongoing relationships where analysts understand your business and you stay informed about how your category is evolving.
+SYNONYMS: [Provide 2-3 relevant synonyms or related terms, comma-separated]
 
-INK's role: INK supports companies' analyst relations through analyst briefings, evaluations, and long‑term engagement to build credibility and stay visible in key research cycles.
+WHY_MATTERS: [Explain why this term/concept matters to businesses, marketers, or communications professionals. What impact does it have?]
 
-Challenges:
-- Aligning company messaging with analyst expectations
-- Navigating pay‑to‑play programs with limited resources
-- Meeting deadlines tied to analyst research schedules"
+INK_ROLE: [Explain how INK (a strategic communications agency) helps companies with this area. What services or expertise does INK provide related to this term?]
 
-Your response should include:
-1. A clear, professional definition (1-2 sentences)
-2. Synonyms section (if not provided by user)
-3. "Why does [term] matter?" section explaining importance and context
-4. "INK's role" section explaining how INK supports this area
-5. "Challenges" section with 3 bullet points of common obstacles
+CHALLENGES: [List 3 specific challenges that companies face related to this term, in bullet point format]
 
-Use INK's professional, authoritative voice throughout.`;
+EXAMPLE FOR REFERENCE:
+For "Brand Positioning":
+DEFINITION: Brand positioning is the strategic process of establishing a unique market presence and perception for a company, product, or service in the minds of target customers.
+
+SYNONYMS: Market positioning, brand differentiation, competitive positioning
+
+WHY_MATTERS: Brand positioning determines how customers perceive and remember your brand relative to competitors. It influences purchasing decisions, brand loyalty, and market share. Effective positioning creates clarity about your value proposition and helps you stand out in crowded markets.
+
+INK_ROLE: INK supports companies' brand positioning through strategic messaging development, competitive analysis, and market research to create compelling, differentiated brand narratives that resonate with target audiences.
+
+CHALLENGES: - Distinguishing your brand in saturated markets
+- Aligning internal teams around positioning strategy  
+- Maintaining consistency across all touchpoints`;
         
         if (category) {
             prompt += `\n\nCategory: ${category}`;
@@ -1718,11 +1726,12 @@ Use INK's professional, authoritative voice throughout.`;
             
             showGlossaryResult(`
                 <div style="color: #28a745; font-weight: 600; margin-bottom: 0.5rem;">✅ Complete glossary entry generated successfully!</div>
-                <div style="margin-bottom: 1rem;">Review and edit the content above, then click "Create Glossary Entry" when ready.</div>
-                ${generatedSynonyms ? `<div style="margin-bottom: 0.5rem; color: #17a2b8;"><strong>Generated synonyms:</strong> ${generatedSynonyms}</div>` : ''}
-                ${generatedWhyMatters ? `<div style="margin-bottom: 0.5rem; color: #17a2b8;"><strong>Why it matters:</strong> ${generatedWhyMatters}</div>` : ''}
-                ${generatedInkRole ? `<div style="margin-bottom: 0.5rem; color: #17a2b8;"><strong>INK's role:</strong> ${generatedInkRole}</div>` : ''}
-                ${generatedChallenges ? `<div style="margin-bottom: 0.5rem; color: #17a2b8;"><strong>Challenges:</strong> ${generatedChallenges}</div>` : ''}
+                <div style="margin-bottom: 1rem;">Review and edit the definition above, then click "Create Glossary Entry" when ready.</div>
+                <div style="margin-bottom: 0.5rem; color: #17a2b8;"><strong>Generated content includes:</strong></div>
+                ${generatedSynonyms ? `<div style="margin-bottom: 0.5rem; color: #17a2b8;">• <strong>Synonyms:</strong> ${generatedSynonyms}</div>` : ''}
+                ${generatedWhyMatters ? `<div style="margin-bottom: 0.5rem; color: #17a2b8;">• <strong>Why it matters:</strong> ${generatedWhyMatters}</div>` : ''}
+                ${generatedInkRole ? `<div style="margin-bottom: 0.5rem; color: #17a2b8;">• <strong>INK's role:</strong> ${generatedInkRole}</div>` : ''}
+                ${generatedChallenges ? `<div style="margin-bottom: 0.5rem; color: #17a2b8;">• <strong>Challenges:</strong> ${generatedChallenges}</div>` : ''}
             `, 'success');
             
             // Scroll to the definition section
