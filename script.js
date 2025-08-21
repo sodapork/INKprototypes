@@ -290,6 +290,10 @@ function getToolContent(toolName) {
                         <label for="glossary-author">Author (optional)</label>
                         <input type="text" id="glossary-author" placeholder="Your name or team">
                     </div>
+                    <div class="input-group">
+                        <label for="glossary-notes">Notes for AI (optional)</label>
+                        <textarea id="glossary-notes" rows="3" placeholder="Provide additional context, specific direction, or examples to help the AI generate a more accurate definition. For example: 'Focus on B2B marketing context' or 'Include examples of how companies use this technology'"></textarea>
+                    </div>
                     <button class="btn" onclick="generateGlossaryDefinition()">Generate Definition with AI</button>
                     
                     <div id="glossary-definition-section" style="display: none; margin-top: 2rem;">
@@ -1627,6 +1631,7 @@ async function generateGlossaryDefinition() {
     const term = document.getElementById('glossary-term').value.trim();
     const category = document.getElementById('glossary-category').value.trim();
     const relatedTerms = document.getElementById('glossary-related-terms').value.trim();
+    const notes = document.getElementById('glossary-notes').value.trim();
     
     // Validate required fields
     if (!term) {
@@ -1674,6 +1679,10 @@ Now create the entry for "${term}" following the exact same format:`;
             prompt += `\n\nUser-provided synonyms: ${relatedTerms}`;
         } else {
             prompt += `\n\nPlease generate 2-3 relevant synonyms for this term.`;
+        }
+        
+        if (notes) {
+            prompt += `\n\nAdditional context and direction: ${notes}`;
         }
         
         prompt += `\n\nFormat your response as: DEFINITION: [definition] SYNONYMS: [synonyms] WHY_MATTERS: [why it matters section] INK_ROLE: [INK's role section] CHALLENGES: [challenges section]`;
@@ -1827,6 +1836,7 @@ function clearGlossaryForm() {
     document.getElementById('glossary-category').value = '';
     document.getElementById('glossary-related-terms').value = '';
     document.getElementById('glossary-author').value = '';
+    document.getElementById('glossary-notes').value = '';
     document.getElementById('glossary-why-matters').value = '';
     document.getElementById('glossary-ink-role').value = '';
     document.getElementById('glossary-challenges').value = '';
