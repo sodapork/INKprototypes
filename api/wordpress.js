@@ -24,29 +24,31 @@ export default async function handler(req, res) {
   try {
     // Create the post content with proper INK formatting
     const postContent = `
-<h1>${term}</h1>
-
 <p>${definition}</p>
 
 ${relatedTerms ? `
 <h3>Synonyms:</h3>
+
 <p>${relatedTerms}</p>
 ` : ''}
 
+${whyMatters ? `
 <h3>Why does ${term.toLowerCase()} matter?</h3>
-<p>${whyMatters || definition}</p>
 
+<p>${whyMatters}</p>
+` : ''}
+
+${inkRole ? `
 <h3>INK's role</h3>
-<p>${inkRole || `INK supports companies' ${term.toLowerCase()} through strategic guidance, implementation, and ongoing optimization to build credibility and achieve measurable results.`}</p>
 
+<p>${inkRole}</p>
+` : ''}
+
+${challenges ? `
 <h3>Challenges</h3>
-${challenges ? challenges : `
-<ul>
-<li>Understanding the nuances and best practices of ${term.toLowerCase()}</li>
-<li>Implementing effective strategies with limited resources</li>
-<li>Measuring and demonstrating ROI from ${term.toLowerCase()} efforts</li>
-</ul>
-`}
+
+${challenges.includes('-') ? challenges.split('\n').map(challenge => challenge.trim()).filter(challenge => challenge.startsWith('-')).map(challenge => `<p>${challenge.substring(1).trim()}</p>`).join('\n') : `<p>${challenges}</p>`}
+` : ''}
 
 <p><em>This glossary entry was created by ${author || 'INK Team'}.</em></p>
     `.trim();

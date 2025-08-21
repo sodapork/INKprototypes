@@ -270,12 +270,40 @@ function getToolContent(toolName) {
         'glossary-creator': `
             <div class="tool-container">
                 <div class="tool-header">
-                    <h2>Glossary Entry Creator - TEST</h2>
-                    <p>Test version to debug the tool.</p>
+                    <h2>Glossary Entry Creator</h2>
+                    <p>Enter a term and let AI generate a professional definition following INK's glossary format, then publish to WordPress Glossary.</p>
                 </div>
                 <div id="glossary-content">
-                    <p>This is a test version of the glossary tool.</p>
-                    <button class="btn" onclick="alert('Glossary tool is working!')">Test Button</button>
+                    <div class="input-group">
+                        <label for="glossary-term">Term <span style="color:red">*</span></label>
+                        <input type="text" id="glossary-term" placeholder="Enter the term to define..." required>
+                    </div>
+                    <div class="input-group">
+                        <label for="glossary-category">Category (optional)</label>
+                        <input type="text" id="glossary-category" placeholder="e.g., Marketing, Technology, Business Strategy...">
+                    </div>
+                    <div class="input-group">
+                        <label for="glossary-related-terms">Synonyms (optional)</label>
+                        <input type="text" id="glossary-related-terms" placeholder="e.g., Industry analyst outreach, Analyst engagement, AR">
+                    </div>
+                    <div class="input-group">
+                        <label for="glossary-author">Author (optional)</label>
+                        <input type="text" id="glossary-author" placeholder="Your name or team">
+                    </div>
+                    <button class="btn" onclick="generateGlossaryDefinition()">Generate Definition with AI</button>
+                    
+                    <div id="glossary-definition-section" style="display: none; margin-top: 2rem;">
+                        <div class="input-group">
+                            <label for="glossary-definition">Definition <span style="color:red">*</span></label>
+                            <textarea id="glossary-definition" rows="6" placeholder="AI-generated definition will appear here. You can edit it before publishing..." required></textarea>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <button class="btn" onclick="createGlossaryEntry()">Create Glossary Entry</button>
+                            <button class="btn btn-secondary" onclick="regenerateDefinition()" style="margin-left: 0.5rem;">Regenerate Definition</button>
+                        </div>
+                    </div>
+                    
+                    <div id="glossary-result" style="margin-top: 1rem;"></div>
                 </div>
             </div>
         `
@@ -1629,7 +1657,7 @@ CHALLENGES: - Aligning company messaging with analyst expectations
 - Navigating pay‑to‑play programs with limited resources
 - Meeting deadlines tied to analyst research schedules
 
-Now create the entry for "${term}":`;
+Now create the entry for "${term}" following the exact same format:`;
         
         if (category) {
             prompt += `\n\nCategory: ${category}`;
@@ -1657,9 +1685,6 @@ Now create the entry for "${term}":`;
         
         if (response.ok && data.choices && data.choices[0] && data.choices[0].message) {
             const aiResponse = data.choices[0].message.content.trim();
-            
-            let generatedDefinition = aiResponse;
-            let generatedSynonyms = '';
             
             // Parse the structured AI response
             let generatedDefinition = aiResponse;
