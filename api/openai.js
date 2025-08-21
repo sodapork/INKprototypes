@@ -22,7 +22,6 @@ export default async function handler(req, res) {
             { role: 'system', content: 'You are a professional business glossary writer for INK, a strategic communications and marketing agency. You create accurate, well-structured glossary entries that follow specific formatting requirements.' },
             { role: 'user', content: prompt }
           ],
-          max_tokens: 1000,
           temperature: 0.3
         })
     });
