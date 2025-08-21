@@ -1678,6 +1678,16 @@ Now create the entry for "${term}" following the exact same format:`;
         console.log('First choice:', data.choices?.[0]);
         console.log('Message:', data.choices?.[0]?.message);
         console.log('Content:', data.choices?.[0]?.message?.content);
+        console.log('Content type:', typeof data.choices?.[0]?.message?.content);
+        console.log('Content length:', data.choices?.[0]?.message?.content?.length);
+        
+        // Debug each condition separately
+        console.log('Condition checks:');
+        console.log('- response.ok:', response.ok);
+        console.log('- data.choices exists:', !!data.choices);
+        console.log('- data.choices[0] exists:', !!data.choices?.[0]);
+        console.log('- data.choices[0].message exists:', !!data.choices?.[0]?.message);
+        console.log('- data.choices[0].message.content exists:', !!data.choices?.[0]?.message?.content);
         
         if (response.ok && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
             const aiResponse = data.choices[0].message.content ? data.choices[0].message.content.trim() : '';

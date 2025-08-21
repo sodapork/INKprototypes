@@ -47,10 +47,11 @@ export default async function handler(req, res) {
       statusText: response.statusText,
       responseLength: data.choices?.[0]?.message?.content ? data.choices[0].message.content.length : 0,
       hasError: !!data.error,
-      error: data.error
+      error: data.error,
+      fullResponse: data
     });
 
-    if (!response.ok) {
+    if (!response.ok || data.error) {
       console.error('OpenAI API Error Response:', data);
       res.status(response.status).json({ 
         error: 'OpenAI API error', 
