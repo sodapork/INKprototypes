@@ -1673,9 +1673,14 @@ Now create the entry for "${term}" following the exact same format:`;
         const data = await response.json();
         
         console.log('OpenAI Response:', data); // Debug logging
+        console.log('Response status:', response.ok);
+        console.log('Data choices:', data.choices);
+        console.log('First choice:', data.choices?.[0]);
+        console.log('Message:', data.choices?.[0]?.message);
+        console.log('Content:', data.choices?.[0]?.message?.content);
         
         if (response.ok && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
-            const aiResponse = data.choices[0].message.content.trim();
+            const aiResponse = data.choices[0].message.content ? data.choices[0].message.content.trim() : '';
             
             // Parse the structured AI response
             let generatedDefinition = aiResponse;
@@ -1687,35 +1692,35 @@ Now create the entry for "${term}" following the exact same format:`;
             // Parse the structured response
             if (aiResponse.includes('DEFINITION:')) {
                 const definitionMatch = aiResponse.match(/DEFINITION:\s*(.*?)(?=\s*SYNONYMS:|$)/s);
-                if (definitionMatch) {
+                if (definitionMatch && definitionMatch[1]) {
                     generatedDefinition = definitionMatch[1].trim();
                 }
             }
             
             if (aiResponse.includes('SYNONYMS:')) {
                 const synonymsMatch = aiResponse.match(/SYNONYMS:\s*(.*?)(?=\s*WHY_MATTERS:|$)/s);
-                if (synonymsMatch) {
+                if (synonymsMatch && synonymsMatch[1]) {
                     generatedSynonyms = synonymsMatch[1].trim();
                 }
             }
             
             if (aiResponse.includes('WHY_MATTERS:')) {
                 const whyMattersMatch = aiResponse.match(/WHY_MATTERS:\s*(.*?)(?=\s*INK_ROLE:|$)/s);
-                if (whyMattersMatch) {
+                if (whyMattersMatch && whyMattersMatch[1]) {
                     generatedWhyMatters = whyMattersMatch[1].trim();
                 }
             }
             
             if (aiResponse.includes('INK_ROLE:')) {
                 const inkRoleMatch = aiResponse.match(/INK_ROLE:\s*(.*?)(?=\s*CHALLENGES:|$)/s);
-                if (inkRoleMatch) {
+                if (inkRoleMatch && inkRoleMatch[1]) {
                     generatedInkRole = inkRoleMatch[1].trim();
                 }
             }
             
             if (aiResponse.includes('CHALLENGES:')) {
                 const challengesMatch = aiResponse.match(/CHALLENGES:\s*(.*?)$/s);
-                if (challengesMatch) {
+                if (challengesMatch && challengesMatch[1]) {
                     generatedChallenges = challengesMatch[1].trim();
                 }
             }
@@ -1725,7 +1730,7 @@ Now create the entry for "${term}" following the exact same format:`;
             document.getElementById('glossary-definition').value = generatedDefinition;
             
             // If synonyms were generated and the field is empty, populate it
-            if (generatedSynonyms && !relatedTerms) {
+            if (generatedSynonyms && (!relatedTerms || relatedTerms.trim() === '')) {
                 document.getElementById('glossary-related-terms').value = generatedSynonyms;
             }
             
@@ -1750,9 +1755,11 @@ Now create the entry for "${term}" following the exact same format:`;
             console.error('OpenAI API Error:', data);
             let errorMessage = 'Could not generate definition. ';
             if (data.error) {
-                errorMessage += data.error;
+                errorMessage += data.error.message || data.error;
             } else if (!response.ok) {
                 errorMessage += `API error (${response.status}). `;
+            } else if (!data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
+                errorMessage += 'Invalid response format from OpenAI API. ';
             } else {
                 errorMessage += 'Invalid response format. ';
             }

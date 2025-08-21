@@ -19,8 +19,8 @@ export default async function handler(req, res) {
   });
 
   try {
-    // Use the new OpenAI API format
-    const response = await fetch('https://api.openai.com/v1/responses', {
+    // Use the OpenAI Chat Completions API
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -28,17 +28,14 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'gpt-4',
-        input: [
+        messages: [
           {
             role: 'user',
-            content: [
-              {
-                type: 'input_text',
-                text: prompt
-              }
-            ]
+            content: prompt
           }
-        ]
+        ],
+        max_tokens: 1000,
+        temperature: 0.7
       })
     });
 
@@ -48,7 +45,7 @@ export default async function handler(req, res) {
       timestamp: new Date().toISOString(),
       status: response.status,
       statusText: response.statusText,
-      responseLength: data.output_text ? data.output_text.length : 0,
+      responseLength: data.choices?.[0]?.message?.content ? data.choices[0].message.content.length : 0,
       hasError: !!data.error,
       error: data.error
     });
@@ -63,16 +60,8 @@ export default async function handler(req, res) {
       return;
     }
 
-    // Convert new format to old format for compatibility
-    const convertedResponse = {
-      choices: [{
-        message: {
-          content: data.output_text
-        }
-      }]
-    };
-
-    res.status(200).json(convertedResponse);
+    // Return the response in the expected format
+    res.status(200).json(data);
     
   } catch (err) {
     console.error('OpenAI API Exception:', {
