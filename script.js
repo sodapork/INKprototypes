@@ -1672,6 +1672,7 @@ Now create the entry for "${term}" following the exact same format:`;
         
         const data = await response.json();
         
+        console.log('=== DEBUGGING START ===');
         console.log('OpenAI Response:', data); // Debug logging
         console.log('Response status:', response.ok);
         console.log('Data choices:', data.choices);
@@ -1688,6 +1689,8 @@ Now create the entry for "${term}" following the exact same format:`;
         console.log('- data.choices[0] exists:', !!data.choices?.[0]);
         console.log('- data.choices[0].message exists:', !!data.choices?.[0]?.message);
         console.log('- data.choices[0].message.content exists:', !!data.choices?.[0]?.message?.content);
+        console.log('=== DEBUGGING END ===');
+        console.log('Timestamp:', new Date().toISOString());
         
         if (response.ok && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
             const aiResponse = data.choices[0].message.content ? data.choices[0].message.content.trim() : '';
