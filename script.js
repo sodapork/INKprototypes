@@ -1604,50 +1604,32 @@ async function generateGlossaryDefinition() {
     
     try {
         // Build the prompt for AI with INK formatting instructions
-        let prompt = `You are a professional business glossary writer for INK, a strategic communications and marketing agency. 
+        let prompt = `Create a glossary entry for "${term}" following this exact format:
 
-Create a comprehensive glossary entry for the term "${term}" in the context of business, marketing, communications, and technology strategy.
+DEFINITION: [1-2 sentence definition in business context]
 
-CRITICAL REQUIREMENTS:
-- FIRST, carefully analyze what the term "${term}" actually means in a business/technology context
-- If the term contains common abbreviations (like LLM, AI, API, etc.), recognize and define the full meaning
-- Provide an ACCURATE and PROFESSIONAL definition that correctly explains what this term means
-- Focus on how this term relates to marketing, communications, business strategy, or technology
-- Use clear, professional language suitable for business professionals
+SYNONYMS: [2-3 related terms, comma-separated]
 
-TERM ANALYSIS:
-- If "${term}" contains "LLM" - this refers to Large Language Models (AI systems)
-- If "${term}" contains "AI" - this refers to Artificial Intelligence
-- If "${term}" contains "API" - this refers to Application Programming Interface
-- If "${term}" contains "SEO" - this refers to Search Engine Optimization
-- If "${term}" contains "CRM" - this refers to Customer Relationship Management
-- If "${term}" contains "ROI" - this refers to Return on Investment
-- If "${term}" contains "KPI" - this refers to Key Performance Indicators
+WHY_MATTERS: [Why this matters to businesses/marketers]
 
-FORMAT YOUR RESPONSE EXACTLY AS FOLLOWS:
-DEFINITION: [Write a clear, accurate 1-2 sentence definition of what this term means in a business context]
+INK_ROLE: [How INK helps companies with this]
 
-SYNONYMS: [Provide 2-3 relevant synonyms or related terms, comma-separated]
+CHALLENGES: [3 bullet points of challenges]
 
-WHY_MATTERS: [Explain why this term/concept matters to businesses, marketers, or communications professionals. What impact does it have?]
-
-INK_ROLE: [Explain how INK (a strategic communications agency) helps companies with this area. What services or expertise does INK provide related to this term?]
-
-CHALLENGES: [List 3 specific challenges that companies face related to this term, in bullet point format]
-
-EXAMPLE FOR REFERENCE:
-For "Analyst Relations":
+Example for "Analyst Relations":
 DEFINITION: Analyst relations is the practice of building relationships with industry analysts who influence buyers, market categories, and company reputation—especially important for B2B companies in complex or emerging sectors.
 
 SYNONYMS: Industry analyst outreach, Analyst engagement, AR
 
-WHY_MATTERS: Analyst relations is a strategic effort to engage with analysts at firms like Gartner, Forrester, and IDC. These analysts advise buyers, define categories, and publish research that can shape perception and influence decisions. Effective analyst relations is more than securing a mention in a report. It's about forming ongoing relationships where analysts understand your business and you stay informed about how your category is evolving.
+WHY_MATTERS: Analyst relations is a strategic effort to engage with analysts at firms like Gartner, Forrester, and IDC. These analysts advise buyers, define categories, and publish research that can shape perception and influence decisions.
 
 INK_ROLE: INK supports companies' analyst relations through analyst briefings, evaluations, and long‑term engagement to build credibility and stay visible in key research cycles.
 
 CHALLENGES: - Aligning company messaging with analyst expectations
 - Navigating pay‑to‑play programs with limited resources
-- Meeting deadlines tied to analyst research schedules`;
+- Meeting deadlines tied to analyst research schedules
+
+Now create the entry for "${term}":`;
         
         if (category) {
             prompt += `\n\nCategory: ${category}`;

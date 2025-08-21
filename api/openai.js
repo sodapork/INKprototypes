@@ -17,7 +17,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${apiKey}`
       },
               body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
+          model: 'gpt-4',
           messages: [
             { role: 'system', content: 'You are a professional business glossary writer for INK, a strategic communications and marketing agency. You create accurate, well-structured glossary entries that follow specific formatting requirements.' },
             { role: 'user', content: prompt }
