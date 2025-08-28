@@ -80,40 +80,48 @@ function getToolContent(toolName) {
             <div class="tool-container">
                 <div class="tool-header" style="display: flex; align-items: center; justify-content: space-between;">
                     <div>
-                        <h2>Point-of-View Builder</h2>
-                        <p>Get authentic, actionable POV ideas for your brand on any issue. Powered by AI.</p>
+                        <h2>Issues Management Builder</h2>
+                        <p>Develop your brand's strategic approach to managing and responding to current issues. Powered by AI.</p>
                     </div>
                     <span class="ai-tag">AI enabled</span>
                 </div>
                 <div id="pov-content">
                     <div class="input-group">
-                        <label for="website-url">Your Website URL <span style="color:red">*</span></label>
-                        <input type="url" id="website-url" placeholder="https://yourbrand.com" required>
+                        <label for="thought-leadership-area">What do you want to be a thought leader on? <span style="color:red">*</span></label>
+                        <textarea id="thought-leadership-area" rows="3" placeholder="Describe the specific area, topic, or issue where you want to establish thought leadership..." required></textarea>
                     </div>
                     <div class="input-group">
-                        <label for="issue-topic">What issue or topic do you want to address?</label>
-                        <textarea id="issue-topic" rows="3" placeholder="Describe the issue you want to take a stance on..." required></textarea>
+                        <label for="company-background">Who are you and what do you do? <span style="color:red">*</span></label>
+                        <textarea id="company-background" rows="3" placeholder="Describe your company, your role, and your organization's mission..." required></textarea>
                     </div>
                     <div class="input-group">
-                        <label for="brand-values">What are your brand's core values? (optional)</label>
-                        <textarea id="brand-values" rows="2" placeholder="List your brand's key values and principles..."></textarea>
+                        <label for="specialization">What do you specialize in? <span style="color:red">*</span></label>
+                        <textarea id="specialization" rows="2" placeholder="Describe your areas of expertise, unique capabilities, or specialized knowledge..." required></textarea>
                     </div>
                     <div class="input-group">
-                        <label for="target-audience">Who is your target audience? (optional)</label>
-                        <textarea id="target-audience" rows="2" placeholder="Describe your primary audience..."></textarea>
+                        <label for="keyword-relevance">How relevant is this keyword or term to your business?</label>
+                        <textarea id="keyword-relevance" rows="2" placeholder="Explain how this topic connects to your business operations, values, or stakeholder interests..."></textarea>
                     </div>
                     <div class="input-group">
-                        <label for="desired-outcome">What outcome do you want to achieve? (optional)</label>
-                        <select id="desired-outcome">
-                            <option value="">Select an outcome...</option>
-                            <option value="awareness">Raise awareness</option>
-                            <option value="education">Educate audience</option>
-                            <option value="action">Drive action</option>
-                            <option value="conversation">Start conversation</option>
-                            <option value="leadership">Position as thought leader</option>
+                        <label for="white-space">Where is the white space? (Market gap analysis)</label>
+                        <textarea id="white-space" rows="3" placeholder="Describe the gap in the market of ideas, what's missing from current conversations, and your unique perspective that could fill this void..."></textarea>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+                            <strong>Objective:</strong> Help you understand where the gap in the market of ideas is + your perspective to create something that is unique.
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="term-assessment">Term assessment</label>
+                        <select id="term-assessment">
+                            <option value="">Select assessment...</option>
+                            <option value="great-term">That's a great term</option>
+                            <option value="crowded-term">That's a crowded term</option>
                         </select>
                     </div>
-                    <button class="btn" onclick="generatePOVIdeas()">Generate POV Ideas</button>
+                    <div class="input-group">
+                        <label for="sme">Who is your SME (Subject Matter Expert)?</label>
+                        <textarea id="sme" rows="2" placeholder="Identify the person or team with the deepest expertise on this topic within your organization..."></textarea>
+                    </div>
+                    <button class="btn" onclick="generateIssuesManagementStrategy()">Generate Issues Management Strategy</button>
                 </div>
             </div>
         `,
@@ -180,12 +188,22 @@ function getToolContent(toolName) {
             <div class="tool-container">
                 <div class="tool-header">
                     <h2>Campaign Channel Optimizer</h2>
-                    <p>Find the optimal mix of marketing channels for your specific goals and industry.</p>
+                    <p>Find the optimal mix of marketing channels for your specific goals and industry. This tool helps you allocate your marketing budget and resources across the most effective channels based on your objectives, audience, and industry context.</p>
                 </div>
+                
+                <div class="context-section" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #007bff;">
+                    <h4 style="margin-top: 0; color: #007bff;">🎯 Campaign Objectives Overview</h4>
+                    <p style="margin-bottom: 1rem; color: #333;"><strong style="color: #333;">Brand Awareness:</strong> Reach new audiences and build recognition</p>
+                    <p style="margin-bottom: 1rem; color: #333;"><strong style="color: #333;">Lead Generation:</strong> Capture qualified prospects for your sales funnel</p>
+                    <p style="margin-bottom: 1rem; color: #333;"><strong style="color: #333;">Direct Sales:</strong> Drive immediate conversions and revenue</p>
+                    <p style="margin-bottom: 1rem; color: #333;"><strong style="color: #333;">Audience Engagement:</strong> Build relationships and community</p>
+                    <p style="margin-bottom: 0; color: #333;"><strong style="color: #333;">Thought Leadership:</strong> Position your brand as an industry expert</p>
+                </div>
+                
                 <div id="channel-content">
                     <div class="input-group">
-                        <label for="campaign-goal">Primary Campaign Goal</label>
-                        <select id="campaign-goal">
+                        <label for="campaign-goal">Primary Campaign Goal <span style="color: #007bff;">*</span></label>
+                        <select id="campaign-goal" onchange="updateGoalContext()">
                             <option value="">Select your primary goal...</option>
                             <option value="awareness">Brand Awareness</option>
                             <option value="leads">Lead Generation</option>
@@ -193,9 +211,11 @@ function getToolContent(toolName) {
                             <option value="engagement">Audience Engagement</option>
                             <option value="thought-leadership">Thought Leadership</option>
                         </select>
+                        <div id="goal-context" style="font-size: 0.9rem; color: #666; margin-top: 0.5rem; display: none;"></div>
                     </div>
+                    
                     <div class="input-group">
-                        <label for="target-audience-size">Target Audience Size</label>
+                        <label for="target-audience-size">Target Audience Size <span style="color: #007bff;">*</span></label>
                         <select id="target-audience-size">
                             <option value="">Select audience size...</option>
                             <option value="local">Local/Regional</option>
@@ -203,8 +223,9 @@ function getToolContent(toolName) {
                             <option value="global">Global</option>
                         </select>
                     </div>
+                    
                     <div class="input-group">
-                        <label for="budget-range">Budget Range</label>
+                        <label for="budget-range">Budget Range <span style="color: #007bff;">*</span></label>
                         <select id="budget-range">
                             <option value="">Select budget range...</option>
                             <option value="low">Under $10K</option>
@@ -213,16 +234,39 @@ function getToolContent(toolName) {
                             <option value="enterprise">$200K+</option>
                         </select>
                     </div>
+                    
                     <div class="input-group">
-                        <label for="industry-focus">Industry Focus</label>
-                        <select id="industry-focus">
+                        <label for="industry-focus">Industry Focus <span style="color: #007bff;">*</span></label>
+                        <select id="industry-focus" onchange="updateIndustryContext()">
                             <option value="">Select your industry...</option>
-                            <option value="b2b">B2B</option>
-                            <option value="b2c">B2C</option>
+                            <option value="tech">Technology</option>
+                            <option value="energy">Energy & Utilities</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="finance">Financial Services</option>
+                            <option value="retail">Retail & E-commerce</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="b2b">B2B Services</option>
+                            <option value="b2c">B2C Consumer</option>
                             <option value="nonprofit">Nonprofit</option>
                             <option value="government">Government</option>
+                            <option value="education">Education</option>
+                            <option value="real-estate">Real Estate</option>
+                            <option value="food-beverage">Food & Beverage</option>
+                            <option value="automotive">Automotive</option>
+                            <option value="fashion-beauty">Fashion & Beauty</option>
+                            <option value="travel-hospitality">Travel & Hospitality</option>
+                            <option value="legal">Legal Services</option>
+                            <option value="consulting">Consulting</option>
+                            <option value="media-entertainment">Media & Entertainment</option>
+                            <option value="sports-fitness">Sports & Fitness</option>
+                            <option value="pharmaceuticals">Pharmaceuticals</option>
+                            <option value="logistics">Logistics & Transportation</option>
+                            <option value="construction">Construction</option>
+                            <option value="agriculture">Agriculture</option>
                         </select>
+                        <div id="industry-context" style="font-size: 0.9rem; color: #666; margin-top: 0.5rem; display: none;"></div>
                     </div>
+                    
                     <button class="btn" onclick="optimizeChannels()">Optimize Channel Mix</button>
                 </div>
             </div>
@@ -687,16 +731,18 @@ function calculateBrandAlignmentScore() {
     };
 }
 
-// POV Builder Functions (AI-powered)
-async function generatePOVIdeas() {
-    const website = document.getElementById('website-url').value.trim();
-    const issueTopic = document.getElementById('issue-topic').value.trim();
-    const brandValues = document.getElementById('brand-values').value.trim();
-    const targetAudience = document.getElementById('target-audience').value.trim();
-    const desiredOutcome = document.getElementById('desired-outcome').value;
+// Issues Management Builder Functions (AI-powered)
+async function generateIssuesManagementStrategy() {
+    const thoughtLeadershipArea = document.getElementById('thought-leadership-area').value.trim();
+    const companyBackground = document.getElementById('company-background').value.trim();
+    const specialization = document.getElementById('specialization').value.trim();
+    const keywordRelevance = document.getElementById('keyword-relevance').value.trim();
+    const whiteSpace = document.getElementById('white-space').value.trim();
+    const termAssessment = document.getElementById('term-assessment').value;
+    const sme = document.getElementById('sme').value.trim();
 
-    if (!website || !issueTopic || !brandValues || !targetAudience || !desiredOutcome) {
-        document.getElementById('pov-content').insertAdjacentHTML('beforeend', '<div class="results" style="color:red; margin-top:1rem;">Please fill in <strong>all fields</strong> before generating POV ideas.</div>');
+    if (!thoughtLeadershipArea || !companyBackground || !specialization) {
+        document.getElementById('pov-content').insertAdjacentHTML('beforeend', '<div class="results" style="color:red; margin-top:1rem;">Please fill in all <strong>required fields</strong> before generating your issues management strategy.</div>');
         return;
     }
 
@@ -704,16 +750,30 @@ async function generatePOVIdeas() {
     document.getElementById('pov-content').innerHTML = `
         <div style="text-align:center; padding:2rem;">
             <div class="loader" style="margin-bottom:1rem;"></div>
-            <p>Generating authentic POV ideas...</p>
+            <p>Generating your issues management strategy...</p>
         </div>
     `;
 
     // Build the OpenAI prompt
-    let prompt = `You are a brand strategist. Given the following information, suggest a list of 5-7 authentic point-of-view (POV) ideas for the brand to take on the issue. For each bullet point, provide:\n- The POV idea (bolded)\n- A short explanation (1-2 sentences) of why this position makes sense for the brand, referencing the website, values, or audience if possible.\n\nBrand website: ${website}\nIssue/topic: ${issueTopic}`;
-    if (brandValues) prompt += `\nBrand values: ${brandValues}`;
-    if (targetAudience) prompt += `\nTarget audience: ${targetAudience}`;
-    if (desiredOutcome) prompt += `\nDesired outcome: ${desiredOutcome}`;
-    prompt += `\n\nFormat your response as:\n- **POV idea**\n  - Why this makes sense: [explanation]\nRepeat for each idea. Do not write a full article. Guide the user, do not give them all the answers.`;
+    let prompt = `You are an issues management and thought leadership strategist. Based on the following information, provide a comprehensive issues management strategy that includes:
+
+1. **Thought Leadership Positioning**: How to establish authority in this area
+2. **White Space Analysis**: How to identify and fill market gaps
+3. **Content Strategy**: What types of content to create
+4. **Messaging Framework**: Key talking points and positioning
+5. **Stakeholder Engagement**: How to engage with different audiences
+6. **Risk Management**: Potential challenges and how to address them
+
+Company Background: ${companyBackground}
+Thought Leadership Area: ${thoughtLeadershipArea}
+Specialization: ${specialization}`;
+
+    if (keywordRelevance) prompt += `\nKeyword Relevance: ${keywordRelevance}`;
+    if (whiteSpace) prompt += `\nWhite Space Analysis: ${whiteSpace}`;
+    if (termAssessment) prompt += `\nTerm Assessment: ${termAssessment}`;
+    if (sme) prompt += `\nSME: ${sme}`;
+
+    prompt += `\n\nFormat your response with clear sections and actionable recommendations. Focus on strategic guidance rather than tactical execution.`;
 
     try {
         // Call the Vercel serverless function instead of OpenAI directly
@@ -723,34 +783,28 @@ async function generatePOVIdeas() {
             body: JSON.stringify({ prompt })
         });
         const data = await response.json();
-        let ideas = '';
+        let strategy = '';
         if (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
-            // Format: split on lines that start with - ** (the POV idea)
-            const lines = data.choices[0].message.content.split(/\n(?=- \*\*)/g);
-            ideas = '<ul class="pov-idea-list">' + lines.map(line => {
-                // Split into idea and explanation
-                const match = line.match(/^- \*\*(.*?)\*\*\s*\n?\s*- Why this makes sense: (.*)$/s);
-                if (match) {
-                    return `<li class="results-highlight"><strong>${match[1]}</strong><br><span class="pov-explanation">${match[2]}</span></li>`;
-                } else {
-                    // fallback: just show the line
-                    return `<li class="results-highlight">${line.replace(/^- /, '')}</li>`;
-                }
-            }).join('') + '</ul>';
+            // Format the response with proper HTML structure
+            strategy = data.choices[0].message.content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br>');
+            strategy = '<p>' + strategy + '</p>';
         } else {
-            ideas = '<span style="color:red;">No response from OpenAI. Please try again.</span>';
+            strategy = '<span style="color:red;">No response from OpenAI. Please try again.</span>';
         }
         document.getElementById('pov-content').innerHTML = `
             <div class="results">
-                <h3>Authentic POV Ideas</h3>
-                <div class="pov-ideas" style="margin-bottom:2rem;">${ideas}</div>
+                <h3>Your Issues Management Strategy</h3>
+                <div class="strategy-content" style="margin-bottom:2rem; line-height:1.6;">${strategy}</div>
                 <div style="text-align:center;">
-                    <button class="btn" onclick="window.open('https://ink-co.com/contact', '_blank')">Get Professional Content Support</button>
+                    <button class="btn" onclick="window.open('https://ink-co.com/contact', '_blank')">Get Professional Strategy Support</button>
                 </div>
             </div>
         `;
     } catch (err) {
-        document.getElementById('pov-content').innerHTML = `<div class="results"><p style="color:red;">Error generating POV ideas. Please try again later.</p></div>`;
+        document.getElementById('pov-content').innerHTML = `<div class="results"><p style="color:red;">Error generating strategy. Please try again later.</p></div>`;
     }
 }
 
@@ -1036,6 +1090,65 @@ function getIndustryInsights(industry) {
 }
 
 // Channel Optimizer Functions
+function updateGoalContext() {
+    const goal = document.getElementById('campaign-goal').value;
+    const contextDiv = document.getElementById('goal-context');
+    
+    const goalContexts = {
+        'awareness': 'Focus on broad reach channels like social media, PR, and content marketing. Prioritize platforms where your target audience spends time.',
+        'leads': 'Emphasize content marketing, email campaigns, and targeted social advertising. Focus on lead capture and nurturing strategies.',
+        'sales': 'Prioritize direct response channels like paid advertising, email marketing, and sales enablement content. Focus on conversion optimization.',
+        'engagement': 'Build community through social media, events, and interactive content. Focus on two-way communication and relationship building.',
+        'thought-leadership': 'Leverage PR, content marketing, speaking opportunities, and industry publications. Focus on demonstrating expertise and authority.'
+    };
+    
+    if (goal && contextDiv) {
+        contextDiv.innerHTML = goalContexts[goal] || '';
+        contextDiv.style.display = 'block';
+    } else if (contextDiv) {
+        contextDiv.style.display = 'none';
+    }
+}
+
+function updateIndustryContext() {
+    const industry = document.getElementById('industry-focus').value;
+    const contextDiv = document.getElementById('industry-context');
+    
+    const industryContexts = {
+        'tech': 'Technology companies excel with thought leadership content, LinkedIn marketing, and industry events. Focus on innovation and technical expertise.',
+        'energy': 'Energy companies benefit from sustainability messaging, regulatory compliance content, and community engagement. Focus on trust and environmental responsibility.',
+        'healthcare': 'Healthcare marketing requires compliance with regulations, educational content, and trust-building. Focus on patient education and professional credentials.',
+        'finance': 'Financial services benefit from educational content, regulatory compliance, and trust-building. Focus on security and expertise.',
+        'retail': 'Retail thrives on visual content, social proof, and e-commerce optimization. Focus on customer reviews and social commerce.',
+        'manufacturing': 'B2B manufacturing benefits from technical content, trade shows, and case studies. Focus on quality and ROI demonstrations.',
+        'b2b': 'B2B services excel with thought leadership, LinkedIn marketing, and industry publications. Focus on expertise and relationship building.',
+        'b2c': 'B2C consumer brands benefit from social media, influencer partnerships, and emotional storytelling. Focus on brand personality and engagement.',
+        'nonprofit': 'Nonprofits excel with storytelling, community engagement, and social media advocacy. Focus on impact and donor relationships.',
+        'government': 'Government agencies focus on transparency, public service messaging, and community engagement. Focus on accessibility and trust.',
+        'education': 'Educational institutions benefit from student success stories, thought leadership, and community partnerships. Focus on outcomes and innovation.',
+        'real-estate': 'Real estate marketing is highly visual and local. Focus on property showcases, market insights, and community involvement.',
+        'food-beverage': 'Food and beverage brands excel with visual content, user-generated content, and local partnerships. Focus on experience and community.',
+        'automotive': 'Automotive marketing benefits from vehicle showcases, customer testimonials, and service content. Focus on reliability and innovation.',
+        'fashion-beauty': 'Fashion and beauty brands thrive on visual content, influencer partnerships, and trend forecasting. Focus on lifestyle and aspiration.',
+        'travel-hospitality': 'Travel companies benefit from destination content, customer stories, and experiential marketing. Focus on adventure and relaxation.',
+        'legal': 'Legal services benefit from thought leadership, client testimonials, and educational content. Focus on expertise and trust.',
+        'consulting': 'Consulting firms excel with case studies, thought leadership, and speaking engagements. Focus on results and expertise.',
+        'media-entertainment': 'Media and entertainment companies thrive on content creation, celebrity partnerships, and social media. Focus on entertainment and engagement.',
+        'sports-fitness': 'Sports and fitness brands benefit from athlete partnerships, community events, and motivational content. Focus on performance and community.',
+        'pharmaceuticals': 'Pharmaceutical companies require regulatory compliance, educational content, and healthcare partnerships. Focus on safety and innovation.',
+        'logistics': 'Logistics companies focus on efficiency, reliability, and technology innovation. Focus on operational excellence and customer service.',
+        'construction': 'Construction companies benefit from project showcases, safety messaging, and client testimonials. Focus on quality and reliability.',
+        'agriculture': 'Agriculture companies emphasize sustainability, innovation, and community partnerships. Focus on environmental responsibility and technology.'
+    };
+    
+    if (industry && contextDiv) {
+        contextDiv.innerHTML = industryContexts[industry] || '';
+        contextDiv.style.display = 'block';
+    } else if (contextDiv) {
+        contextDiv.style.display = 'none';
+    }
+}
+
 function optimizeChannels() {
     const goal = document.getElementById('campaign-goal').value;
     const audienceSize = document.getElementById('target-audience-size').value;
@@ -1051,31 +1164,77 @@ function optimizeChannels() {
     
     const resultsHTML = `
         <div class="results">
-            <h3>Optimal Channel Mix</h3>
-            
-            <div class="chart-container">
-                <canvas id="channelChart"></canvas>
+            <div class="results-header" style="background: linear-gradient(135deg, #007bff, #0056b3); color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; text-align: center;">
+                <h3 style="margin: 0 0 1rem 0; font-size: 1.8rem;">Your Optimal Channel Mix</h3>
+                <p style="margin: 0; font-size: 1.1rem; opacity: 0.9;">Based on your ${goal} objectives, ${industry} industry focus, and ${budgetRange} budget</p>
             </div>
             
-            <div class="channel-breakdown">
-                ${optimization.channels.map(channel => `
-                    <div class="channel-item">
-                        <h4 class="results-highlight">${channel.name} (${channel.percentage}%)</h4>
-                        <p class="results-highlight">${channel.description}</p>
-                        <ul>
-                            ${channel.activities.map(activity => `<li class="results-highlight">${activity}</li>`).join('')}
-                        </ul>
+            <div class="strategy-summary" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #28a745;">
+                <h4 style="margin-top: 0; color: #28a745;">📊 Strategy Overview</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #007bff;">${goal.charAt(0).toUpperCase() + goal.slice(1)}</div>
+                        <div style="font-size: 0.9rem; color: #666;">Primary Goal</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #007bff;">${industry.charAt(0).toUpperCase() + industry.slice(1)}</div>
+                        <div style="font-size: 0.9rem; color: #666;">Industry Focus</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #007bff;">${budgetRange.charAt(0).toUpperCase() + budgetRange.slice(1)}</div>
+                        <div style="font-size: 0.9rem; color: #666;">Budget Range</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #007bff;">${audienceSize.charAt(0).toUpperCase() + audienceSize.slice(1)}</div>
+                        <div style="font-size: 0.9rem; color: #666;">Audience Size</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                <h4 style="margin-top: 0; color: #333; text-align: center;">Channel Allocation Breakdown</h4>
+                <canvas id="channelChart" style="max-height: 400px;"></canvas>
+            </div>
+            
+            <div class="channel-breakdown" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                ${optimization.channels.map((channel, index) => `
+                    <div class="channel-item" style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid ${getChannelColor(index)};">
+                        <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                            <div style="width: 12px; height: 12px; border-radius: 50%; background: ${getChannelColor(index)}; margin-right: 0.75rem;"></div>
+                            <h4 style="margin: 0; color: #333;">${channel.name} (${channel.percentage}%)</h4>
+                        </div>
+                        <p style="color: #666; margin-bottom: 1rem; font-style: italic;">${channel.description}</p>
+                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 6px;">
+                            <h5 style="margin: 0 0 0.5rem 0; color: #333; font-size: 0.9rem;">Key Activities:</h5>
+                            <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.9rem;">
+                                ${channel.activities.map(activity => `<li style="margin-bottom: 0.25rem; color: #333;">${activity}</li>`).join('')}
+                            </ul>
+                        </div>
                     </div>
                 `).join('')}
             </div>
             
-            <h4>Strategic Recommendations:</h4>
-            <ul>
-                ${optimization.recommendations.map(rec => `<li class="results-highlight">${rec}</li>`).join('')}
-            </ul>
+            <div class="recommendations-section" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+                <h4 style="margin-top: 0; color: #333; text-align: center;">🎯 Strategic Recommendations</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    ${optimization.recommendations.map((rec, index) => `
+                        <div style="background: white; padding: 1rem; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+                            <div style="display: flex; align-items: flex-start;">
+                                <span style="background: #007bff; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; margin-right: 0.75rem; flex-shrink: 0;">${index + 1}</span>
+                                <span style="color: #333; font-size: 0.95rem;">${rec}</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
             
-            <div style="margin-top: 2rem; text-align: center;">
-                <button class="btn" onclick="window.open('https://ink-co.com/contact', '_blank')">Get Custom Strategy</button>
+            <div class="next-steps" style="background: #e8f4fd; padding: 2rem; border-radius: 12px; text-align: center; border: 2px solid #007bff;">
+                <h4 style="margin-top: 0; color: #007bff;">🚀 Ready to Execute Your Strategy?</h4>
+                <p style="color: #333; margin-bottom: 1.5rem;">Get expert guidance to implement this channel mix and maximize your campaign performance.</p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn" onclick="window.open('https://ink-co.com/contact', '_blank')" style="background: #007bff; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; cursor: pointer;">Get Custom Strategy</button>
+                    <button class="btn btn-secondary" onclick="downloadChannelStrategy()" style="background: #6c757d; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; cursor: pointer;">Download Strategy PDF</button>
+                </div>
             </div>
         </div>
     `;
@@ -1086,37 +1245,296 @@ function optimizeChannels() {
     createChannelChart(optimization.channels);
 }
 
+function getChannelColor(index) {
+    const colors = [
+        '#007bff', // Blue
+        '#28a745', // Green
+        '#ffc107', // Yellow
+        '#dc3545', // Red
+        '#6f42c1', // Purple
+        '#fd7e14', // Orange
+        '#20c997', // Teal
+        '#e83e8c', // Pink
+        '#6c757d', // Gray
+        '#17a2b8'  // Cyan
+    ];
+    return colors[index % colors.length];
+}
+
+function downloadChannelStrategy() {
+    // Create a simple text-based strategy document
+    const goal = document.getElementById('campaign-goal').value;
+    const audienceSize = document.getElementById('target-audience-size').value;
+    const budgetRange = document.getElementById('budget-range').value;
+    const industry = document.getElementById('industry-focus').value;
+    
+    const optimization = getChannelOptimization(goal, audienceSize, budgetRange, industry);
+    
+    let content = `CHANNEL CAMPAIGN STRATEGY\n`;
+    content += `Generated on: ${new Date().toLocaleDateString()}\n\n`;
+    content += `CAMPAIGN PARAMETERS:\n`;
+    content += `Primary Goal: ${goal.charAt(0).toUpperCase() + goal.slice(1)}\n`;
+    content += `Industry: ${industry.charAt(0).toUpperCase() + industry.slice(1)}\n`;
+    content += `Budget Range: ${budgetRange.charAt(0).toUpperCase() + budgetRange.slice(1)}\n`;
+    content += `Audience Size: ${audienceSize.charAt(0).toUpperCase() + audienceSize.slice(1)}\n\n`;
+    
+    content += `OPTIMAL CHANNEL MIX:\n`;
+    optimization.channels.forEach(channel => {
+        content += `\n${channel.name} (${channel.percentage}%)\n`;
+        content += `Description: ${channel.description}\n`;
+        content += `Key Activities:\n`;
+        channel.activities.forEach(activity => {
+            content += `  • ${activity}\n`;
+        });
+    });
+    
+    content += `\nSTRATEGIC RECOMMENDATIONS:\n`;
+    optimization.recommendations.forEach((rec, index) => {
+        content += `${index + 1}. ${rec}\n`;
+    });
+    
+    content += `\n---\nGenerated by INK's Channel Campaign Optimizer\nFor professional strategy support, visit: https://ink-co.com/contact`;
+    
+    // Create and download the file
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `channel-strategy-${goal}-${industry}-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+}
+
 function getChannelOptimization(goal, audienceSize, budgetRange, industry) {
     const channelMixes = {
         'awareness': {
             channels: [
-                { name: 'Social Media', percentage: 40, description: 'Build brand awareness through engaging content', activities: ['Organic social posts', 'Influencer partnerships', 'Social advertising'] },
-                { name: 'PR & Media', percentage: 30, description: 'Earned media coverage and thought leadership', activities: ['Press releases', 'Media outreach', 'Thought leadership articles'] },
-                { name: 'Content Marketing', percentage: 20, description: 'Educational and engaging content', activities: ['Blog posts', 'Infographics', 'Video content'] },
-                { name: 'Events', percentage: 10, description: 'Direct audience engagement', activities: ['Webinars', 'Industry events', 'Brand activations'] }
+                { name: 'Social Media', percentage: 35, description: 'Build brand awareness through engaging content', activities: ['Organic social posts', 'Influencer partnerships', 'Social advertising', 'Community building'] },
+                { name: 'PR & Media', percentage: 25, description: 'Earned media coverage and thought leadership', activities: ['Press releases', 'Media outreach', 'Thought leadership articles', 'Industry publications'] },
+                { name: 'Content Marketing', percentage: 25, description: 'Educational and engaging content', activities: ['Blog posts', 'Infographics', 'Video content', 'SEO optimization'] },
+                { name: 'Events', percentage: 15, description: 'Direct audience engagement', activities: ['Webinars', 'Industry events', 'Brand activations', 'Networking'] }
             ]
         },
         'leads': {
             channels: [
-                { name: 'Content Marketing', percentage: 35, description: 'Lead generation through valuable content', activities: ['Gated content', 'Email newsletters', 'SEO optimization'] },
-                { name: 'Social Media', percentage: 25, description: 'Social selling and lead nurturing', activities: ['LinkedIn outreach', 'Social advertising', 'Community building'] },
-                { name: 'Email Marketing', percentage: 20, description: 'Direct lead nurturing', activities: ['Email campaigns', 'Lead scoring', 'Automation'] },
-                { name: 'PR & Media', percentage: 20, description: 'Credibility and trust building', activities: ['Industry publications', 'Expert quotes', 'Case studies'] }
+                { name: 'Content Marketing', percentage: 30, description: 'Lead generation through valuable content', activities: ['Gated content', 'Email newsletters', 'SEO optimization', 'Case studies'] },
+                { name: 'Social Media', percentage: 25, description: 'Social selling and lead nurturing', activities: ['LinkedIn outreach', 'Social advertising', 'Community building', 'Lead magnets'] },
+                { name: 'Email Marketing', percentage: 20, description: 'Direct lead nurturing', activities: ['Email campaigns', 'Lead scoring', 'Automation', 'Drip campaigns'] },
+                { name: 'PR & Media', percentage: 15, description: 'Credibility and trust building', activities: ['Industry publications', 'Expert quotes', 'Case studies', 'Media interviews'] },
+                { name: 'Events', percentage: 10, description: 'Direct lead capture', activities: ['Webinars', 'Trade shows', 'Networking events', 'Workshops'] }
+            ]
+        },
+        'sales': {
+            channels: [
+                { name: 'Paid Advertising', percentage: 35, description: 'Direct response and conversion optimization', activities: ['Google Ads', 'Social advertising', 'Retargeting', 'Display ads'] },
+                { name: 'Email Marketing', percentage: 25, description: 'Sales nurturing and conversion', activities: ['Sales emails', 'Promotional campaigns', 'Abandoned cart', 'Product launches'] },
+                { name: 'Content Marketing', percentage: 20, description: 'Sales enablement content', activities: ['Product demos', 'Case studies', 'ROI calculators', 'Comparison guides'] },
+                { name: 'Social Media', percentage: 15, description: 'Social selling and community', activities: ['Social selling', 'Customer testimonials', 'Product showcases', 'Live demos'] },
+                { name: 'Events', percentage: 5, description: 'Direct sales opportunities', activities: ['Sales events', 'Product launches', 'Customer meetings', 'Trade shows'] }
+            ]
+        },
+        'engagement': {
+            channels: [
+                { name: 'Social Media', percentage: 40, description: 'Community building and engagement', activities: ['Community management', 'User-generated content', 'Live streaming', 'Interactive posts'] },
+                { name: 'Content Marketing', percentage: 25, description: 'Engaging and interactive content', activities: ['Interactive content', 'Polls and surveys', 'User-generated content', 'Behind-the-scenes'] },
+                { name: 'Events', percentage: 20, description: 'Direct community engagement', activities: ['Community events', 'Meetups', 'Workshops', 'Networking'] },
+                { name: 'Email Marketing', percentage: 15, description: 'Personalized engagement', activities: ['Personalized emails', 'Community newsletters', 'Feedback requests', 'Exclusive content'] }
+            ]
+        },
+        'thought-leadership': {
+            channels: [
+                { name: 'PR & Media', percentage: 35, description: 'Industry authority and credibility', activities: ['Industry publications', 'Expert quotes', 'Media interviews', 'Press releases'] },
+                { name: 'Content Marketing', percentage: 30, description: 'Thought leadership content', activities: ['White papers', 'Industry reports', 'Expert blogs', 'Research studies'] },
+                { name: 'Events', percentage: 20, description: 'Speaking and networking', activities: ['Conference speaking', 'Industry panels', 'Webinars', 'Workshops'] },
+                { name: 'Social Media', percentage: 15, description: 'Thought leadership sharing', activities: ['LinkedIn articles', 'Industry insights', 'Expert commentary', 'Professional networking'] }
             ]
         }
     };
     
     const mix = channelMixes[goal] || channelMixes['awareness'];
     
+    // Industry-specific adjustments
+    const industryAdjustments = getIndustryAdjustments(industry, goal);
+    
+    // Apply industry adjustments to channel mix
+    const adjustedChannels = mix.channels.map(channel => {
+        const adjustment = industryAdjustments[channel.name] || 0;
+        return {
+            ...channel,
+            percentage: Math.max(5, Math.min(50, channel.percentage + adjustment))
+        };
+    });
+    
+    // Normalize percentages to total 100%
+    const totalPercentage = adjustedChannels.reduce((sum, channel) => sum + channel.percentage, 0);
+    adjustedChannels.forEach(channel => {
+        channel.percentage = Math.round((channel.percentage / totalPercentage) * 100);
+    });
+    
     return {
-        channels: mix.channels,
-        recommendations: [
-            'Start with high-impact, low-cost channels',
-            'Focus on consistent messaging across all touchpoints',
-            'Measure performance and adjust allocation monthly',
-            'Consider seasonal trends and industry events'
+        channels: adjustedChannels,
+        recommendations: getIndustryRecommendations(industry, goal, budgetRange, audienceSize)
+    };
+}
+
+function getIndustryAdjustments(industry, goal) {
+    const adjustments = {
+        'tech': {
+            'Social Media': 5, // Tech companies excel on social
+            'PR & Media': 3,  // Strong PR presence
+            'Content Marketing': 2,
+            'Events': 0,
+            'Paid Advertising': -2,
+            'Email Marketing': -2
+        },
+        'energy': {
+            'PR & Media': 5,  // Energy companies need strong PR
+            'Content Marketing': 3, // Educational content important
+            'Events': 2,      // Community engagement
+            'Social Media': -2,
+            'Paid Advertising': -3,
+            'Email Marketing': -2
+        },
+        'healthcare': {
+            'PR & Media': 5,  // Trust and credibility crucial
+            'Content Marketing': 3, // Educational content
+            'Events': 2,      // Professional events
+            'Social Media': -3,
+            'Paid Advertising': -2,
+            'Email Marketing': -2
+        },
+        'finance': {
+            'PR & Media': 5,  // Trust and compliance
+            'Content Marketing': 3, // Educational content
+            'Email Marketing': 2,   // Direct communication
+            'Social Media': -3,
+            'Paid Advertising': -2,
+            'Events': -2
+        },
+        'retail': {
+            'Social Media': 5, // Visual and social commerce
+            'Paid Advertising': 3, // Direct response
+            'Email Marketing': 2,  // Promotional
+            'PR & Media': -2,
+            'Content Marketing': -3,
+            'Events': -2
+        },
+        'manufacturing': {
+            'Content Marketing': 5, // Technical content
+            'Events': 3,      // Trade shows
+            'PR & Media': 2,  // Industry publications
+            'Social Media': -3,
+            'Paid Advertising': -2,
+            'Email Marketing': -2
+        }
+    };
+    
+    return adjustments[industry] || {};
+}
+
+function getIndustryRecommendations(industry, goal, budgetRange, audienceSize) {
+    const baseRecommendations = [
+        'Start with high-impact, low-cost channels',
+        'Focus on consistent messaging across all touchpoints',
+        'Measure performance and adjust allocation monthly',
+        'Consider seasonal trends and industry events'
+    ];
+    
+    const industrySpecific = {
+        'tech': [
+            'Prioritize LinkedIn for B2B tech marketing',
+            'Focus on thought leadership and innovation content',
+            'Leverage industry events and conferences',
+            'Use case studies and technical demonstrations'
+        ],
+        'energy': [
+            'Emphasize sustainability and environmental messaging',
+            'Focus on regulatory compliance and safety',
+            'Build community trust through local engagement',
+            'Use educational content to explain complex topics'
+        ],
+        'healthcare': [
+            'Ensure all content complies with healthcare regulations',
+            'Focus on patient education and trust-building',
+            'Leverage professional credentials and expertise',
+            'Use case studies and patient success stories'
+        ],
+        'finance': [
+            'Emphasize security, trust, and compliance',
+            'Focus on educational content about financial topics',
+            'Use testimonials and case studies carefully',
+            'Maintain professional tone across all channels'
+        ],
+        'retail': [
+            'Prioritize visual content and social commerce',
+            'Focus on customer reviews and testimonials',
+            'Use seasonal and trend-based campaigns',
+            'Leverage influencer partnerships and user-generated content'
+        ],
+        'manufacturing': [
+            'Focus on technical specifications and quality content',
+            'Leverage trade shows and industry events',
+            'Use case studies and ROI demonstrations',
+            'Emphasize certifications and industry standards'
         ]
     };
+    
+    const budgetRecommendations = {
+        'low': [
+            'Focus on organic social media and content marketing',
+            'Leverage free industry events and networking',
+            'Use email marketing for cost-effective lead nurturing',
+            'Prioritize high-ROI channels like SEO and PR'
+        ],
+        'medium': [
+            'Balance organic and paid channels',
+            'Invest in targeted social advertising',
+            'Consider industry-specific events and sponsorships',
+            'Allocate budget for content creation and tools'
+        ],
+        'high': [
+            'Implement comprehensive multi-channel strategy',
+            'Invest in premium content and creative assets',
+            'Consider high-profile events and sponsorships',
+            'Allocate budget for advanced analytics and tools'
+        ],
+        'enterprise': [
+            'Execute enterprise-level integrated campaigns',
+            'Invest in custom content and premium placements',
+            'Consider global events and major sponsorships',
+            'Allocate significant budget for technology and analytics'
+        ]
+    };
+    
+    const audienceRecommendations = {
+        'local': [
+            'Focus on local SEO and community engagement',
+            'Leverage local events and partnerships',
+            'Use local media and community publications',
+            'Emphasize local customer testimonials'
+        ],
+        'national': [
+            'Balance national and regional strategies',
+            'Use national media and industry publications',
+            'Consider national events and conferences',
+            'Leverage national influencer partnerships'
+        ],
+        'global': [
+            'Develop multi-region content and campaigns',
+            'Use global platforms and international media',
+            'Consider global events and virtual experiences',
+            'Adapt messaging for different cultural contexts'
+        ]
+    };
+    
+    return [
+        ...baseRecommendations,
+        ...(industrySpecific[industry] || []),
+        ...(budgetRecommendations[budgetRange] || []),
+        ...(audienceRecommendations[audienceSize] || [])
+    ].slice(0, 8); // Limit to 8 recommendations
 }
 
 function createChannelChart(channels) {
@@ -1128,14 +1546,9 @@ function createChannelChart(channels) {
             labels: channels.map(c => c.name),
             datasets: [{
                 data: channels.map(c => c.percentage),
-                backgroundColor: [
-                    '#007bff',
-                    '#28a745',
-                    '#ffc107',
-                    '#dc3545',
-                    '#6f42c1',
-                    '#fd7e14'
-                ]
+                backgroundColor: channels.map((c, index) => getChannelColor(index)),
+                borderWidth: 2,
+                borderColor: '#ffffff'
             }]
         },
         options: {
@@ -1143,8 +1556,28 @@ function createChannelChart(channels) {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'bottom'
+                    position: 'bottom',
+                    labels: {
+                        padding: 20,
+                        usePointStyle: true,
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.label}: ${context.parsed}%`;
+                        }
+                    }
                 }
+            },
+            cutout: '60%',
+            animation: {
+                animateRotate: true,
+                duration: 1000
             }
         }
     });
@@ -1594,12 +2027,23 @@ async function createGlossaryEntry() {
                 <div style="color: #28a745; font-weight: 600; margin-bottom: 0.5rem;">✅ Glossary entry created successfully!</div>
                 <div style="margin-bottom: 0.5rem;"><strong>Glossary ID:</strong> ${data.post.id}</div>
                 <div style="margin-bottom: 0.5rem;"><strong>Status:</strong> ${data.post.status}</div>
-                <div style="margin-bottom: 0.5rem;"><strong>Type:</strong> Glossary Entry</div>
-                <div style="margin-bottom: 1rem;"><strong>Link:</strong> <a href="${data.post.link}" target="_blank">View in WordPress Glossary</a></div>
+                <div style="margin-bottom: 0.5rem;"><strong>Type:</strong> ${data.post.type === 'glossary' ? 'Glossary Entry' : 'Post'}</div>
+                <div style="margin-bottom: 1rem;"><strong>Link:</strong> <a href="${data.post.link}" target="_blank">View in WordPress</a></div>
+                <div style="margin-bottom: 1rem; color: #17a2b8;"><em>${data.message}</em></div>
                 <button class="btn btn-secondary" onclick="clearGlossaryForm()">Create Another Entry</button>
             `, 'success');
         } else {
-            showGlossaryResult(`Error: ${data.error || 'Failed to create glossary entry'}`, 'error');
+            let errorMessage = data.error || 'Failed to create glossary entry';
+            if (data.details) {
+                errorMessage += `<br><br><strong>Details:</strong> ${data.details}`;
+            }
+            if (data.debug) {
+                errorMessage += `<br><br><strong>Debug Info:</strong><br>`;
+                errorMessage += `URL: ${data.debug.wpUrl}<br>`;
+                errorMessage += `Credentials: ${data.debug.hasCredentials ? 'Configured' : 'Missing'}<br>`;
+                errorMessage += `Timestamp: ${data.debug.timestamp}`;
+            }
+            showGlossaryResult(`Error: ${errorMessage}`, 'error');
         }
     } catch (error) {
         console.error('Error creating glossary entry:', error);
