@@ -60,23 +60,47 @@ export default async function handler(req, res) {
           })
         });
         
-        // If we get here, the request was successful
-        break;
+        // Check if the response is actually successful
+        if (response.ok) {
+          console.log(`Model ${model} succeeded with status: ${response.status}`);
+          break;
+        } else {
+          const errorData = await response.json();
+          console.log(`Model ${model} failed with status ${response.status}:`, errorData);
+          if (response.status === 403) {
+            // Continue to next model for 403 errors
+            continue;
+          } else {
+            // For other errors, throw to be caught by outer catch
+            throw new Error(`Model ${model} failed: ${response.status} - ${JSON.stringify(errorData)}`);
+          }
+        }
       } catch (modelError) {
-        console.log(`Model ${model} failed:`, modelError.message);
+        console.log(`Model ${model} failed with exception:`, modelError.message);
         lastError = modelError;
         continue;
       }
     }
     
-    if (!response) {
-      throw new Error(`All models failed. Last error: ${lastError?.message}`);
+    if (!response || !response.ok) {
+      const errorMsg = lastError ? `Last error: ${lastError.message}` : 'No successful response from any model';
+      throw new Error(`All models failed. ${errorMsg}`);
     }
+    
+    console.log(`Successfully using model: ${response.url ? 'API call successful' : 'Unknown'}`);
 
     const data = await response.json();
     
     // Find which model was actually used
     const usedModel = data.model || 'unknown';
+    
+    console.log('Raw OpenAI response data:', {
+      model: usedModel,
+      hasChoices: !!data.choices,
+      choicesLength: data.choices?.length || 0,
+      hasError: !!data.error,
+      errorDetails: data.error
+    });
     
     console.log('OpenAI API Response:', {
       timestamp: new Date().toISOString(),
