@@ -127,7 +127,6 @@ function getToolContent(toolName) {
                 <div class="tool-header">
                     <h2>Issues Management Builder</h2>
                     <p>Develop your brand's strategic approach to managing and responding to current issues. Powered by AI.</p>
-                    <span class="ai-tag">AI enabled</span>
                 </div>
                 <div id="pov-content">
                     <div class="pov-explainer">
@@ -158,22 +157,7 @@ function getToolContent(toolName) {
                             <strong>Objective:</strong> Help you understand where the gap in the market of ideas is + your perspective to create something that is unique. Think about: What conversations are missing? What angles aren't being covered? What unique viewpoint could you bring that others aren't addressing?
                         </div>
                     </div>
-                    <div class="input-group">
-                        <label for="term-assessment">Term assessment</label>
-                        <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem; margin-bottom: 0.5rem;">
-                            <strong>Assessment:</strong> The AI will analyze your inputs and determine how crowded this topic/term is on a scale of 1-10 (1 = not crowded, 10 = very crowded).
-                        </div>
-                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 6px; border: 1px solid #dee2e6;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.8rem; color: #666;">
-                                <span>1 - Not crowded</span>
-                                <span>10 - Very crowded</span>
-                            </div>
-                            <div style="background: #e9ecef; height: 8px; border-radius: 4px; position: relative;">
-                                <div id="crowding-scale" style="background: #007bff; height: 100%; border-radius: 4px; width: 0%; transition: width 0.3s ease;"></div>
-                            </div>
-                            <div id="crowding-score" style="text-align: center; margin-top: 0.5rem; font-weight: 600; color: #007bff;">AI will determine</div>
-                        </div>
-                    </div>
+
                     <div class="input-group">
                         <label for="sme">Who is your SME (Subject Matter Expert)?</label>
                         <textarea id="sme" rows="2" placeholder="Identify the person or team with the deepest expertise on this topic within your organization..."></textarea>
