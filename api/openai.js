@@ -33,30 +33,54 @@ export default async function handler(req, res) {
   });
 
   try {
-    // Use the OpenAI Chat Completions API
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-              body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: [
-          {
-            role: 'user',
-            content: prompt
-          }
-        ],
-        max_tokens: 1000,
-        temperature: 0.7
-      })
-    });
+    // Try different models in order of preference
+    const models = ['gpt-4o-mini', 'gpt-3.5-turbo', 'gpt-4'];
+    let response;
+    let lastError;
+    
+    for (const model of models) {
+      try {
+        console.log(`Trying model: ${model}`);
+        response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: [
+              {
+                role: 'user',
+                content: prompt
+              }
+            ],
+            max_tokens: 1000,
+            temperature: 0.7
+          })
+        });
+        
+        // If we get here, the request was successful
+        break;
+      } catch (modelError) {
+        console.log(`Model ${model} failed:`, modelError.message);
+        lastError = modelError;
+        continue;
+      }
+    }
+    
+    if (!response) {
+      throw new Error(`All models failed. Last error: ${lastError?.message}`);
+    }
 
     const data = await response.json();
     
+    // Find which model was actually used
+    const usedModel = data.model || 'unknown';
+    
     console.log('OpenAI API Response:', {
       timestamp: new Date().toISOString(),
+      model: usedModel,
       status: response.status,
       statusText: response.statusText,
       responseLength: data.choices?.[0]?.message?.content ? data.choices[0].message.content.length : 0,
