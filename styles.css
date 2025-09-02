@@ -262,6 +262,20 @@ main {
 .tool-header p {
     color: #2F2F2E;
     font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.tool-header .ai-tag {
+    display: inline-block;
+    background: #2196f3;
+    color: #fff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.5rem;
 }
 
 .question-container {
@@ -1028,6 +1042,8 @@ body[data-embedded="true"] .ai-tag {
     font-weight: 600 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.5px !important;
+    display: inline-block !important;
+    margin-top: 0.5rem !important;
 }
 
 body[data-embedded="true"] .feature {

@@ -124,11 +124,9 @@ function getToolContent(toolName) {
         
         'pov-builder': `
             <div class="tool-container">
-                <div class="tool-header" style="display: flex; align-items: center; justify-content: space-between;">
-                    <div>
-                        <h2>Issues Management Builder</h2>
-                        <p>Develop your brand's strategic approach to managing and responding to current issues. Powered by AI.</p>
-                    </div>
+                <div class="tool-header">
+                    <h2>Issues Management Builder</h2>
+                    <p>Develop your brand's strategic approach to managing and responding to current issues. Powered by AI.</p>
                     <span class="ai-tag">AI enabled</span>
                 </div>
                 <div id="pov-content">
