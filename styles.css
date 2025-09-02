@@ -1167,3 +1167,9 @@ body[data-embedded="true"] .chat-input {
     max-width: 600px;
     margin: 0 auto;
 }
+
+/* Center main page titles */
+.tools-section .container h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
