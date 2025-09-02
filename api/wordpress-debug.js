@@ -16,7 +16,16 @@ export default async function handler(req, res) {
   const wpUsername = process.env.WORDPRESS_USERNAME;
   const wpPassword = process.env.WORDPRESS_APPLICATION_PASSWORD;
 
+  console.log('=== WordPress API Debug Info ===');
+  console.log('WordPress URL:', wpUrl);
+  console.log('Username:', wpUsername);
+  console.log('Password configured:', !!wpPassword);
+  console.log('Term:', term);
+  console.log('Category:', category);
+  console.log('Author:', author);
+
   if (!wpUrl || !wpUsername || !wpPassword) {
+    console.error('Missing WordPress credentials');
     res.status(500).json({ error: 'WordPress credentials not configured' });
     return;
   }
@@ -71,13 +80,13 @@ ${challenges ? `
 </div>
     `.trim();
 
-    // Prepare the post data for the glossary custom post type
+    // Prepare the post data for standard WordPress posts
     const postData = {
       title: term,
       content: postContent,
       status: 'draft',
-      type: 'glossary', // Use the custom post type 'glossary' that exists on INK site
-      categories: [], // You can add category IDs here if needed
+      type: 'post',
+      categories: [],
       tags: ['glossary', 'ink-glossary', 'business-terms'],
       meta: {
         _glossary_entry: true,
@@ -87,9 +96,11 @@ ${challenges ? `
       }
     };
 
-    // First, test if the glossary endpoint exists and is accessible
-    console.log('Testing glossary endpoint availability...');
-    const testResponse = await fetch(`${wpUrl}/wp-json/wp/v2/glossary`, {
+    console.log('Post data prepared:', JSON.stringify(postData, null, 2));
+
+    // Test WordPress connection first
+    console.log('Testing WordPress connection...');
+    const testResponse = await fetch(`${wpUrl}/wp-json/wp/v2/posts`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -97,18 +108,20 @@ ${challenges ? `
       }
     });
 
-    console.log('Glossary endpoint test status:', testResponse.status);
+    console.log('Test response status:', testResponse.status);
+    console.log('Test response ok:', testResponse.ok);
 
-    // If glossary endpoint doesn't work, fall back to regular posts
-    let endpoint = '/wp-json/wp/v2/glossary';
     if (!testResponse.ok) {
-      console.log('Glossary endpoint not available, falling back to regular posts');
-      endpoint = '/wp-json/wp/v2/posts';
-      postData.type = 'post'; // Change to regular post type
+      const testErrorText = await testResponse.text();
+      console.error('WordPress connection test failed:', testErrorText);
+      throw new Error(`WordPress connection test failed: ${testResponse.status} - ${testErrorText}`);
     }
 
-    // Create the post via WordPress REST API
-    const response = await fetch(`${wpUrl}${endpoint}`, {
+    console.log('WordPress connection test successful');
+
+    // Create the post
+    console.log('Creating post...');
+    const response = await fetch(`${wpUrl}/wp-json/wp/v2/posts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -117,6 +130,9 @@ ${challenges ? `
       body: JSON.stringify(postData)
     });
 
+    console.log('Create response status:', response.status);
+    console.log('Create response ok:', response.ok);
+
     if (!response.ok) {
       const errorData = await response.text();
       console.error('WordPress API Error Response:', errorData);
@@ -124,16 +140,17 @@ ${challenges ? `
     }
 
     const createdPost = await response.json();
+    console.log('Post created successfully:', createdPost.id);
 
     res.status(200).json({
       success: true,
-      message: `Glossary entry created successfully as draft in ${postData.type === 'glossary' ? 'Glossary section' : 'Posts'}`,
+      message: 'Glossary entry created successfully as draft',
       post: {
         id: createdPost.id,
         title: createdPost.title.rendered,
         link: createdPost.link,
         status: createdPost.status,
-        type: postData.type
+        type: 'post'
       }
     });
 
@@ -141,7 +158,13 @@ ${challenges ? `
     console.error('Error creating glossary entry:', error);
     res.status(500).json({ 
       error: 'Failed to create glossary entry',
-      details: error.message 
+      details: error.message,
+      debug: {
+        wpUrl: wpUrl,
+        hasCredentials: !!(wpUrl && wpUsername && wpPassword),
+        timestamp: new Date().toISOString()
+      }
     });
   }
 }
+
