@@ -775,7 +775,7 @@ async function generateIssuesManagementStrategy() {
     document.getElementById('pov-content').innerHTML = `
         <div style="text-align:center; padding:2rem;">
             <div class="loader" style="margin-bottom:1rem;"></div>
-            <p>Generating your issues management strategy...</p>
+            <p style="color: #333; font-weight: 500;">Generating your issues management strategy...</p>
         </div>
     `;
 
@@ -797,7 +797,6 @@ Specialization: ${specialization}`;
 
     if (keywordRelevance) prompt += `\nKeyword Relevance: ${keywordRelevance}`;
     if (whiteSpace) prompt += `\nWhite Space Analysis: ${whiteSpace}`;
-    if (termAssessment) prompt += `\nTerm Assessment: ${termAssessment}`;
     if (sme) prompt += `\nSME: ${sme}`;
 
     prompt += `\n\nIMPORTANT: At the end of your response, provide a "Topic Crowding Assessment" with a score from 1-10 (1 = not crowded, 10 = very crowded) based on your analysis of the thought leadership area and market conditions. Explain your reasoning for this score.
