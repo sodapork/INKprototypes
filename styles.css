@@ -1,3 +1,36 @@
+/* INK Typography System - Local Fonts */
+@font-face {
+    font-family: 'League Gothic';
+    src: url('./fonts/LeagueGothic-Regular-VariableFont_wdth.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Brandon Text';
+    src: url('./fonts/HvDTrial_Brandon_Text_Regular-BF6514e9eb617a0.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Brandon Text';
+    src: url('./fonts/HvDTrial_Brandon_Text_Bold-BF6514e9eb720dc.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Brandon Text';
+    src: url('./fonts/HvDTrial_Brandon_Text_Medium-BF6514e9eb272a3.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -6,7 +39,7 @@
 }
 
 body {
-    font-family: 'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Brandon Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
     color: #fff;
     background: #23B280;
@@ -49,19 +82,23 @@ body::before {
 }
 
 .logo h1 {
+    font-family: 'League Gothic', sans-serif;
     font-size: 2.2rem;
-    font-weight: 900;
+    font-weight: 400;
     color: #23B280;
     background: #fff;
     padding: 0.25em 0.75em;
     border-radius: 8px;
-    letter-spacing: 2px;
+    letter-spacing: 0;
     text-transform: uppercase;
     margin: 0;
     display: inline-block;
+    line-height: 0.9;
 }
 
 .tagline {
+    font-family: 'Brandon Text', sans-serif;
+    font-weight: 700;
     font-size: 1rem;
     color: #FFFFFF;
     margin-left: 14px;
@@ -77,6 +114,7 @@ body::before {
 .nav-link {
     color: #fff;
     text-decoration: none;
+    font-family: 'Brandon Text', sans-serif;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -105,12 +143,14 @@ main {
 
 .tools-section h2 {
     text-align: center;
+    font-family: 'League Gothic', sans-serif;
     font-size: 2.7rem;
     margin-bottom: 3rem;
     color: #fff;
-    font-weight: 900;
+    font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 0;
+    line-height: 0.9;
 }
 
 .tools-grid {
@@ -143,15 +183,18 @@ main {
 }
 
 .tool-card h3 {
+    font-family: 'League Gothic', sans-serif;
     font-size: 1.4rem;
     margin-bottom: 1rem;
     color: #23B280;
-    font-weight: 900;
+    font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0;
+    line-height: 0.9;
 }
 
 .tool-card p {
+    font-family: 'Brandon Text', sans-serif;
     color: #2F2F2E;
     margin-bottom: 1.5rem;
     line-height: 1.6;
@@ -166,6 +209,7 @@ main {
 }
 
 .feature {
+    font-family: 'Brandon Text', sans-serif;
     background: #FFFFFF;
     color: #23B280;
     padding: 0.25rem 0.75rem;
@@ -178,12 +222,13 @@ main {
 }
 
 .tool-btn {
+    font-family: 'Brandon Text', sans-serif;
     background: #23B280;
     color: #fff;
     border: none;
     padding: 0.85rem 1.7rem;
     border-radius: 8px;
-    font-weight: 900;
+    font-weight: 700;
     cursor: pointer;
     transition: transform 0.2s, background 0.2s;
     width: 100%;
@@ -255,14 +300,22 @@ main {
 }
 
 .tool-header h2 {
+    font-family: 'League Gothic', sans-serif;
     color: #2F2F2E;
     margin-bottom: 0.5rem;
+    font-size: 2.7rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 0.9;
 }
 
 .tool-header p {
+    font-family: 'Brandon Text', sans-serif;
     color: #2F2F2E;
     font-size: 1.1rem;
     margin-bottom: 1rem;
+    line-height: 1.5;
+    font-weight: 400;
 }
 
 .tool-header .ai-tag {
@@ -288,17 +341,23 @@ main {
 }
 
 .pov-explainer h4 {
+    font-family: 'League Gothic', sans-serif;
     margin-top: 0;
     margin-bottom: 0.75rem;
     color: #1976d2;
     font-size: 1.1rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 0.9;
 }
 
 .pov-explainer p {
+    font-family: 'Brandon Text', sans-serif;
     margin-bottom: 0;
     color: #1976d2;
     font-size: 0.95rem;
     line-height: 1.5;
+    font-weight: 400;
 }
 
 .question-container {
@@ -306,6 +365,7 @@ main {
 }
 
 .question {
+    font-family: 'Brandon Text', sans-serif;
     font-size: 1.2rem;
     font-weight: 600;
     margin-bottom: 1rem;
@@ -319,6 +379,7 @@ main {
 }
 
 .option {
+    font-family: 'Brandon Text', sans-serif;
     background: #f5f7fa;
     border: 2px solid #e3e6ea;
     border-radius: 12px;
@@ -349,6 +410,7 @@ main {
 }
 
 .input-group label {
+    font-family: 'Brandon Text', sans-serif;
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 600;
@@ -358,6 +420,7 @@ main {
 .input-group input,
 .input-group select,
 .input-group textarea {
+    font-family: 'Brandon Text', sans-serif;
     width: 100%;
     padding: 0.75rem;
     border: 2px solid #e9ecef;
@@ -374,6 +437,7 @@ main {
 }
 
 .btn {
+    font-family: 'Brandon Text', sans-serif;
     background: #23B280;
     color: white;
     border: none;
