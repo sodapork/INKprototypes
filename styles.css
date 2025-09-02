@@ -945,3 +945,134 @@ main {
         width: 100%;
     }
 }
+
+/* Embedded Tool View Styles */
+body[data-embedded="true"] {
+    background: #fff;
+    color: #333;
+}
+
+body[data-embedded="true"] .modal {
+    position: static !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+}
+
+body[data-embedded="true"] .modal-content {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+}
+
+body[data-embedded="true"] .close {
+    display: none !important;
+}
+
+body[data-embedded="true"] .tool-container {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    background: #fff !important;
+    color: #333 !important;
+}
+
+body[data-embedded="true"] .tool-header h2 {
+    color: #23B280 !important;
+    margin-bottom: 1rem !important;
+}
+
+body[data-embedded="true"] .tool-header p {
+    color: #666 !important;
+    margin-bottom: 2rem !important;
+}
+
+/* Additional embedded tool styles */
+body[data-embedded="true"] .input-group label {
+    color: #333 !important;
+    font-weight: 600 !important;
+}
+
+body[data-embedded="true"] .input-group input,
+body[data-embedded="true"] .input-group select,
+body[data-embedded="true"] .input-group textarea {
+    background: #fff !important;
+    border: 1px solid #ddd !important;
+    color: #333 !important;
+}
+
+body[data-embedded="true"] .btn {
+    background: #23B280 !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+body[data-embedded="true"] .btn:hover {
+    background: #1a8f6b !important;
+}
+
+body[data-embedded="true"] .ai-tag {
+    background: #2196f3 !important;
+    color: #fff !important;
+    padding: 0.25rem 0.75rem !important;
+    border-radius: 12px !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+body[data-embedded="true"] .feature {
+    background: #f8f9fa !important;
+    color: #666 !important;
+    border: 1px solid #e9ecef !important;
+}
+
+body[data-embedded="true"] .question-container {
+    background: #f8f9fa !important;
+    border: 1px solid #e9ecef !important;
+    border-radius: 8px !important;
+    padding: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+body[data-embedded="true"] .question {
+    color: #333 !important;
+    font-weight: 600 !important;
+    margin-bottom: 1rem !important;
+}
+
+body[data-embedded="true"] .option {
+    background: #fff !important;
+    border: 1px solid #ddd !important;
+    color: #333 !important;
+    padding: 0.75rem 1rem !important;
+    margin-bottom: 0.5rem !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+body[data-embedded="true"] .option:hover {
+    background: #f8f9fa !important;
+    border-color: #23B280 !important;
+}
+
+body[data-embedded="true"] .chatbot-container {
+    background: #f8f9fa !important;
+    border: 1px solid #e9ecef !important;
+}
+
+body[data-embedded="true"] .chat-input {
+    background: #fff !important;
+    border: 1px solid #ddd !important;
+    color: #333 !important;
+}

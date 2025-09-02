@@ -3,6 +3,52 @@ let currentTool = null;
 let currentQuestion = 0;
 let answers = {};
 
+// Check for URL parameters to show specific tool
+function checkUrlParameters() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const toolParam = urlParams.get('tool');
+    
+    if (toolParam) {
+        // Add embedded attribute to body for CSS styling
+        document.body.setAttribute('data-embedded', 'true');
+        
+        // Hide the main page content
+        const mainContent = document.querySelector('main');
+        if (mainContent) {
+            mainContent.style.display = 'none';
+        }
+        
+        // Hide the header and footer for clean embedding
+        const header = document.querySelector('header');
+        const footer = document.querySelector('.footer');
+        if (header) header.style.display = 'none';
+        if (footer) footer.style.display = 'none';
+        
+        // Show only the requested tool
+        openTool(toolParam);
+        
+        // Prevent modal behavior - show tool directly in page
+        if (modal) {
+            modal.style.display = 'block';
+            modal.style.position = 'static';
+            modal.style.backgroundColor = 'transparent';
+            modal.style.padding = '0';
+        }
+        
+        // Adjust modal content styling for embedded view
+        if (toolContainer) {
+            toolContainer.style.maxWidth = 'none';
+            toolContainer.style.margin = '0';
+            toolContainer.style.padding = '0';
+        }
+        
+        // Hide the close button in embedded mode
+        if (closeBtn) {
+            closeBtn.style.display = 'none';
+        }
+    }
+}
+
 // Modal functionality
 const modal = document.getElementById('tool-modal');
 const closeBtn = document.querySelector('.close');
@@ -2409,4 +2455,9 @@ function clearGlossaryForm() {
     document.getElementById('glossary-challenges').value = '';
     document.getElementById('glossary-result').innerHTML = '';
     document.getElementById('glossary-definition-section').style.display = 'none';
-} 
+}
+
+// Initialize URL parameter checking when the script loads
+document.addEventListener('DOMContentLoaded', function() {
+    checkUrlParameters();
+}); 
