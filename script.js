@@ -86,6 +86,11 @@ function getToolContent(toolName) {
                     <span class="ai-tag">AI enabled</span>
                 </div>
                 <div id="pov-content">
+                    <div style="background: #e3f2fd; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #2196f3;">
+                        <h4 style="margin-top: 0; color: #1976d2;">🎯 POV Builder Questions</h4>
+                        <p style="margin-bottom: 0; color: #1976d2; font-size: 0.9rem;">Answer these strategic questions to build your comprehensive issues management strategy. Required fields are marked with an asterisk (*).</p>
+                    </div>
+                    
                     <div class="input-group">
                         <label for="thought-leadership-area">What do you want to be a thought leader on? <span style="color:red">*</span></label>
                         <textarea id="thought-leadership-area" rows="3" placeholder="Describe the specific area, topic, or issue where you want to establish thought leadership..." required></textarea>
@@ -99,27 +104,38 @@ function getToolContent(toolName) {
                         <textarea id="specialization" rows="2" placeholder="Describe your areas of expertise, unique capabilities, or specialized knowledge..." required></textarea>
                     </div>
                     <div class="input-group">
-                        <label for="keyword-relevance">How relevant is this keyword or term to your business?</label>
+                        <label for="keyword-relevance">How relevant is this keyword or topic to your business?</label>
                         <textarea id="keyword-relevance" rows="2" placeholder="Explain how this topic connects to your business operations, values, or stakeholder interests..."></textarea>
                     </div>
                     <div class="input-group">
                         <label for="white-space">Where is the white space? (Market gap analysis)</label>
                         <textarea id="white-space" rows="3" placeholder="Describe the gap in the market of ideas, what's missing from current conversations, and your unique perspective that could fill this void..."></textarea>
                         <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
-                            <strong>Objective:</strong> Help you understand where the gap in the market of ideas is + your perspective to create something that is unique.
+                            <strong>Objective:</strong> Help you understand where the gap in the market of ideas is + your perspective to create something that is unique. Think about: What conversations are missing? What angles aren't being covered? What unique viewpoint could you bring that others aren't addressing?
                         </div>
                     </div>
                     <div class="input-group">
                         <label for="term-assessment">Term assessment</label>
-                        <select id="term-assessment">
-                            <option value="">Select assessment...</option>
-                            <option value="great-term">That's a great term</option>
-                            <option value="crowded-term">That's a crowded term</option>
-                        </select>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                            <strong>Assessment:</strong> The AI will analyze your inputs and determine how crowded this topic/term is on a scale of 1-10 (1 = not crowded, 10 = very crowded).
+                        </div>
+                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 6px; border: 1px solid #dee2e6;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.8rem; color: #666;">
+                                <span>1 - Not crowded</span>
+                                <span>10 - Very crowded</span>
+                            </div>
+                            <div style="background: #e9ecef; height: 8px; border-radius: 4px; position: relative;">
+                                <div id="crowding-scale" style="background: #007bff; height: 100%; border-radius: 4px; width: 0%; transition: width 0.3s ease;"></div>
+                            </div>
+                            <div id="crowding-score" style="text-align: center; margin-top: 0.5rem; font-weight: 600; color: #007bff;">AI will determine</div>
+                        </div>
                     </div>
                     <div class="input-group">
                         <label for="sme">Who is your SME (Subject Matter Expert)?</label>
                         <textarea id="sme" rows="2" placeholder="Identify the person or team with the deepest expertise on this topic within your organization..."></textarea>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+                            <strong>Purpose:</strong> This helps us understand how to leverage your internal expertise and position them effectively in your thought leadership strategy.
+                        </div>
                     </div>
                     <button class="btn" onclick="generateIssuesManagementStrategy()">Generate Issues Management Strategy</button>
                 </div>
@@ -738,11 +754,20 @@ async function generateIssuesManagementStrategy() {
     const specialization = document.getElementById('specialization').value.trim();
     const keywordRelevance = document.getElementById('keyword-relevance').value.trim();
     const whiteSpace = document.getElementById('white-space').value.trim();
-    const termAssessment = document.getElementById('term-assessment').value;
     const sme = document.getElementById('sme').value.trim();
 
     if (!thoughtLeadershipArea || !companyBackground || !specialization) {
-        document.getElementById('pov-content').insertAdjacentHTML('beforeend', '<div class="results" style="color:red; margin-top:1rem;">Please fill in all <strong>required fields</strong> before generating your issues management strategy.</div>');
+        let missingFields = [];
+        if (!thoughtLeadershipArea) missingFields.push('Thought Leadership Area');
+        if (!companyBackground) missingFields.push('Company Background');
+        if (!specialization) missingFields.push('Specialization');
+        
+        document.getElementById('pov-content').insertAdjacentHTML('beforeend', `
+            <div class="results" style="color:red; margin-top:1rem; background: #fff5f5; padding: 1rem; border-radius: 6px; border: 1px solid #fed7d7;">
+                <strong>Please fill in these required fields:</strong><br>
+                ${missingFields.join(', ')}
+            </div>
+        `);
         return;
     }
 
@@ -755,14 +780,16 @@ async function generateIssuesManagementStrategy() {
     `;
 
     // Build the OpenAI prompt
-    let prompt = `You are an issues management and thought leadership strategist. Based on the following information, provide a comprehensive issues management strategy that includes:
+    let prompt = `You are an issues management and thought leadership strategist. Based on the following information, provide a comprehensive issues management strategy that directly addresses each of these key areas:
 
-1. **Thought Leadership Positioning**: How to establish authority in this area
-2. **White Space Analysis**: How to identify and fill market gaps
-3. **Content Strategy**: What types of content to create
-4. **Messaging Framework**: Key talking points and positioning
-5. **Stakeholder Engagement**: How to engage with different audiences
+1. **Thought Leadership Positioning**: How to establish authority in the specified area
+2. **White Space Analysis**: How to identify and fill market gaps based on the white space analysis provided
+3. **Content Strategy**: What types of content to create to establish thought leadership
+4. **Messaging Framework**: Key talking points and positioning that leverage your specialization
+5. **Stakeholder Engagement**: How to engage with different audiences based on your company background
 6. **Risk Management**: Potential challenges and how to address them
+7. **SME Utilization**: How to leverage your subject matter expert effectively
+8. **Term Assessment Strategy**: How to approach the term based on whether it's a great term or crowded term
 
 Company Background: ${companyBackground}
 Thought Leadership Area: ${thoughtLeadershipArea}
@@ -773,7 +800,9 @@ Specialization: ${specialization}`;
     if (termAssessment) prompt += `\nTerm Assessment: ${termAssessment}`;
     if (sme) prompt += `\nSME: ${sme}`;
 
-    prompt += `\n\nFormat your response with clear sections and actionable recommendations. Focus on strategic guidance rather than tactical execution.`;
+    prompt += `\n\nIMPORTANT: At the end of your response, provide a "Topic Crowding Assessment" with a score from 1-10 (1 = not crowded, 10 = very crowded) based on your analysis of the thought leadership area and market conditions. Explain your reasoning for this score.
+
+Please structure your response to directly address how each of these inputs should inform the strategy. For each section, reference the specific information provided and explain how it shapes the recommendations. Format your response with clear sections and actionable recommendations. Focus on strategic guidance rather than tactical execution.`;
 
     try {
         // Call the Vercel serverless function instead of OpenAI directly
@@ -794,10 +823,66 @@ Specialization: ${specialization}`;
         } else {
             strategy = '<span style="color:red;">No response from OpenAI. Please try again.</span>';
         }
+        // Extract crowding score from AI response
+        let crowdingScore = 'AI will determine';
+        let crowdingPercentage = 0;
+        
+        // Look for crowding score in the AI response
+        const crowdingMatch = strategy.match(/Topic Crowding Assessment.*?(\d+)/i);
+        if (crowdingMatch) {
+            crowdingScore = crowdingMatch[1];
+            crowdingPercentage = (parseInt(crowdingScore) / 10) * 100;
+        }
+        
         document.getElementById('pov-content').innerHTML = `
             <div class="results">
                 <h3>Your Issues Management Strategy</h3>
                 <div class="strategy-content" style="margin-bottom:2rem; line-height:1.6;">${strategy}</div>
+                
+                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #007bff;">
+                    <h4 style="margin-top: 0; color: #007bff;">📋 POV Builder Inputs Summary</h4>
+                    <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">These are the key inputs that shaped your strategy. Each answer directly influenced the recommendations above.</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                        <div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #dee2e6;">
+                            <strong style="color: #007bff;">🎯 Thought Leadership Area:</strong><br>
+                            <span style="color: #333;">${thoughtLeadershipArea}</span>
+                        </div>
+                        <div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #dee2e6;">
+                            <strong style="color: #007bff;">🏢 Company Background:</strong><br>
+                            <span style="color: #333;">${companyBackground}</span>
+                        </div>
+                        <div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #dee2e6;">
+                            <strong style="color: #007bff;">💡 Specialization:</strong><br>
+                            <span style="color: #333;">${specialization}</span>
+                        </div>
+                        ${keywordRelevance ? `<div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #dee2e6;">
+                            <strong style="color: #007bff;">🔗 Keyword Relevance:</strong><br>
+                            <span style="color: #333;">${keywordRelevance}</span>
+                        </div>` : ''}
+                        ${whiteSpace ? `<div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #dee2e6;">
+                            <strong style="color: #007bff;">⚪ White Space Analysis:</strong><br>
+                            <span style="color: #333;">${whiteSpace}</span>
+                        </div>` : ''}
+                        <div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #dee2e6;">
+                            <strong style="color: #007bff;">📊 Topic Crowding Assessment:</strong><br>
+                            <div style="margin-top: 0.5rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.8rem; color: #666;">
+                                    <span>1 - Not crowded</span>
+                                    <span>10 - Very crowded</span>
+                                </div>
+                                <div style="background: #e9ecef; height: 8px; border-radius: 4px; position: relative;">
+                                    <div style="background: #007bff; height: 100%; border-radius: 4px; width: ${crowdingPercentage}%; transition: width 0.3s ease;"></div>
+                                </div>
+                                <div style="text-align: center; margin-top: 0.5rem; font-weight: 600; color: #007bff;">Score: ${crowdingScore}/10</div>
+                            </div>
+                        </div>
+                        ${sme ? `<div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #dee2e6;">
+                            <strong style="color: #007bff;">👨‍💼 SME:</strong><br>
+                            <span style="color: #333;">${sme}</span>
+                        </div>` : ''}
+                    </div>
+                </div>
+                
                 <div style="text-align:center;">
                     <button class="btn" onclick="window.open('https://ink-co.com/contact', '_blank')">Get Professional Strategy Support</button>
                 </div>
