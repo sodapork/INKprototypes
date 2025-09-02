@@ -399,6 +399,19 @@ main {
     border-radius: 2px;
 }
 
+/* Ensure text in results is readable */
+.results {
+    color: #333;
+}
+
+.results p, .results div {
+    color: #333;
+}
+
+.strategy-content {
+    color: #333 !important;
+}
+
 /* Enhanced ROI Results Styling */
 .roi-metrics {
     display: grid;

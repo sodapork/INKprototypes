@@ -815,10 +815,10 @@ Please structure your response to directly address how each of these inputs shou
         if (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
             // Format the response with proper HTML structure
             strategy = data.choices[0].message.content
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\n\n/g, '</p><p>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong style="color: #333;">$1</strong>')
+                .replace(/\n\n/g, '</p><p style="color: #333;">')
                 .replace(/\n/g, '<br>');
-            strategy = '<p>' + strategy + '</p>';
+            strategy = '<p style="color: #333;">' + strategy + '</p>';
         } else {
             strategy = '<span style="color:red;">No response from OpenAI. Please try again.</span>';
         }
@@ -835,8 +835,8 @@ Please structure your response to directly address how each of these inputs shou
         
         document.getElementById('pov-content').innerHTML = `
             <div class="results">
-                <h3>Your Issues Management Strategy</h3>
-                <div class="strategy-content" style="margin-bottom:2rem; line-height:1.6;">${strategy}</div>
+                <h3 style="color: #333;">Your Issues Management Strategy</h3>
+                <div class="strategy-content" style="margin-bottom:2rem; line-height:1.6; color: #333;">${strategy}</div>
                 
                 <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #007bff;">
                     <h4 style="margin-top: 0; color: #007bff;">📋 POV Builder Inputs Summary</h4>
