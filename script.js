@@ -130,9 +130,9 @@ function getToolContent(toolName) {
                     <span class="ai-tag">AI enabled</span>
                 </div>
                 <div id="pov-content">
-                    <div style="background: #e3f2fd; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #2196f3;">
-                        <h4 style="margin-top: 0; color: #1976d2;">🎯 POV Builder Questions</h4>
-                        <p style="margin-bottom: 0; color: #1976d2; font-size: 0.9rem;">Answer these strategic questions to build your comprehensive issues management strategy. Required fields are marked with an asterisk (*).</p>
+                    <div class="pov-explainer">
+                        <h4>🎯 POV Builder Questions</h4>
+                        <p>Answer these strategic questions to build your comprehensive issues management strategy. Required fields are marked with an asterisk (*).</p>
                     </div>
                     
                     <div class="input-group">
