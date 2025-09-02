@@ -158,7 +158,22 @@ function getToolContent(toolName) {
                             <strong>Objective:</strong> Help you understand where the gap in the market of ideas is + your perspective to create something that is unique. Think about: What conversations are missing? What angles aren't being covered? What unique viewpoint could you bring that others aren't addressing?
                         </div>
                     </div>
-                    
+                    <div class="input-group">
+                        <label for="term-assessment">Term assessment</label>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                            <strong>Assessment:</strong> The AI will analyze your inputs and determine how crowded this topic/term is on a scale of 1-10 (1 = not crowded, 10 = very crowded).
+                        </div>
+                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 6px; border: 1px solid #dee2e6;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.8rem; color: #666;">
+                                <span>1 - Not crowded</span>
+                                <span>10 - Very crowded</span>
+                            </div>
+                            <div style="background: #e9ecef; height: 8px; border-radius: 4px; position: relative;">
+                                <div id="crowding-scale" style="background: #007bff; height: 100%; border-radius: 4px; width: 0%; transition: width 0.3s ease;"></div>
+                            </div>
+                            <div id="crowding-score" style="text-align: center; margin-top: 0.5rem; font-weight: 600; color: #007bff;">AI will determine</div>
+                        </div>
+                    </div>
                     <div class="input-group">
                         <label for="sme">Who is your SME (Subject Matter Expert)?</label>
                         <textarea id="sme" rows="2" placeholder="Identify the person or team with the deepest expertise on this topic within your organization..."></textarea>
@@ -844,22 +859,21 @@ Please structure your response to directly address how each of these inputs shou
         if (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
             // Format the response with proper HTML structure and beautiful formatting
             strategy = data.choices[0].message.content
-                // Convert markdown headers to styled HTML using INK typography
-                .replace(/^#\s+(.+)$/gm, '<h2 style="font-family: \'Oswald\', sans-serif; color: #2F2F2E; font-size: 4rem; font-weight: 400; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 3px solid #23B280; text-align: left; text-transform: uppercase; line-height: 0.9;">$1</h2>')
-                .replace(/^##\s+(.+)$/gm, '<h3 style="font-family: \'Oswald\', sans-serif; color: #007bff; font-size: 2.7rem; font-weight: 400; margin: 1.5rem 0 1rem 0; padding-left: 1rem; border-left: 4px solid #007bff; text-transform: uppercase; line-height: 0.9;">$1</h3>')
-                .replace(/^###\s+(.+)$/gm, '<h4 style="font-family: \'Oswald\', sans-serif; color: #2F2F2E; font-size: 2.7rem; font-weight: 400; margin: 1rem 0 0.5rem 0; text-transform: uppercase; line-height: 0.9;">$1</h4>')
-                .replace(/^####\s+(.+)$/gm, '<h5 style="font-family: \'Inter\', sans-serif; color: #23B280; font-size: 2rem; font-weight: 700; margin: 0.75rem 0 0.5rem 0; padding-left: 0.5rem; border-left: 3px solid #23B280; line-height: 1.5;">$1</h5>')
+                // Convert markdown headers to styled HTML
+                .replace(/^#\s+(.+)$/gm, '<h2 style="color: #2F2F2E; font-size: 1.8rem; font-weight: 700; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 3px solid #23B280; text-align: left;">$1</h2>')
+                .replace(/^##\s+(.+)$/gm, '<h3 style="color: #007bff; font-size: 1.4rem; font-weight: 600; margin: 1.5rem 0 1rem 0; padding-left: 1rem; border-left: 4px solid #007bff;">$1</h3>')
+                .replace(/^###\s+(.+)$/gm, '<h4 style="color: #2F2F2E; font-size: 1.2rem; font-weight: 600; margin: 1rem 0 0.5rem 0;">$1</h4>')
                 // Convert bullet points to styled lists
-                .replace(/^\s*-\s+\*\*(.+?)\*\*:\s*(.+)$/gm, '<div style="background: #f8f9fa; border-left: 4px solid #23B280; padding: 1rem; margin: 1rem 0; border-radius: 0 8px 8px 0;"><strong style="font-family: \'Inter\', sans-serif; color: #23B280; font-size: 2rem; font-weight: 700; display: block; margin-bottom: 0.5rem; line-height: 1.5;">$1</strong><span style="font-family: \'Inter\', sans-serif; color: #555; line-height: 1.5; font-size: 1.8rem;">$2</span></div>')
-                .replace(/^\s*-\s+(.+)$/gm, '<div style="background: #f8f9fa; border-left: 4px solid #dee2e6; padding: 0.75rem; margin: 0.5rem 0; border-radius: 0 6px 6px 0;"><span style="font-family: \'Inter\', sans-serif; color: #555; line-height: 1.5; font-size: 1.8rem;">$1</span></div>')
+                .replace(/^\s*-\s+\*\*(.+?)\*\*:\s*(.+)$/gm, '<div style="background: #f8f9fa; border-left: 4px solid #23B280; padding: 1rem; margin: 1rem 0; border-radius: 0 8px 8px 0;"><strong style="color: #23B280; font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">$1</strong><span style="color: #555; line-height: 1.6;">$2</span></div>')
+                .replace(/^\s*-\s+(.+)$/gm, '<div style="background: #f8f9fa; border-left: 4px solid #dee2e6; padding: 0.75rem; margin: 0.5rem 0; border-radius: 0 6px 6px 0;"><span style="color: #555; line-height: 1.6;">$1</span></div>')
                 // Convert bold text
-                .replace(/\*\*(.*?)\*\*/g, '<strong style="font-family: \'Inter\', sans-serif; color: #2F2F2E; font-weight: 700; font-size: 1.8rem;">$1</strong>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong style="color: #2F2F2E; font-weight: 600;">$1</strong>')
                 // Convert line breaks to proper spacing
                 .replace(/\n\n/g, '</div><div style="margin: 1rem 0;">')
                 .replace(/\n/g, '<br>');
             
-            // Wrap in a container with proper styling using INK typography
-            strategy = '<div style="font-family: \'Inter\', sans-serif; color: #333; line-height: 1.5; font-size: 1.8rem;">' + strategy + '</div>';
+            // Wrap in a container with proper styling
+            strategy = '<div style="color: #333; line-height: 1.7; font-size: 1rem;">' + strategy + '</div>';
         } else {
             strategy = '<span style="color:red;">No response from OpenAI. Please try again.</span>';
         }
@@ -904,49 +918,49 @@ Please structure your response to directly address how each of these inputs shou
         
         document.getElementById('pov-content').innerHTML = `
             <div class="results">
-                <h3 style="font-family: 'Oswald', sans-serif; color: #333; font-size: 2.7rem; font-weight: 400; text-transform: uppercase; line-height: 0.9;">Your Issues Management Strategy</h3>
+                <h3 style="color: #333;">Your Issues Management Strategy</h3>
                 <div class="strategy-content" style="margin-bottom:2rem; padding: 2rem; background: white; border-radius: 12px; border: 1px solid #e9ecef; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">${strategy}</div>
                 
                 <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #007bff;">
-                    <h4 style="font-family: 'Oswald', sans-serif; margin-top: 0; color: #007bff; font-size: 2.7rem; font-weight: 400; text-transform: uppercase; line-height: 0.9;">📋 POV Builder Inputs Summary</h4>
-                    <p style="font-family: 'Inter', sans-serif; margin-bottom: 1rem; color: #666; font-size: 1.8rem; line-height: 1.5; font-weight: 400;">These are the key inputs that shaped your strategy. Each answer directly influenced the recommendations above.</p>
+                    <h4 style="margin-top: 0; color: #007bff;">📋 POV Builder Inputs Summary</h4>
+                    <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">These are the key inputs that shaped your strategy. Each answer directly influenced the recommendations above.</p>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
                         <div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #dee2e6;">
-                            <strong style="font-family: 'Inter', sans-serif; color: #007bff; font-size: 1.6rem; font-weight: 700; line-height: 1.3;">🎯 Thought Leadership Area:</strong><br>
-                            <span style="font-family: 'Inter', sans-serif; color: #333; font-size: 1.8rem; line-height: 1.5;">${thoughtLeadershipArea}</span>
+                            <strong style="color: #007bff;">🎯 Thought Leadership Area:</strong><br>
+                            <span style="color: #333;">${thoughtLeadershipArea}</span>
                         </div>
                         <div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #dee2e6;">
-                            <strong style="font-family: 'Inter', sans-serif; color: #007bff; font-size: 1.6rem; font-weight: 700; line-height: 1.3;">🏢 Company Background:</strong><br>
-                            <span style="font-family: 'Inter', sans-serif; color: #333; font-size: 1.8rem; line-height: 1.5;">${companyBackground}</span>
+                            <strong style="color: #007bff;">🏢 Company Background:</strong><br>
+                            <span style="color: #333;">${companyBackground}</span>
                         </div>
                         <div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #dee2e6;">
-                            <strong style="font-family: 'Inter', sans-serif; color: #007bff; font-size: 1.6rem; font-weight: 700; line-height: 1.3;">💡 Specialization:</strong><br>
-                            <span style="font-family: 'Inter', sans-serif; color: #333; font-size: 1.8rem; line-height: 1.5;">${specialization}</span>
+                            <strong style="color: #007bff;">💡 Specialization:</strong><br>
+                            <span style="color: #333;">${specialization}</span>
                         </div>
                         ${keywordRelevance ? `<div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #dee2e6;">
-                            <strong style="font-family: 'Inter', sans-serif; color: #007bff; font-size: 1.6rem; font-weight: 700; line-height: 1.3;">🔗 Keyword Relevance:</strong><br>
-                            <span style="font-family: 'Inter', sans-serif; color: #333; font-size: 1.8rem; line-height: 1.5;">${keywordRelevance}</span>
+                            <strong style="color: #007bff;">🔗 Keyword Relevance:</strong><br>
+                            <span style="color: #333;">${keywordRelevance}</span>
                         </div>` : ''}
                         ${whiteSpace ? `<div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #dee2e6;">
-                            <strong style="font-family: 'Inter', sans-serif; color: #007bff; font-size: 1.6rem; font-weight: 700; line-height: 1.3;">⚪ White Space Analysis:</strong><br>
-                            <span style="font-family: 'Inter', sans-serif; color: #333; font-size: 1.8rem; line-height: 1.5;">${whiteSpace}</span>
+                            <strong style="color: #007bff;">⚪ White Space Analysis:</strong><br>
+                            <span style="color: #333;">${whiteSpace}</span>
                         </div>` : ''}
                         <div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #dee2e6;">
-                            <strong style="font-family: 'Inter', sans-serif; color: #007bff; font-size: 1.6rem; font-weight: 700; line-height: 1.3;">📊 Topic Crowding Assessment:</strong><br>
+                            <strong style="color: #007bff;">📊 Topic Crowding Assessment:</strong><br>
                             <div style="margin-top: 0.5rem;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-family: 'Inter', sans-serif; font-size: 1.5rem; color: #666; line-height: 1.3;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.8rem; color: #666;">
                                     <span>1 - Not crowded</span>
                                     <span>10 - Very crowded</span>
                                 </div>
                                 <div style="background: #e9ecef; height: 8px; border-radius: 4px; position: relative;">
                                     <div style="background: #007bff; height: 100%; border-radius: 4px; width: ${crowdingPercentage}%; transition: width 0.3s ease;"></div>
                                 </div>
-                                <div style="text-align: center; margin-top: 0.5rem; font-family: 'Inter', sans-serif; font-weight: 700; color: #007bff; font-size: 1.6rem; line-height: 1.3;">Score: ${crowdingScore}/10</div>
+                                <div style="text-align: center; margin-top: 0.5rem; font-weight: 600; color: #007bff;">Score: ${crowdingScore}/10</div>
                             </div>
                         </div>
                         ${sme ? `<div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #dee2e6;">
-                            <strong style="font-family: 'Inter', sans-serif; color: #007bff; font-size: 1.6rem; font-weight: 700; line-height: 1.3;">👨‍💼 SME:</strong><br>
-                            <span style="font-family: 'Inter', sans-serif; color: #333; font-size: 1.8rem; line-height: 1.5;">${sme}</span>
+                            <strong style="color: #007bff;">👨‍💼 SME:</strong><br>
+                            <span style="color: #333;">${sme}</span>
                         </div>` : ''}
                     </div>
                 </div>
