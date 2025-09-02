@@ -412,6 +412,42 @@ main {
     color: #333 !important;
 }
 
+/* Enhanced strategy content styling */
+.strategy-content h2 {
+    color: #2F2F2E !important;
+    font-size: 1.8rem !important;
+    font-weight: 700 !important;
+    margin: 2rem 0 1rem 0 !important;
+    padding-bottom: 0.5rem !important;
+    border-bottom: 3px solid #23B280 !important;
+    text-align: left !important;
+}
+
+.strategy-content h3 {
+    color: #007bff !important;
+    font-size: 1.4rem !important;
+    font-weight: 600 !important;
+    margin: 1.5rem 0 1rem 0 !important;
+    padding-left: 1rem !important;
+    border-left: 4px solid #007bff !important;
+}
+
+.strategy-content h4 {
+    color: #2F2F2E !important;
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+    margin: 1rem 0 0.5rem 0 !important;
+}
+
+.strategy-content div[style*="background: #f8f9fa"] {
+    transition: all 0.3s ease;
+}
+
+.strategy-content div[style*="background: #f8f9fa"]:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
 /* Enhanced ROI Results Styling */
 .roi-metrics {
     display: grid;

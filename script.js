@@ -813,12 +813,23 @@ Please structure your response to directly address how each of these inputs shou
         const data = await response.json();
         let strategy = '';
         if (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
-            // Format the response with proper HTML structure
+            // Format the response with proper HTML structure and beautiful formatting
             strategy = data.choices[0].message.content
-                .replace(/\*\*(.*?)\*\*/g, '<strong style="color: #333;">$1</strong>')
-                .replace(/\n\n/g, '</p><p style="color: #333;">')
+                // Convert markdown headers to styled HTML
+                .replace(/^#\s+(.+)$/gm, '<h2 style="color: #2F2F2E; font-size: 1.8rem; font-weight: 700; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 3px solid #23B280; text-align: left;">$1</h2>')
+                .replace(/^##\s+(.+)$/gm, '<h3 style="color: #007bff; font-size: 1.4rem; font-weight: 600; margin: 1.5rem 0 1rem 0; padding-left: 1rem; border-left: 4px solid #007bff;">$1</h3>')
+                .replace(/^###\s+(.+)$/gm, '<h4 style="color: #2F2F2E; font-size: 1.2rem; font-weight: 600; margin: 1rem 0 0.5rem 0;">$1</h4>')
+                // Convert bullet points to styled lists
+                .replace(/^\s*-\s+\*\*(.+?)\*\*:\s*(.+)$/gm, '<div style="background: #f8f9fa; border-left: 4px solid #23B280; padding: 1rem; margin: 1rem 0; border-radius: 0 8px 8px 0;"><strong style="color: #23B280; font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">$1</strong><span style="color: #555; line-height: 1.6;">$2</span></div>')
+                .replace(/^\s*-\s+(.+)$/gm, '<div style="background: #f8f9fa; border-left: 4px solid #dee2e6; padding: 0.75rem; margin: 0.5rem 0; border-radius: 0 6px 6px 0;"><span style="color: #555; line-height: 1.6;">$1</span></div>')
+                // Convert bold text
+                .replace(/\*\*(.*?)\*\*/g, '<strong style="color: #2F2F2E; font-weight: 600;">$1</strong>')
+                // Convert line breaks to proper spacing
+                .replace(/\n\n/g, '</div><div style="margin: 1rem 0;">')
                 .replace(/\n/g, '<br>');
-            strategy = '<p style="color: #333;">' + strategy + '</p>';
+            
+            // Wrap in a container with proper styling
+            strategy = '<div style="color: #333; line-height: 1.7; font-size: 1rem;">' + strategy + '</div>';
         } else {
             strategy = '<span style="color:red;">No response from OpenAI. Please try again.</span>';
         }
@@ -864,7 +875,7 @@ Please structure your response to directly address how each of these inputs shou
         document.getElementById('pov-content').innerHTML = `
             <div class="results">
                 <h3 style="color: #333;">Your Issues Management Strategy</h3>
-                <div class="strategy-content" style="margin-bottom:2rem; line-height:1.6; color: #333;">${strategy}</div>
+                <div class="strategy-content" style="margin-bottom:2rem; padding: 2rem; background: white; border-radius: 12px; border: 1px solid #e9ecef; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">${strategy}</div>
                 
                 <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #007bff;">
                     <h4 style="margin-top: 0; color: #007bff;">📋 POV Builder Inputs Summary</h4>
