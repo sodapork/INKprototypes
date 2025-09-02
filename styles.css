@@ -1076,3 +1076,94 @@ body[data-embedded="true"] .chat-input {
     border: 1px solid #ddd !important;
     color: #333 !important;
 }
+
+/* Center tool content */
+.tool-container {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.tool-header h2 {
+    margin-bottom: 1rem;
+}
+
+.tool-header p {
+    margin-bottom: 1.5rem;
+}
+
+/* Center form elements */
+.input-group {
+    text-align: left;
+    max-width: 600px;
+    margin: 0 auto 1.5rem auto;
+}
+
+/* Center buttons */
+.btn {
+    display: inline-block;
+    margin: 0.5rem;
+}
+
+/* Center quiz content */
+#quiz-content {
+    text-align: center;
+}
+
+.question-container {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.option {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+}
+
+/* Center chatbot content */
+.chatbot-container {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#pov2-input-area {
+    justify-content: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Center glossary content */
+#glossary-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Center channel optimizer content */
+#channel-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Center customer quiz content */
+#customer-quiz-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
