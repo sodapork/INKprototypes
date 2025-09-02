@@ -826,12 +826,40 @@ Please structure your response to directly address how each of these inputs shou
         let crowdingScore = 'AI will determine';
         let crowdingPercentage = 0;
         
-        // Look for crowding score in the AI response
-        const crowdingMatch = strategy.match(/Topic Crowding Assessment.*?(\d+)/i);
+        // Look for crowding score in the AI response - be more specific about finding a 1-10 score
+        const crowdingMatch = strategy.match(/Topic Crowding Assessment.*?(\d{1,2})\/10/i);
         if (crowdingMatch) {
-            crowdingScore = crowdingMatch[1];
-            crowdingPercentage = (parseInt(crowdingScore) / 10) * 100;
+            const score = parseInt(crowdingMatch[1]);
+            // Ensure the score is within 1-10 range
+            if (score >= 1 && score <= 10) {
+                crowdingScore = score.toString();
+                crowdingPercentage = (score / 10) * 100;
+            } else {
+                crowdingScore = 'AI will determine';
+                crowdingPercentage = 0;
+            }
+        } else {
+            // Try alternative patterns if the first one doesn't work
+            const altMatch = strategy.match(/crowding.*?(\d{1,2})\s*out\s*of\s*10/i) || 
+                           strategy.match(/score.*?(\d{1,2})\/10/i) ||
+                           strategy.match(/crowding.*?(\d{1,2})/i);
+            
+            if (altMatch) {
+                const score = parseInt(altMatch[1]);
+                if (score >= 1 && score <= 10) {
+                    crowdingScore = score.toString();
+                    crowdingPercentage = (score / 10) * 100;
+                }
+            }
         }
+        
+        // Debug logging
+        console.log('Crowding score extraction:', {
+            originalStrategy: strategy.substring(0, 200) + '...',
+            finalScore: crowdingScore,
+            percentage: crowdingPercentage,
+            isValid: parseInt(crowdingScore) >= 1 && parseInt(crowdingScore) <= 10
+        });
         
         document.getElementById('pov-content').innerHTML = `
             <div class="results">
