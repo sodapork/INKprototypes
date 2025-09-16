@@ -465,7 +465,7 @@ main {
     color: white;
     border: none;
     padding: 1rem 2rem;
-    border-radius: 4px;
+    border-radius: 0;
     font-weight: 700;
     cursor: pointer;
     transition: transform 0.2s ease;
@@ -858,8 +858,8 @@ main {
     margin: 0 0 2rem 0;
     padding: 2rem;
     background: #fff;
-    border-radius: 12px;
-    border: 2px solid #23B280;
+    border-radius: 0;
+    border: 2px solid #000;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -1106,7 +1106,7 @@ main {
     color: #fff;
     border: none;
     padding: 1rem 2rem;
-    border-radius: 8px;
+    border-radius: 0;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -1197,7 +1197,7 @@ main {
     color: #fff;
     border: none;
     padding: 1.2rem 2.5rem;
-    border-radius: 8px;
+    border-radius: 0;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
