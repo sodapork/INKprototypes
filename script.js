@@ -3,6 +3,42 @@ let currentTool = null;
 let currentQuestion = 0;
 let answers = {};
 
+// User Entries Data Capture System
+class UserEntriesManager {
+    constructor() {
+        this.entries = JSON.parse(localStorage.getItem('inkUserEntries') || '[]');
+    }
+
+    saveEntry(tool, userData, results, status = 'completed') {
+        const entry = {
+            id: Date.now() + Math.random().toString(36).substr(2, 9),
+            tool: tool,
+            timestamp: new Date().toISOString(),
+            userData: userData,
+            results: results,
+            status: status
+        };
+
+        this.entries.push(entry);
+        localStorage.setItem('inkUserEntries', JSON.stringify(this.entries));
+        
+        console.log('User entry saved:', entry);
+        return entry;
+    }
+
+    getEntries() {
+        return this.entries;
+    }
+
+    clearEntries() {
+        this.entries = [];
+        localStorage.setItem('inkUserEntries', JSON.stringify(this.entries));
+    }
+}
+
+// Initialize the user entries manager
+const userEntriesManager = new UserEntriesManager();
+
 // Check for URL parameters to show specific tool
 function checkUrlParameters() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -647,6 +683,17 @@ function showBrandAlignmentResults() {
     const brandContext = answers['brand-context'];
     const results = calculateBrandAlignmentScore();
     
+    // Capture user data for the table
+    const userData = {
+        issueCategory: issueCategory,
+        specificIssue: specificIssue,
+        brandContext: brandContext,
+        answers: { ...answers }
+    };
+    
+    // Save entry to user entries table
+    userEntriesManager.saveEntry('brand-alignment', userData, results);
+    
     const resultsHTML = `
         <div class="results">
             <div class="step-indicator">
@@ -911,6 +958,25 @@ Please structure your response to directly address how each of these inputs shou
             isValid: parseInt(crowdingScore) >= 1 && parseInt(crowdingScore) <= 10
         });
         
+        // Capture user data for the table
+        const userData = {
+            thoughtLeadershipArea: thoughtLeadershipArea,
+            companyBackground: companyBackground,
+            specialization: specialization,
+            keywordRelevance: keywordRelevance,
+            whiteSpace: whiteSpace,
+            sme: sme
+        };
+        
+        const results = {
+            strategy: strategy,
+            crowdingScore: crowdingScore,
+            crowdingPercentage: crowdingPercentage
+        };
+        
+        // Save entry to user entries table
+        userEntriesManager.saveEntry('pov-builder', userData, results);
+        
         document.getElementById('pov-content').innerHTML = `
             <div class="results">
                 <h3 style="color: #333;">Your Issues Management Strategy</h3>
@@ -983,6 +1049,17 @@ function calculateROI() {
     }
     
     const roi = calculateROIEstimates(budget, campaignType, industry, duration);
+    
+    // Capture user data for the table
+    const userData = {
+        budget: budget,
+        campaignType: campaignType,
+        industry: industry,
+        duration: duration
+    };
+    
+    // Save entry to user entries table
+    userEntriesManager.saveEntry('roi-calculator', userData, roi);
     
     const resultsHTML = `
         <div class="results">
@@ -1323,6 +1400,17 @@ function optimizeChannels() {
     }
     
     const optimization = getChannelOptimization(goal, audienceSize, budgetRange, industry);
+    
+    // Capture user data for the table
+    const userData = {
+        goal: goal,
+        audienceSize: audienceSize,
+        budgetRange: budgetRange,
+        industry: industry
+    };
+    
+    // Save entry to user entries table
+    userEntriesManager.saveEntry('channel-optimizer', userData, optimization);
     
     const resultsHTML = `
         <div class="results">
@@ -1921,6 +2009,20 @@ function showCustomerQuizResults() {
     const results = calculateCustomerQuizScore();
     const demographicInsights = getDemographicInsights(demographic);
     
+    // Capture user data for the table
+    const userData = {
+        demographic: demographic,
+        answers: { ...answers }
+    };
+    
+    const resultsWithInsights = {
+        ...results,
+        demographicInsights: demographicInsights
+    };
+    
+    // Save entry to user entries table
+    userEntriesManager.saveEntry('customer-quiz', userData, resultsWithInsights);
+    
     const resultsHTML = `
         <div class="results">
             <h3>Your Customer Knowledge Score</h3>
@@ -2185,6 +2287,29 @@ async function createGlossaryEntry() {
         const data = await response.json();
         
         if (response.ok && data.success) {
+            // Capture user data for the table
+            const userData = {
+                term: term,
+                definition: definition,
+                category: category,
+                relatedTerms: relatedTerms,
+                author: author,
+                whyMatters: whyMatters,
+                inkRole: inkRole,
+                challenges: challenges
+            };
+            
+            const results = {
+                postId: data.post.id,
+                status: data.post.status,
+                type: data.post.type,
+                link: data.post.link,
+                message: data.message
+            };
+            
+            // Save entry to user entries table
+            userEntriesManager.saveEntry('glossary', userData, results);
+            
             showGlossaryResult(`
                 <div style="color: #28a745; font-weight: 600; margin-bottom: 0.5rem;">✅ Glossary entry created successfully!</div>
                 <div style="margin-bottom: 0.5rem;"><strong>Glossary ID:</strong> ${data.post.id}</div>

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Entries - INK Interactive Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Brandon Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1E5749 0%, #23B280 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #1E5749;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .controls {
+            padding: 1.5rem 2rem;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #1E5749;
+        }
+
+        .filter-group select, .filter-group input {
+            padding: 0.5rem;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-family: inherit;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #23B280;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e9a6b;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: #1E5749;
+            color: white;
+            padding: 1rem 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e9ecef;
+            vertical-align: top;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .tool-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .tool-brand-alignment {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .tool-pov-builder {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .tool-roi-calculator {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+
+        .tool-channel-optimizer {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .tool-customer-quiz {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .tool-glossary {
+            background: #f1f8e9;
+            color: #689f38;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-partial {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .data-cell {
+            max-width: 200px;
+            word-wrap: break-word;
+        }
+
+        .data-cell.expandable {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .data-cell.expandable:hover {
+            background: #e3f2fd;
+        }
+
+        .data-cell.expandable::after {
+            content: "📄";
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.5;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .modal-header h3 {
+            color: #1E5749;
+            font-size: 1.5rem;
+        }
+
+        .close {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .close:hover {
+            color: #1E5749;
+        }
+
+        .data-field {
+            margin-bottom: 1rem;
+        }
+
+        .data-field label {
+            font-weight: 600;
+            color: #1E5749;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .data-field .value {
+            background: #f8f9fa;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border-left: 4px solid #23B280;
+            white-space: pre-wrap;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #23B280;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                justify-content: center;
+            }
+
+            .export-buttons {
+                justify-content: center;
+            }
+
+            .table-container {
+                font-size: 0.8rem;
+            }
+
+            th, td {
+                padding: 0.5rem 0.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>User Entries Dashboard</h1>
+            <p>Track and analyze user interactions with INK Interactive Tools</p>
+        </div>
+
+        <div class="stats" id="stats">
+            <!-- Stats will be populated by JavaScript -->
+        </div>
+
+        <div class="controls">
+            <div class="filter-group">
+                <label for="tool-filter">Tool:</label>
+                <select id="tool-filter">
+                    <option value="">All Tools</option>
+                    <option value="brand-alignment">Issues Alignment Quiz</option>
+                    <option value="pov-builder">Issues Management Builder</option>
+                    <option value="roi-calculator">ROI Calculator</option>
+                    <option value="channel-optimizer">Campaign Channel Optimizer</option>
+                    <option value="customer-quiz">Customer Knowledge Quiz</option>
+                    <option value="glossary">Glossary Entry Creator</option>
+                </select>
+
+                <label for="date-filter">Date:</label>
+                <input type="date" id="date-filter">
+
+                <label for="search">Search:</label>
+                <input type="text" id="search" placeholder="Search entries...">
+            </div>
+
+            <div class="export-buttons">
+                <button class="btn btn-primary" onclick="exportToCSV()">Export CSV</button>
+                <button class="btn btn-secondary" onclick="exportToJSON()">Export JSON</button>
+                <button class="btn btn-secondary" onclick="clearAllEntries()">Clear All</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="entries-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tool</th>
+                        <th>Timestamp</th>
+                        <th>Status</th>
+                        <th>User Data</th>
+                        <th>Results</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="entries-tbody">
+                    <!-- Entries will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal for viewing detailed entry -->
+    <div id="entry-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Entry Details</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="modal-body">
+                <!-- Detailed entry data will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User entries storage
+        let userEntries = JSON.parse(localStorage.getItem('inkUserEntries') || '[]');
+        let filteredEntries = [...userEntries];
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            renderTable();
+            setupFilters();
+        });
+
+        function updateStats() {
+            const stats = {
+                total: userEntries.length,
+                today: userEntries.filter(entry => {
+                    const today = new Date().toDateString();
+                    return new Date(entry.timestamp).toDateString() === today;
+                }).length,
+                thisWeek: userEntries.filter(entry => {
+                    const weekAgo = new Date();
+                    weekAgo.setDate(weekAgo.getDate() - 7);
+                    return new Date(entry.timestamp) >= weekAgo;
+                }).length,
+                completed: userEntries.filter(entry => entry.status === 'completed').length
+            };
+
+            document.getElementById('stats').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${stats.total}</div>
+                    <div class="stat-label">Total Entries</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.today}</div>
+                    <div class="stat-label">Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.thisWeek}</div>
+                    <div class="stat-label">This Week</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.completed}</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+            `;
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('entries-tbody');
+            tbody.innerHTML = '';
+
+            if (filteredEntries.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 2rem; color: #6c757d;">
+                            No entries found. Use the tools to generate some data!
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            filteredEntries.forEach((entry, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${entry.id}</td>
+                    <td><span class="tool-badge tool-${entry.tool}">${getToolDisplayName(entry.tool)}</span></td>
+                    <td>${formatTimestamp(entry.timestamp)}</td>
+                    <td><span class="status-badge status-${entry.status}">${entry.status}</span></td>
+                    <td class="data-cell expandable" onclick="showEntryDetails(${index})">${truncateText(JSON.stringify(entry.userData), 50)}</td>
+                    <td class="data-cell expandable" onclick="showEntryDetails(${index})">${truncateText(JSON.stringify(entry.results), 50)}</td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="showEntryDetails(${index})" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">View</button>
+                        <button class="btn btn-secondary" onclick="deleteEntry(${entry.id})" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: #dc3545;">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function setupFilters() {
+            document.getElementById('tool-filter').addEventListener('change', applyFilters);
+            document.getElementById('date-filter').addEventListener('change', applyFilters);
+            document.getElementById('search').addEventListener('input', applyFilters);
+        }
+
+        function applyFilters() {
+            const toolFilter = document.getElementById('tool-filter').value;
+            const dateFilter = document.getElementById('date-filter').value;
+            const searchFilter = document.getElementById('search').value.toLowerCase();
+
+            filteredEntries = userEntries.filter(entry => {
+                const matchesTool = !toolFilter || entry.tool === toolFilter;
+                const matchesDate = !dateFilter || entry.timestamp.startsWith(dateFilter);
+                const matchesSearch = !searchFilter || 
+                    JSON.stringify(entry).toLowerCase().includes(searchFilter);
+
+                return matchesTool && matchesDate && matchesSearch;
+            });
+
+            renderTable();
+        }
+
+        function showEntryDetails(index) {
+            const entry = filteredEntries[index];
+            const modal = document.getElementById('entry-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+
+            modalTitle.textContent = `Entry ${entry.id} - ${getToolDisplayName(entry.tool)}`;
+
+            modalBody.innerHTML = `
+                <div class="data-field">
+                    <label>Timestamp:</label>
+                    <div class="value">${formatTimestamp(entry.timestamp)}</div>
+                </div>
+                <div class="data-field">
+                    <label>Tool:</label>
+                    <div class="value">${getToolDisplayName(entry.tool)}</div>
+                </div>
+                <div class="data-field">
+                    <label>Status:</label>
+                    <div class="value">${entry.status}</div>
+                </div>
+                <div class="data-field">
+                    <label>User Data:</label>
+                    <div class="value">${JSON.stringify(entry.userData, null, 2)}</div>
+                </div>
+                <div class="data-field">
+                    <label>Results:</label>
+                    <div class="value">${JSON.stringify(entry.results, null, 2)}</div>
+                </div>
+            `;
+
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('entry-modal').style.display = 'none';
+        }
+
+        function deleteEntry(entryId) {
+            if (confirm('Are you sure you want to delete this entry?')) {
+                userEntries = userEntries.filter(entry => entry.id !== entryId);
+                localStorage.setItem('inkUserEntries', JSON.stringify(userEntries));
+                applyFilters();
+                updateStats();
+            }
+        }
+
+        function clearAllEntries() {
+            if (confirm('Are you sure you want to clear ALL entries? This cannot be undone.')) {
+                userEntries = [];
+                localStorage.setItem('inkUserEntries', JSON.stringify(userEntries));
+                applyFilters();
+                updateStats();
+            }
+        }
+
+        function exportToCSV() {
+            const csvContent = generateCSV();
+            downloadFile(csvContent, 'ink-user-entries.csv', 'text/csv');
+        }
+
+        function exportToJSON() {
+            const jsonContent = JSON.stringify(userEntries, null, 2);
+            downloadFile(jsonContent, 'ink-user-entries.json', 'application/json');
+        }
+
+        function generateCSV() {
+            const headers = ['ID', 'Tool', 'Timestamp', 'Status', 'User Data', 'Results'];
+            const rows = userEntries.map(entry => [
+                entry.id,
+                getToolDisplayName(entry.tool),
+                entry.timestamp,
+                entry.status,
+                JSON.stringify(entry.userData),
+                JSON.stringify(entry.results)
+            ]);
+
+            return [headers, ...rows].map(row => 
+                row.map(field => `"${field.toString().replace(/"/g, '""')}"`).join(',')
+            ).join('\n');
+        }
+
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Utility functions
+        function getToolDisplayName(tool) {
+            const names = {
+                'brand-alignment': 'Issues Alignment Quiz',
+                'pov-builder': 'Issues Management Builder',
+                'roi-calculator': 'ROI Calculator',
+                'channel-optimizer': 'Campaign Channel Optimizer',
+                'customer-quiz': 'Customer Knowledge Quiz',
+                'glossary': 'Glossary Entry Creator'
+            };
+            return names[tool] || tool;
+        }
+
+        function formatTimestamp(timestamp) {
+            return new Date(timestamp).toLocaleString();
+        }
+
+        function truncateText(text, maxLength) {
+            return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('entry-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
