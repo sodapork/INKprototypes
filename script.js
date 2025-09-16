@@ -115,8 +115,8 @@ function getToolContent(toolName) {
         'brand-alignment': `
             <div class="tool-container">
                 <div class="tool-header">
-                    <h2>Brand Alignment Quiz</h2>
-                    <p>In today's rapidly changing landscape, brands face constant pressure to take stands on issues. But not every issue deserves your brand's voice. This quiz helps you think strategically about when and how to engage with current issues that matter to your stakeholders.</p>
+                    <h2>ISSUES ALIGNMENT QUIZ</h2>
+                    <p>Companies face constant pressure to comment, support, or take a position on issues. But not every issue needs or deserves every company's voice. INK's Issue's Alignment Quiz is a sneak peek on how we help clients think strategically about when and how to engage.</p>
                 </div>
                 <div id="quiz-content"></div>
             </div>
@@ -466,9 +466,9 @@ function showIssueSelectionStep() {
                 <p class="context-text">Before diving into alignment questions, let's identify the specific issue you're thinking about. This helps us provide more targeted guidance for your brand's unique situation.</p>
                 
                 <div class="input-group">
-                    <label for="issue-category">Issue Category</label>
+                    <label for="issue-category">ISSUE CATEGORY</label>
                     <select id="issue-category" onchange="updateIssueContext()">
-                        <option value="">Select a category...</option>
+                        <option value="">Select a category</option>
                         <option value="cultural-movements">Cultural Movements</option>
                         <option value="geopolitical-crises">Geopolitical Crises and War</option>
                         <option value="climate-weather">Climate and Extreme Weather Events</option>
@@ -480,16 +480,16 @@ function showIssueSelectionStep() {
                 </div>
                 
                 <div class="input-group">
-                    <label for="specific-issue">Describe the specific issue</label>
-                    <textarea id="specific-issue" rows="3" placeholder="Describe the current issue, event, or topic you're considering commenting on..."></textarea>
+                    <label for="specific-issue">DESCRIBE THE ISSUE</label>
+                    <textarea id="specific-issue" rows="3" placeholder="Describe the current issue, event, or topic you're considering..."></textarea>
                 </div>
                 
                 <div class="input-group">
-                    <label for="brand-context">Why are you considering this issue?</label>
+                    <label for="brand-context">WHY ARE YOU CONSIDERING THIS ISSUE?</label>
                     <textarea id="brand-context" rows="2" placeholder="What's driving your interest in this issue? (e.g., stakeholder pressure, business impact, values alignment)"></textarea>
                 </div>
                 
-                <button class="btn" onclick="proceedToAlignmentQuestions()">Continue to Alignment Assessment</button>
+                <button class="btn" onclick="proceedToAlignmentQuestions()">DIG DEEPER</button>
             </div>
         </div>
     `;
@@ -552,8 +552,10 @@ function showBrandAlignmentQuestion() {
                 <span class="step active">2. Assess Alignment</span>
                 <span class="step">3. Get Results</span>
             </div>
+            <div class="question-number">QUESTION ${currentQuestion + 1} (OF ${getIssueQuestions().length})</div>
             <div class="question">${q.question}</div>
             <div class="options">${optionsHTML}</div>
+            <button class="btn next-question-btn" onclick="nextBrandAlignmentQuestion()" style="display: none;">NEXT QUESTION</button>
         </div>
     `;
     document.getElementById('quiz-content').innerHTML = questionHTML;
@@ -566,20 +568,23 @@ function selectSingleOption(questionIndex, value) {
     // Add selected class to clicked option
     event.target.classList.add('selected');
     
-    // Auto-advance to next question after a short delay
-    setTimeout(() => {
-        if (currentQuestion < getIssueQuestions().length - 1) {
-            nextBrandAlignmentQuestion();
-        } else {
-            // If it's the last question, show results
-            showBrandAlignmentResults();
+    // Show the NEXT QUESTION button
+    const nextBtn = document.querySelector('.next-question-btn');
+    if (nextBtn) {
+        nextBtn.style.display = 'block';
+        if (currentQuestion >= getIssueQuestions().length - 1) {
+            nextBtn.textContent = 'GET RESULTS';
         }
-    }, 500);
+    }
 }
 
 function nextBrandAlignmentQuestion() {
-    currentQuestion++;
-    showBrandAlignmentQuestion();
+    if (currentQuestion >= getIssueQuestions().length - 1) {
+        showBrandAlignmentResults();
+    } else {
+        currentQuestion++;
+        showBrandAlignmentQuestion();
+    }
 }
 
 function getIssueQuestions() {
@@ -650,33 +655,35 @@ function showBrandAlignmentResults() {
                 <span class="step active">3. Get Results</span>
             </div>
             
-            <div class="issue-summary">
-                <h4>Your Issue Analysis</h4>
-                <p><strong>Category:</strong> ${getCategoryDisplayName(issueCategory)}</p>
-                <p><strong>Specific Issue:</strong> ${specificIssue}</p>
-                ${brandContext ? `<p><strong>Your Context:</strong> ${brandContext}</p>` : ''}
+            <div class="score-container">
+                <div class="score-display">
+                    <div class="score-percentage">${results.score}%</div>
+                    <div class="score-label">${results.title.toUpperCase()}</div>
+                </div>
             </div>
             
-            <h3>Your Brand Alignment Assessment</h3>
-            <div class="score ${results.level}">${results.score}%</div>
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: ${results.score}%"></div>
+            <div class="recommendation">
+                <h3>${results.recommendation}</h3>
+                <p>${results.description}</p>
             </div>
-            <p class="results-highlight"><strong>${results.title}</strong></p>
-            <p class="results-highlight">${results.description}</p>
             
-            <h4>Key Areas to Address:</h4>
-            <ul>
-                ${results.recommendations.map(rec => `<li class="results-highlight">${rec}</li>`).join('')}
-            </ul>
+            <div class="key-areas">
+                <h4>KEY AREAS TO ADDRESS</h4>
+                <div class="areas-list">
+                    ${results.recommendations.map(rec => `
+                        <div class="area-item">
+                            <span class="area-icon ${rec.type}">
+                                ${rec.type === 'positive' ? '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '<svg width="16" height="16" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg"><line y1="-1" x2="18.1017" y2="-1" transform="matrix(0.704698 0.709507 -0.704699 0.709507 6.85144 7.71405)" stroke="currentColor" stroke-width="2"/><line y1="-1" x2="18.1017" y2="-1" transform="matrix(-0.704699 0.709507 -0.704699 -0.709507 19.6078 6.71613)" stroke="currentColor" stroke-width="2"/></svg>'}
+                            </span>
+                            <span class="area-text">${rec.text}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
             
             <div class="next-steps">
-                <h4>Next Steps</h4>
-                <p>Ready to develop your brand's stance on this issue? Download our comprehensive worksheet to guide your strategic thinking and action planning.</p>
-                <div class="cta-buttons">
-                    <button class="btn btn-primary" onclick="downloadWorksheet()">Download Strategic Issues Worksheet</button>
-                    <button class="btn btn-secondary" onclick="window.open('https://ink-co.com/contact', '_blank')">Schedule a Consultation</button>
-                </div>
+                <h4>Ready to develop your brand's stance on this issue?</h4>
+                <button class="btn btn-primary" onclick="downloadWorksheet()">DOWNLOAD STRATEGIC ISSUES WORKSHEET</button>
             </div>
         </div>
     `;
@@ -752,24 +759,28 @@ function calculateBrandAlignmentScore() {
     if (advice.length > 2 || finalScore < 40) {
         shouldComment = false;
     }
-    let resultTitle, resultDesc, recommendations;
+    let resultTitle, resultDesc, recommendation, recommendations;
     if (shouldComment && finalScore >= 70) {
-        resultTitle = 'Yes, you should comment.';
-        resultDesc = 'Your brand is well-aligned with this issue. Proceed with a thoughtful, authentic statement.';
-        recommendations = advice.length ? advice : ['No major gaps identified.'];
+        resultTitle = 'BRAND ALIGNED ISSUE';
+        resultDesc = 'Your brand is well-aligned to this issue. Proceed with a thoughtful, authentic statement.';
+        recommendation = 'Yes, you should comment.';
+        recommendations = advice.length ? advice.map(adv => ({ type: 'negative', text: adv })) : [{ type: 'positive', text: 'No major gaps identified.' }];
     } else if (shouldComment && finalScore >= 40) {
-        resultTitle = 'Proceed with caution.';
+        resultTitle = 'PROCEED WITH CAUTION';
         resultDesc = 'There are some alignment gaps. Address them before making a public statement.';
-        recommendations = advice.length ? advice : ['Review your brand\'s alignment before commenting.'];
+        recommendation = 'Proceed with caution.';
+        recommendations = advice.length ? advice.map(adv => ({ type: 'negative', text: adv })) : [{ type: 'negative', text: 'Review your brand\'s alignment before commenting.' }];
     } else {
-        resultTitle = 'It may be best to stay silent.';
+        resultTitle = 'NOT ALIGNED';
         resultDesc = 'Your brand is not well-aligned with this issue. Consider focusing on issues more relevant to your brand.';
-        recommendations = advice.length ? advice : ['Significant gaps exist; commenting may not be advisable.'];
+        recommendation = 'It may be best to stay silent.';
+        recommendations = advice.length ? advice.map(adv => ({ type: 'negative', text: adv })) : [{ type: 'negative', text: 'Significant gaps exist; commenting may not be advisable.' }];
     }
     return {
         score: finalScore,
         level: finalScore >= 70 ? 'excellent' : finalScore >= 40 ? 'fair' : 'poor',
         title: resultTitle,
+        recommendation: recommendation,
         description: resultDesc,
         recommendations
     };
