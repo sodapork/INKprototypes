@@ -301,7 +301,7 @@ main {
 }
 
 .tool-header {
-    text-align: center;
+    text-align: left;
     margin-bottom: 2rem;
     padding-bottom: 1rem;
     border-bottom: 2px solid #f0f0f0;
@@ -381,6 +381,7 @@ main {
     color: #23B280;
     text-transform: uppercase;
     letter-spacing: 1px;
+    text-align: left;
 }
 
 .question {
@@ -390,6 +391,7 @@ main {
     margin-bottom: 2rem;
     color: #2F2F2E;
     line-height: 1.4;
+    text-align: left;
 }
 
 .options {
@@ -403,7 +405,7 @@ main {
     font-family: 'Brandon Text', sans-serif;
     background: #fff;
     border: 2px solid #23B280;
-    border-radius: 8px;
+    border-radius: 4px;
     padding: 1.2rem;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -462,12 +464,14 @@ main {
     background: #23B280;
     color: white;
     border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 6px;
-    font-weight: 600;
+    padding: 1rem 2rem;
+    border-radius: 4px;
+    font-weight: 700;
     cursor: pointer;
     transition: transform 0.2s ease;
     font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .btn:hover {
@@ -1394,8 +1398,10 @@ body[data-embedded="true"] .chat-input {
 
 /* Center buttons */
 .btn {
-    display: inline-block;
-    margin: 0.5rem;
+    display: block;
+    margin: 2rem auto 0 auto;
+    width: 100%;
+    max-width: 300px;
 }
 
 /* Center quiz content */
@@ -1404,7 +1410,7 @@ body[data-embedded="true"] .chat-input {
 }
 
 .question-container {
-    text-align: center;
+    text-align: left;
     max-width: 600px;
     margin: 0 auto 2rem auto;
 }
