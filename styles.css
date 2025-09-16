@@ -416,8 +416,8 @@ main {
 }
 
 .option:hover {
-    background: #23B280;
-    color: #fff;
+    background: #fff;
+    color: #2F2F2E;
     border-color: #23B280;
 }
 
