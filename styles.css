@@ -268,10 +268,10 @@ main {
 .modal-content {
     background-color: white;
     margin: 2% auto;
-    padding: 24.1px 256px 123px 261px;
+    padding: 2rem;
     border-radius: 12px;
-    width: 803.434px;
-    height: 1004.062px;
+    width: 90%;
+    max-width: 800px;
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
@@ -297,7 +297,7 @@ main {
 
 /* Tool Specific Styles */
 .tool-container {
-    padding: 0;
+    padding: 1rem;
 }
 
 .tool-header {
@@ -998,8 +998,8 @@ main {
 }
 
 .issue-selection-container {
-    width: 100%;
-    margin: 0;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .issue-selection-content h3 {
@@ -1388,8 +1388,8 @@ body[data-embedded="true"] .chat-input {
 /* Form elements */
 .input-group {
     text-align: left;
-    width: 100%;
-    margin: 0 0 1.5rem 0;
+    max-width: 600px;
+    margin: 0 auto 1.5rem auto;
 }
 
 /* Center buttons */
