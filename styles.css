@@ -900,9 +900,7 @@ main {
     font-weight: 700;
     margin-bottom: 0.5rem;
     line-height: 1.3;
-    border-bottom: 2px solid #23B280;
-    padding-bottom: 0.25rem;
-    display: inline-block;
+    font-family: 'Brandon Text', sans-serif;
 }
 
 .recommendation p {
@@ -911,6 +909,7 @@ main {
     line-height: 1.6;
     margin: 0;
     font-weight: 400;
+    font-family: 'Brandon Text', sans-serif;
 }
 
 .key-areas {
