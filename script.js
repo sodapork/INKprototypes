@@ -696,12 +696,6 @@ function showBrandAlignmentResults() {
     
     const resultsHTML = `
         <div class="results">
-            <div class="step-indicator">
-                <span class="step completed">1. Select Issue</span>
-                <span class="step completed">2. Assess Alignment</span>
-                <span class="step active">3. Get Results</span>
-            </div>
-            
             <div class="score-container">
                 <div class="score-display">
                     <div class="score-percentage">${results.score}%</div>
@@ -715,7 +709,10 @@ function showBrandAlignmentResults() {
             </div>
             
             <div class="key-areas">
-                <h4>KEY AREAS TO ADDRESS</h4>
+                <div class="key-areas-header">
+                    <h4>KEY AREAS TO ADDRESS</h4>
+                    <div class="floating-icon">E</div>
+                </div>
                 <div class="areas-list">
                     ${results.recommendations.map(rec => `
                         <div class="area-item">
