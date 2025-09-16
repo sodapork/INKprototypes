@@ -711,7 +711,6 @@ function showBrandAlignmentResults() {
             <div class="key-areas">
                 <div class="key-areas-header">
                     <h4>KEY AREAS TO ADDRESS</h4>
-                    <div class="floating-icon">E</div>
                 </div>
                 <div class="areas-list">
                     ${results.recommendations.map(rec => `
