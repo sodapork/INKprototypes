@@ -867,9 +867,15 @@ main {
     font-family: 'League Gothic', 'Arial Narrow', 'Helvetica Condensed', sans-serif;
     font-size: 4.5rem;
     font-weight: 400;
-    color: #23B280;
+    color: #22b280 !important;
     line-height: 1;
     margin-bottom: 0.5rem;
+}
+
+/* Ensure score percentage is always green regardless of other styles */
+.score-display .score-percentage,
+.results .score-percentage {
+    color: #22b280 !important;
 }
 
 .score-label {
