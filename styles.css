@@ -873,8 +873,9 @@ main {
 }
 
 .score-label {
+    font-family: 'League Gothic', 'Arial Narrow', 'Helvetica Condensed', sans-serif;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 400;
     color: #2F2F2E;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -1078,10 +1079,13 @@ main {
 .next-steps h4 {
     color: #2F2F2E;
     margin: 0;
-    font-size: 1.2rem;
-    font-weight: 700;
+    font-family: 'League Gothic', 'Arial Narrow', 'Helvetica Condensed', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 400;
     flex: 1;
     text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .next-steps p {
