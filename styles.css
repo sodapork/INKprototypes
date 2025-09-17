@@ -872,9 +872,14 @@ main {
     margin-bottom: 0.5rem;
 }
 
-/* Ensure score percentage is always green regardless of other styles */
+/* Ensure score percentage and label are always green regardless of other styles */
 .score-display .score-percentage,
 .results .score-percentage {
+    color: #22b280 !important;
+}
+
+.score-display .score-label,
+.results .score-label {
     color: #22b280 !important;
 }
 
@@ -882,7 +887,7 @@ main {
     font-family: 'League Gothic', 'Arial Narrow', 'Helvetica Condensed', sans-serif;
     font-size: 1rem;
     font-weight: 400;
-    color: #2F2F2E;
+    color: #22b280 !important;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
