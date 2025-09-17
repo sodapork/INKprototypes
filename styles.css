@@ -386,7 +386,7 @@ main {
 
 .question {
     font-family: 'League Gothic', 'Arial Narrow', 'Helvetica Condensed', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 400;
     margin-bottom: 2rem;
     color: #2F2F2E;
@@ -1373,6 +1373,7 @@ body[data-embedded="true"] .question-container {
 body[data-embedded="true"] .question {
     color: #333 !important;
     font-family: 'League Gothic', 'Arial Narrow', 'Helvetica Condensed', sans-serif !important;
+    font-size: 1.8rem !important;
     font-weight: 400 !important;
     margin-bottom: 1rem !important;
     text-transform: uppercase !important;
