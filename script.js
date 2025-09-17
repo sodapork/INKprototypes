@@ -492,11 +492,6 @@ function startBrandAlignmentQuiz() {
 function showIssueSelectionStep() {
     const issueSelectionHTML = `
         <div class="issue-selection-container">
-            <div class="step-indicator">
-                <span class="step active">1. Select Issue</span>
-                <span class="step">2. Assess Alignment</span>
-                <span class="step">3. Get Results</span>
-            </div>
             <div class="issue-selection-content">
                 <h3>What issue are you considering?</h3>
                 <p class="context-text">Before diving into alignment questions, let's identify the specific issue you're thinking about. This helps us provide more targeted guidance for your brand's unique situation.</p>
@@ -583,11 +578,6 @@ function showBrandAlignmentQuestion() {
     `).join('');
     const questionHTML = `
         <div class="question-container">
-            <div class="step-indicator">
-                <span class="step completed">1. Select Issue</span>
-                <span class="step active">2. Assess Alignment</span>
-                <span class="step">3. Get Results</span>
-            </div>
             <div class="question-number">QUESTION ${currentQuestion + 1} (OF ${getIssueQuestions().length})</div>
             <div class="question">${q.question}</div>
             <div class="options">${optionsHTML}</div>
