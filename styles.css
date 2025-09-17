@@ -1086,6 +1086,7 @@ main {
     text-align: left;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    line-height: 1.2;
 }
 
 .next-steps p {
