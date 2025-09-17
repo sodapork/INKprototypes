@@ -693,7 +693,7 @@ function showBrandAlignmentResults() {
             <div class="score-container">
                 <div class="score-display">
                     <div class="score-percentage">${results.score}%</div>
-                    <div class="score-label">BRAND ALIGNED ISSUE</div>
+                    <div class="score-label">${results.title.toUpperCase()}</div>
                 </div>
             </div>
             
