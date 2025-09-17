@@ -508,6 +508,7 @@ function showIssueSelectionStep() {
                         <option value="health-community">Health and Community Crises</option>
                         <option value="other">Other</option>
                     </select>
+                    <div id="category-description" class="category-description" style="display: none;"></div>
                 </div>
                 
                 <div class="input-group">
@@ -529,7 +530,7 @@ function showIssueSelectionStep() {
 
 function updateIssueContext() {
     const category = document.getElementById('issue-category').value;
-    const contextText = document.querySelector('.context-text');
+    const categoryDescription = document.getElementById('category-description');
     
     const categoryContexts = {
         'cultural-movements': 'Cultural movements around gender, sexuality, and racial issues require brands to demonstrate genuine understanding and authentic commitment. Consider your brand\'s track record and whether you can contribute meaningfully to the conversation.',
@@ -541,8 +542,11 @@ function updateIssueContext() {
         'other': 'For other issues, focus on the direct connection to your brand\'s mission, values, and stakeholder interests.'
     };
     
-    if (category && contextText) {
-        contextText.innerHTML = categoryContexts[category] || 'Consider how this issue connects to your brand\'s core mission, values, and stakeholder interests.';
+    if (category && categoryDescription) {
+        categoryDescription.innerHTML = categoryContexts[category] || 'Consider how this issue connects to your brand\'s core mission, values, and stakeholder interests.';
+        categoryDescription.style.display = 'block';
+    } else if (categoryDescription) {
+        categoryDescription.style.display = 'none';
     }
 }
 

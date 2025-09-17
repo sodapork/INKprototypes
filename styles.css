@@ -1192,6 +1192,19 @@ main {
     line-height: 125%;
 }
 
+.category-description {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    color: #2F2F2E;
+    font-family: 'Brandon Text', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
 .issue-selection-container .btn {
     background: #23B280;
     color: #fff;
