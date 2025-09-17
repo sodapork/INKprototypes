@@ -873,8 +873,9 @@ main {
 }
 
 .score-percentage {
+    font-family: 'League Gothic', 'Arial Narrow', 'Helvetica Condensed', sans-serif;
     font-size: 4.5rem;
-    font-weight: 700;
+    font-weight: 400;
     color: #23B280;
     line-height: 1;
     margin-bottom: 0.5rem;
@@ -898,11 +899,14 @@ main {
 
 .recommendation h3 {
     color: #2F2F2E;
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.8rem;
+    font-weight: 400;
     margin-bottom: 0.5rem;
     line-height: 1.3;
-    font-family: 'Brandon Text', sans-serif;
+    font-family: 'League Gothic', 'Arial Narrow', 'Helvetica Condensed', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
 }
 
 .recommendation p {
