@@ -385,9 +385,9 @@ main {
 }
 
 .question {
-    font-family: 'Brandon Text', sans-serif;
+    font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 1.3rem;
-    font-weight: 600;
+    font-weight: 400;
     margin-bottom: 2rem;
     color: #2F2F2E;
     line-height: 1.4;
@@ -1370,7 +1370,8 @@ body[data-embedded="true"] .question-container {
 
 body[data-embedded="true"] .question {
     color: #333 !important;
-    font-weight: 600 !important;
+    font-family: Georgia, 'Times New Roman', Times, serif !important;
+    font-weight: 400 !important;
     margin-bottom: 1rem !important;
 }
 
