@@ -495,15 +495,6 @@ main {
     overflow: hidden;
 }
 
-.results::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 6px;
-    background: #23B280;
-}
 
 .results h3 {
     color: #2F2F2E;
